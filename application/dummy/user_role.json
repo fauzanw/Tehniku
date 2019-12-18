@@ -1,0 +1,20 @@
+{
+    "user_role": [
+        {
+            "id": 1,
+            "role": "Admin"
+        },
+        {
+            "id": 2,
+            "role": "Perusahaan"
+        },
+        {
+            "id": 3,
+            "role": "Pegawai"
+        },
+        {
+            "id": 4,
+            "role": "Customer"
+        }
+    ]
+}

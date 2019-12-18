@@ -1,0 +1,28 @@
+{
+    "pegawai": [
+        {
+            "id": 3,
+            "nama": "Nama Pegawai",
+            "umur": "123asdasdasd",
+            "nomor_ponsel": "09809898",
+            "alamat": "",
+            "nomor_ktp": "09089809808098908908",
+            "gender": "laki-laki",
+            "perusahaan_id": 1,
+            "user_id": 3,
+            "status": true
+        },
+        {
+            "id": 3,
+            "nama": "Holiq Gay",
+            "umur": "15",
+            "nomor_ponsel": "0843843197947",
+            "alamat": "",
+            "nomor_ktp": "9043282938",
+            "gender": "laki-laki",
+            "perusahaan_id": 2,
+            "user_id": 3,
+            "status": true
+        }
+    ]
+}

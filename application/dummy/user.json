@@ -1,0 +1,36 @@
+{
+    "user": [
+        {
+            "id": 3,
+            "email": "asdasd@gmail.com",
+            "password": "123123",
+            "role_id": 3,
+            "is_verified": true,
+            "date_joined": "Minggu, 15 Desember 2019"
+        },
+        {
+            "id": 3,
+            "email": "holiq@gay.co.li",
+            "password": "holiq123",
+            "role_id": 3,
+            "is_verified": true,
+            "date_joined": "Minggu, 15 Desember 2019"
+        },
+        {
+            "id": 1,
+            "email": "panasonic_admin@gmail.com",
+            "password": "panasonic_admin",
+            "role_id": 2,
+            "is_verified": true,
+            "date_joined": "09 Feb 2019"
+        },
+        {
+            "id": 2,
+            "email": "lg_admin@gmail.com",
+            "password": "lg_admin",
+            "role_id": 2,
+            "is_verified": true,
+            "date_joined": "12 May 2019"
+        }
+    ]
+}

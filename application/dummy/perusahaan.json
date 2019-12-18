@@ -1,0 +1,18 @@
+{
+    "perusahaan": [
+        {
+            "id": 1,
+            "nama_perusahaan": "Panasonic",
+            "npwp": 948246392492463,
+            "logo": "panasonic.png",
+            "user_id": 1
+        },
+        {
+            "id": 2,
+            "nama_perusahaan": "LG Tech",
+            "npwp": 421920480483058,
+            "logo": "lg.png",
+            "user_id": 2
+        }
+    ]
+}
