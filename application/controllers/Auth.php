@@ -26,8 +26,12 @@ class Auth extends CI_Controller {
 				redirect('perusahaan');
 			}else if($this->session->userdata('role_id') == array_search('pegawai', $this->data_role)) {
 				redirect('pegawai');
+			}else if($this->session->userdata('role_id') == array_search("admin", $this->data_role)) {
+				redirect('admin');
 			}
-		}else if(!isset($_POST['login'])) {
+		}
+
+		if(!isset($_POST['login'])) {
 			$data = [
 				'title' => 'User'
 			];
@@ -39,11 +43,23 @@ class Auth extends CI_Controller {
 			$user = $this->db->get_where('users', ["email" => $email])->row_array();
 			if($user) {
 				if(password_verify($password, $user["password"])){
-					$this->session->set_userdata($user);
-					if($user["role_id"] == array_search("perusahaan",$this->data_role)) {
-						redirect('perusahaan');
-					}else if($user["role_id"] == array_search("pegawai", $this->data_role)) {
-						redirect('pegawai');
+					if($user['is_verified'] == 1) {
+						if($user['is_blocked'] == 0) {
+							$this->session->set_userdata($user);
+							if($user["role_id"] == array_search("perusahaan",$this->data_role)) {
+								redirect('perusahaan');
+							}else if($user["role_id"] == array_search("pegawai", $this->data_role)) {
+								redirect('pegawai');
+							}else if($user['role_id'] == array_search('admin', $this->data_role)) {
+								redirect('admin');
+							}
+						}else{
+							$this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Akun anda diblokir</strong> oleh admin, silahkan hubungi customer service.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+							redirect('auth/login');
+						}
+					}else{
+						$this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Akun anda</strong> belum / memang sengaja tidak diverifikasi oleh admin, silahkan hubungi customer service.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+						redirect('auth/login');
 					}
 				}else{
 					$this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Password</strong> anda salah.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
@@ -66,10 +82,164 @@ class Auth extends CI_Controller {
 		$this->session->unset_userdata("date_joined");
 		redirect('auth/login');
 	}
-
 	public function perusahaan_register()
 	{
-		$this->load->view('auth/register_perusahaan');
+		if(!isset($_POST['daftar'])) {
+		    $this->load->view('auth/register_perusahaan');
+		}else{
+			$foto_npwp       = '';
+			$foto_ktp        = '';
+			$logo_perusahaan = '';
+
+			$upload_image = $_FILES['foto_npwp']['name'];
+			$config['upload_path']   = './assets/argon/img/npwp/';
+			$config['allowed_types'] = 'jpg|png|jpeg';
+			$config['max_size']      = '2048';
+			$config['encrypt_name']  = TRUE;
+
+			$this->load->library('upload', $config);
+
+			if($this->upload->do_upload('foto_npwp')) {
+				$foto_npwp .= $this->upload->data('file_name');
+			}else{
+				if($this->upload->display_errors() == "<p>The filetype you are attempting to upload is not allowed.</p>") {
+					$this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Gagal</strong> upload foto pegawai, format foto harus jpg / png /jpeg.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+					redirect('auth/perusahaan/register');
+				} else if($this->upload->display_errors() == "<p>The file you are attempting to upload is larger than the permitted size.</p>") {
+					$this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Gagal</strong> upload foto pegawai, size foto tidak boleh lebih dari 2mb.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+					redirect('auth/perusahaan/register');
+				} else {
+					echo $this->upload->display_errors();die;	
+				}
+			}
+
+			$upload_image = $_FILES['foto_ktp']['name'];
+			$config['upload_path']   = './assets/argon/img/ktp/';
+			$config['allowed_types'] = 'jpg|png|jpeg';
+			$config['max_size']      = '2048';
+			$config['encrypt_name']  = TRUE;
+
+			$this->load->library('upload', $config);
+
+			if($this->upload->do_upload('foto_ktp')) {
+				$foto_ktp .= $this->upload->data('file_name');
+			}else{
+				if($this->upload->display_errors() == "<p>The filetype you are attempting to upload is not allowed.</p>") {
+					$this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Gagal</strong> upload foto pegawai, format foto harus jpg / png /jpeg.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+					redirect('auth/perusahaan/register');
+				} else if($this->upload->display_errors() == "<p>The file you are attempting to upload is larger than the permitted size.</p>") {
+					$this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Gagal</strong> upload foto pegawai, size foto tidak boleh lebih dari 2mb.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+					redirect('auth/perusahaan/register');
+				} else {
+					echo $this->upload->display_errors();die;	
+				}
+			}
+
+			$upload_image = $_FILES['logo_perusahaan']['name'];
+			$config['upload_path']   = './assets/argon/img/perusahaan/';
+			$config['allowed_types'] = 'jpg|png|jpeg';
+			$config['max_size']      = '2048';
+			$config['encrypt_name']  = TRUE;
+
+			$this->load->library('upload', $config);
+
+			if($this->upload->do_upload('logo_perusahaan')) {
+				$logo_perusahaan .= $this->upload->data('file_name');
+			}else{
+				if($this->upload->display_errors() == "<p>The filetype you are attempting to upload is not allowed.</p>") {
+					$this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Gagal</strong> upload foto pegawai, format foto harus jpg / png /jpeg.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+					redirect('perusahaan/pegawai');
+				} else if($this->upload->display_errors() == "<p>The file you are attempting to upload is larger than the permitted size.</p>") {
+					$this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Gagal</strong> upload foto pegawai, size foto tidak boleh lebih dari 2mb.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+					redirect('perusahaan/pegawai');
+				} else {
+					echo $this->upload->display_errors();die;	
+				}
+			}
+
+			$id_user   = uniqid();
+			$data_user = array(
+				'id'          => $id_user,
+				'email'       => $this->input->post('email'),
+				'password'    => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
+				'role_id'     => array_search("perusahaan",$this->data_role),
+				'is_verified' => 0,
+				'date_joined' => formatHariTanggal(date('Y-m-d'))
+			);
+			$data_perusahaan = array(
+				'id'               => uniqid(),
+				'nama_perusahaan'  => htmlspecialchars($this->input->post('nama_perusahaan')),
+				'nomor_npwp'       => $this->input->post('nomor_npwp'),
+				'foto_npwp'        => $foto_npwp,
+				'nomor_ktp'        => $this->input->post('nomor_ktp'),
+				'foto_ktp'         => $foto_ktp,
+				'user_id'          => $id_user,
+				'logo_perusahaan'  => $logo_perusahaan,
+				'alamat'           => htmlspecialchars($this->input->post('alamat')),
+				'latlon'           => $this->input->post('latlon')
+			);
+
+			$this->db->insert('users', $data_user);
+			$this->db->insert('perusahaan', $data_perusahaan);
+			$this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Perusahaan anda</strong> berhasil di daftarkan, harap tunggu admin mengkonfirmasi perusahaan anda.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+			redirect('auth/perusahaan/register');
+		}
+	}
+
+	public function customer_register()
+	{
+		if(!isset($_POST['daftar'])) {
+			$this->load->view('auth/register_customer');
+		}else{
+			$foto_ktp                = '';
+			$uploaded_foto_ktp       = $_FILES['foto_ktp']['name'];
+			$config['upload_path']   = './assets/argon/img/ktp/';
+			$config['allowed_types'] = 'jpg|png|jpeg';
+			$config['max_size']      = '2048';
+			$config['encrypt_name']  = TRUE;
+
+			$this->load->library('upload', $config);
+
+			if($this->upload->do_upload('foto_ktp')) {
+				$foto_ktp .= $this->upload->data('file_name');
+			}else{
+				if($this->upload->display_errors() == "<p>The filetype you are attempting to upload is not allowed.</p>") {
+					$this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Gagal</strong> upload foto pegawai, format foto harus jpg / png /jpeg.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+					redirect('perusahaan/pegawai');
+				} else if($this->upload->display_errors() == "<p>The file you are attempting to upload is larger than the permitted size.</p>") {
+					$this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Gagal</strong> upload foto pegawai, size foto tidak boleh lebih dari 2mb.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+					redirect('perusahaan/pegawai');
+				} else {
+					echo $this->upload->display_errors();die;	
+				}
+			}
+
+			$id_user   = uniqid();
+			$data_user = array(
+				'id'          => $id_user,
+				'email'       => $this->input->post('email'),
+				'password'    => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
+				'role_id'     => array_search("customer",$this->data_role),
+				'is_verified' => 0,
+				'date_joined' => formatHariTanggal(date('Y-m-d'))
+			);
+			$this->db->insert('users', $data_user);
+			$data_customer = array(
+				'id'           => uniqid(),
+				'nama'         => htmlspecialchars($this->input->post('nama_lengkap')),
+				'alamat'       => htmlspecialchars($this->input->post('alamat')),
+				'nomor_ponsel' => $this->input->post('nomor_ponsel'),
+				'foto_ktp'     => $foto_ktp,
+				'nomor_ktp'    => $this->input->post('nomor_ktp'),
+				'user_id'      => $data_user['id']
+			);
+
+			// var_dump($data_customer); die;
+
+			$this->db->insert('customer', $data_customer);
+			$this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Akun Anda</strong> berhasil didaftarkan, harap tunggu sampai admin mengkonfirmasi akun anda.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+			redirect('auth/customer/register');
+		}
 	}
 
 }

@@ -2119,6 +2119,7 @@ select.form-control[multiple] {
 }
 
 textarea.form-control {
+  resize: none;
   height: auto;
 }
 
@@ -2316,7 +2317,7 @@ textarea.form-control {
 .form-control.is-invalid,
 .was-validated .custom-select:invalid,
 .custom-select.is-invalid {
-  border-color: #fb6340;
+  border-color: #fb6340 !important;
 }
 
 .was-validated .form-control:invalid:focus,
@@ -16928,7 +16929,7 @@ textarea[resize="horizontal"] {
   left: 0;
   top: 0.25rem;
   bottom: 0.25rem;
-  border-left: 2px solid #5e72e4;
+  border-left: 2px solid #fb6340;
 }
 
 .navbar-vertical .navbar-nav .nav-link>i {
@@ -17052,7 +17053,7 @@ textarea[resize="horizontal"] {
   bottom: 0.25rem;
   left: 0;
   right: auto;
-  border-left: 2px solid #5e72e4;
+  border-left: 2px solid #fb6340;
   border-bottom: 0;
 }
 
@@ -17161,7 +17162,7 @@ textarea[resize="horizontal"] {
     bottom: 0.25rem;
     left: 0;
     right: auto;
-    border-left: 2px solid #5e72e4;
+    border-left: 2px solid #fb6340;
     border-bottom: 0;
   }
 
@@ -17271,7 +17272,7 @@ textarea[resize="horizontal"] {
     bottom: 0.25rem;
     left: 0;
     right: auto;
-    border-left: 2px solid #5e72e4;
+    border-left: 2px solid #fb6340;
     border-bottom: 0;
   }
 

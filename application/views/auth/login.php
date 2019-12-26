@@ -83,13 +83,13 @@
           <div class="card bg-secondary shadow border-0">
             <div class="card-body px-lg-5 py-lg-5">
               <?= $this->session->flashdata('message') ?>
-              <form role="form" method="post">
+              <form role="form" method="post" class="needs-validation" novalidate>
                 <div class="form-group mb-3">
                   <div class="input-group input-group-alternative">
                     <div class="input-group-prepend">
                       <span class="input-group-text"><i class="ni ni-email-83"></i></span>
                     </div>
-                    <input class="form-control" name="email" placeholder="Email" type="email">
+                    <input class="form-control" name="email" placeholder="Email" type="email" required>
                   </div>
                 </div>
                 <div class="form-group">
@@ -97,11 +97,11 @@
                     <div class="input-group-prepend">
                       <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
                     </div>
-                    <input class="form-control" name="password" placeholder="Password" type="password">
+                    <input class="form-control" name="password" placeholder="Password" type="password" required>
                   </div>
                 </div>
                 <div class="text-center">
-                  <button type="submit" name="login" class="btn btn-primary btn-block my-4">Login</button>
+                  <button type="submit" name="login" class="btn btn-orange btn-block my-4">Login</button>
                 </div>
               </form>
             </div>
@@ -128,6 +128,24 @@
         token: "ee6fab19c5a04ac1a32a645abde4613a",
         application: "argon-dashboard-free"
       });
+
+      (function() {
+        'use strict';
+        window.addEventListener('load', function() {
+          // Fetch all the forms we want to apply custom Bootstrap validation styles to
+          var forms = document.getElementsByClassName('needs-validation');
+          // Loop over them and prevent submission
+          var validation = Array.prototype.filter.call(forms, function(form) {
+            form.addEventListener('submit', function(event) {
+              if (form.checkValidity() === false) {
+                event.preventDefault();
+                event.stopPropagation();
+              }
+              form.classList.add('was-validated');
+            }, false);
+          });
+        }, false);
+      })();
   </script>
 </body>
 

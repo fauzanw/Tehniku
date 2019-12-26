@@ -1,4 +1,5 @@
     <div class="container-fluid mt--7">
+      <?= $this->session->flashdata('message'); ?>
       <div class="card bg-dark shadow">
         <div class="card-body">
           <form method="post" enctype="multipart/form-data">
@@ -96,40 +97,29 @@
           </form>
         </div>
       </div>
-      <div class="card mt-3 bg-dark mb-3 bg-default shadow mb-5" id="dataTable">
+      <div class="card shadow bg-dark mt-3 mb-3">
         <div class="card-header bg-transparent border-0 d-sm-flex align-items-center justify-content-between mb-4">
-        <h3 class="text-white mb-0">Data Jasa</h3>
-        <a href="<?= base_url('perusahaan/pegawai/tambah') ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
-          <i class="fas fa-user-plus"></i> Tambah Jasa
-        </a>
+          <h3 class="text-white">Data Jasa</h3>
+          <a href="<?= base_url('perusahaan/pegawai/tambah') ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+            <i class="fas fa-user-plus"></i> Tambah Jasa
+          </a>
         </div>
         <div class="card-body">
-          <table class="table align-items-center table-dark table-flush table-hover dataTable">
+          <table class="table table-responsive-md table-dark" id="dataTable">
             <thead class="thead-dark">
               <tr>
                 <th scope="col">No</th>
                 <th scope="col">Nama</th>
                 <th scope="col">Harga</th>
+                <th scope="col">Type Jasa</th>
                 <th scope="col">Aksi</th>
               </tr>
             </thead>
             <tbody>
               <?php $i = 1;foreach($data_jasa as $data) : ?>
               <tr>
-                <td><?= $i++ ?></td>
-                <td><?= $data['nama_jasa']; ?></td>
-                <td><?= $data['harga']; ?></td>
-                <td class='text-right'>
-                  <div class="dropdown">
-                    <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-ellipsis-v"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                        <a class="dropdown-item" href="<?= base_url('perusahaan/jasa/').$data['id']."/hapus" ?>">Hapus</a>
-                        <a class="dropdown-item" href="#">Edit</a>
-                    </div>
-                  </div>
-                </td>
+                <td><?= $i++; ?></td>
+                <td></td>
               </tr>
               <?php endforeach; ?>
             </tbody>

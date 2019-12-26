@@ -53,11 +53,16 @@ $route['default_controller'] = 'landing';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
-/**
+/**s
  * custom route
  * */ 
 
-$route["auth/perusahaan/register"] = "auth/perusahaan_register";
-$route["perusahaan/pegawai/tambah"] = "perusahaan/tambah_pegawai";
-$route["perusahaan/pegawai/(:any)/hapus"] = "perusahaan/hapus_pegawai/$1";
-$route["perusahaan/pegawai/(:any)/hapus"] = "perusahaan/hapus_pegawai/$1";
+$route["auth/perusahaan/register"]         = "auth/perusahaan_register";
+$route["auth/customer/register"]           = "auth/customer_register";
+$route["perusahaan/pegawai/tambah"]        = "perusahaan/tambah_pegawai";
+$route["perusahaan/pegawai/blocked/edit"]  = "perusahaan/edit_blocked_pegawai";
+$route["perusahaan/pegawai/(:any)/hapus"]  = "perusahaan/hapus_pegawai/$1";
+$route["perusahaan/pegawai/(:any)/edit"]   = "perusahaan/edit_pegawai/$1";
+$route["admin/perusahaan/verif/edit"]      = "admin/edit_verif_perusahaan";
+$route["admin/perusahaan/blocked/edit"]    = "admin/edit_blocked_perusahaan";
+$route["admin/customer/blocked/edit"] = "admin/edit_blocked_customer";

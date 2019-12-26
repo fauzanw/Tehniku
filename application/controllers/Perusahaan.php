@@ -12,14 +12,10 @@ class Perusahaan extends CI_Controller {
 		"adc5ce5d-0491-4d88-b9d4-8bc11b40415a"  => "pegawai",
 		"ef40c680-03f0-45b9-ab98-290200f5ff13"  => "customer"
 	);
-
+	
 	public function __construct() {
 		parent::__construct();
-		if(!$this->session->userdata('email')) {
-			redirect('auth/login');
-		}elseif($this->session->userdata('email') && $this->session->userdata('role_id') != array_search("perusahaan",$this->data_role)) {
-			show_404();
-		}
+		checkAuthUser('Perusahaan');
 	}
 
 	public function index()
@@ -40,11 +36,18 @@ class Perusahaan extends CI_Controller {
 
 	public function manage() {
 		$perusahaan = $this->db->get_where('perusahaan', ["user_id" => $this->session->userdata('id')])->row_array();
+		$this->db
+			 ->select('*')
+			 ->from('jasa j')
+			 ->join('jasa_type jt', 'jt.id=j.jasa_type_id')
+			 ->where('j.perusahaan_id', $perusahaan['id']);
+		$jasa = $this->db->get()->result_array();
 		$data = [
 			'title'             => 'Manage',
 			'title_main_header' => 'Manage Perusahaan',
 			'data_perusahaan'   => $perusahaan,
-			'data_perusahaan2'  => $this->session->userdata()
+			'data_perusahaan2'  => $this->session->userdata(),
+			'data_jasa'         => $jasa
 		];
 		if(isset($_POST['manage'])) {
 
@@ -140,7 +143,7 @@ class Perusahaan extends CI_Controller {
 			$this->db->where('id', $data['data_perusahaan']['id']);
 			$this->db->update('perusahaan');
 			$this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Data Perusahaan</strong> berhasil di ubah.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-			redirect('perusahaan');
+			redirect('perusahaan/manage');
 		}else{
 			$data['data_jasa'] = $this->db->get_where('jasa', ['perusahaan_id' => $data['data_perusahaan']['id']])->result_array();
 			$this->load->view('perusahaan/header', $data);
@@ -151,9 +154,17 @@ class Perusahaan extends CI_Controller {
 		}
 	}
 
+	public function tambah_jasa() {
+		$this->load->view('perusahaan/header', $data);
+		$this->load->view('perusahaan/navigator', $data);
+		$this->load->view('perusahaan/main_header', $data);
+		$this->load->view('perusahaan/manage_perusahaan', $data);
+		$this->load->view('perusahaan/footer', $data);
+	}
+
 	public function pegawai() {
 		$perusahaan = $this->db->get_where('perusahaan', ["user_id" => $this->session->userdata('id')])->row_array();
-		$pegawai    = $this->db->get("pegawai")->result_array();
+		$pegawai    = $this->db->select('*')->from('pegawai p')->join('users u', 'p.user_id=u.id')->get()->result_array();
 		$data = [
 			'title'             => 'Pegawai',
 			'title_main_header' => 'Pegawai '.$perusahaan['nama_perusahaan'],
@@ -244,6 +255,7 @@ class Perusahaan extends CI_Controller {
 		$cek = $this->db->get_where('pegawai', ['id' => $id])->row_array();
 		if($cek) {
 			$hapus = $this->db->delete('pegawai', ['id' => $id]);
+			$this->db->delete('users', ['id' => $cek['user_id']]);
 			if($hapus){
 				unlink(BASEPATH."../assets/argon/img/pegawai/".$cek['foto_pegawai']);
 				$this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Berhasil</strong> hapus data pegawai.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
@@ -253,8 +265,47 @@ class Perusahaan extends CI_Controller {
 			redirect('perusahaan/pegawai');
 			}
 		}else{
-			$this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Gagal</strong> hapus, pegawai tidak terdaftar.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+			$this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Gagal</strong> hapus, pegawai tidak terdaftar.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
 			redirect('perusahaan/pegawai');
+		}
+	}
+
+	public function edit_pegawai($id) {
+		if(!isset($_POST['edit'])) {
+			show_404();
+		}else{
+			$data_pegawai = $this->db->get_where('pegawai', ['id' => $id])->row_array();
+			if($data_pegawai) {
+
+				$this->db->set('nama', $this->input->post('nama_pegawai'));
+				$this->db->set('umur', $this->input->post('umur'));
+				$this->db->set('nomor_ponsel', $this->input->post('nomor_ponsel'));
+				$this->db->set('gender', $this->input->post('gender'));
+				$this->db->where('id', $id);
+				$this->db->update('pegawai');
+				$this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Berhasil</strong> edit data pegawai.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+			redirect('perusahaan/pegawai');
+			} else{
+				$this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Gagal</strong> edit, pegawai tidak terdaftar.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+				redirect('perusahaan/pegawai');
+			}
+		}
+	}
+
+	public function edit_blocked_pegawai() 
+	{
+		$user_id = $this->input->post('id');
+		$result = $this->db->get_where('users', ['id' => $user_id])->row_array();
+		if($result['is_blocked'] == 1) {
+			$this->db->set('is_blocked', 0);
+			$this->db->where('id', $user_id);
+			$this->db->update('users');
+			$this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Berhasil</strong> membuka blokir pegawai.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+		}else{
+			$this->db->set('is_blocked', 1);
+			$this->db->where('id', $user_id);
+			$this->db->update('users');
+			$this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Berhasil</strong> memblokir pegawai.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
 		}
 	}
 

@@ -98,7 +98,7 @@
                         <div class="input-group-prepend">
                           <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
                         </div>
-                        <input class="form-control" placeholder="Nama Perusahaan" name='nama_perusahaan' type="text" required>
+                        <input class="form-control" placeholder="Nama Lengkap" name='nama_lengkap' type="text" required>
                       </div>
                     </div>
                     <div class="form-group">
@@ -106,11 +106,8 @@
                         <div class="input-group-prepend">
                           <span class="input-group-text"><i class="ni ni-email-83"></i></span>
                         </div>
-                        <input class="form-control" name="email" id="email" placeholder="Email Perusahaan" type="email" required>
+                        <input class="form-control" name="email" id="email" placeholder="Alamat Email" type="email" required>
                       </div>
-                    </div>
-                    <div class="form-group">
-                        <textarea name="alamat" id="alamat" class="form-control" style="border: .1 solid black;" placeholder="Alamat Perusahaan" rows="7" required></textarea>
                     </div>
                     <div class="form-group">
                       <div class="input-group input-group-alternative">
@@ -120,6 +117,9 @@
                         <input class="form-control" name="password" placeholder="Password" type="password" required>
                       </div>
                     </div>
+                    <div class="form-group">
+                      <textarea name="alamat" id="alamat" class="form-control" style="border: .1 solid black;" placeholder="Alamat Rumah" rows="4" required></textarea>
+                    </div>
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
@@ -127,7 +127,7 @@
                         <div class="input-group-prepend">
                           <span class="input-group-text"><i class="ni ni-credit-card"></i></span>
                         </div>
-                        <input class="form-control" placeholder="Nomor Npwp" type="text" id="nomor_npwp" name="nomor_npwp" required>
+                        <input class="form-control" placeholder="Nomor Ponsel" type="text" id="nomor_ponsel" name="nomor_ponsel" required>
                       </div>
                     </div>
                     <div class="form-group">
@@ -140,20 +140,8 @@
                     </div>
                     <div class="form-group">
                       <div class="custom-file">
-                        <input type="file" class="custom-file-input" name="foto_npwp" required>
-                        <label class="custom-file-label" for="inputGroupFile01">Pilih Foto Npwp</label>
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <div class="custom-file">
                         <input type="file" class="custom-file-input" name="foto_ktp" required>
                         <label class="custom-file-label" for="inputGroupFile01">Pilih Foto Ktp</label>
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <div class="custom-file">
-                        <input type="file" class="custom-file-input" name="logo_perusahaan" required>
-                        <label class="custom-file-label" for="inputGroupFile01">Pilih Logo Perusahaan</label>
                       </div>
                     </div>
                     <div class="form-group">  
@@ -167,11 +155,11 @@
                         </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <div class="text-center">
-                    <button type="submit" name="daftar" class="btn btn-orange btn-block mt-4">DAFTAR SEKARANG!</button>
+                    <div class="form-group">
+                      <div class="text-center">
+                        <button type="submit" name="daftar" class="btn btn-orange btn-block mt-4">DAFTAR SEKARANG!</button>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </form>

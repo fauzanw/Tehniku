@@ -51,7 +51,7 @@
                             <li class="scroll-to-section"><a href="#welcome" class="menu-item">Home</a></li>
                             <li class="scroll-to-section"><a href="#about" class="menu-item">Jasa</a></li>
                             <li class="scroll-to-section"><a href="#testimonials" class="menu-item">Testimonials</a></li>
-                            <li class="scroll-to-section"><a href="#join" class="menu-item">Join</a></li>
+                            <li class="scroll-to-section"><a href="#join" class="menu-item">Register</a></li>
                             <li class="scroll-to-section"><a href="#contact-us" class="menu-item">Contact Us</a></li>
                         </ul>
                         <a class='menu-trigger'>
@@ -77,7 +77,7 @@
                         data-scroll-reveal="enter left move 30px over 0.6s after 0.4s">
                         <h1><em>TEHNIKU</em></h1>
                         <p>Tehniku adalah sebuah app untuk mempermudahkan anda membeli / service barang elektronik anda</p> 
-                        <a href="#about" class="main-button-slider">KNOW US BETTER</a>
+                        <a href="<?= base_url('auth/login') ?>" class="main-button-slider">Login Sekarang</a>
                     </div>
                 </div>
             </div>
@@ -311,7 +311,7 @@
                                     <img src="assets/landing/images/join/customer.png" style="width: 120px;height:110px;" alt="">
                                     <h4>Customer</h4>
                                     <p>Kamu bisa daftar & menggunakan jasa dari Tehniku</p>
-                                    <a href="#testimonials" class="main-button btn-block">
+                                    <a href="<?= base_url('auth/customer/register')  ?>" class="main-button btn-block">
                                     Daftar
                                     </a>
                                 </div>

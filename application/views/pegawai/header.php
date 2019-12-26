@@ -32,7 +32,7 @@
   <!-- CSS Files -->
   <link href="<?= base_url('assets/argon') ?>/css/argon-dashboard.css?v=1.1.0" rel="stylesheet" />
   <link rel="stylesheet" type="text/css" href="<?= base_url('assets/argon/') ?>DataTables/datatables.css"/>
-  <link rel="stylesheet" href="<?= base_url('assets/argon/') ?>DataTables-1.10.20/css/dataTables.bootstrap.css">
+  <link rel="stylesheet" href="<?= base_url('assets/argon/') ?>DataTables/DataTables-1.10.20/css/dataTables.bootstrap4.min.css">
 </head>
 
 <body class="">

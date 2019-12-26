@@ -8,7 +8,7 @@
   <script src="<?= base_url('assets/argon') ?>/js/argon-dashboard.min.js?v=1.1.0"></script>
   <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
   <script type="text/javascript" src="<?= base_url('assets/argon/') ?>DataTables/datatables.min.js"></script>
-  <!-- <script src="<?= base_url('assets/argon/') ?>DataTables/DataTables-1.10.20/js/dataTables.bootstrap.js"></script> -->
+  <script src="<?= base_url('assets/argon/') ?>DataTables/DataTables-1.10.20/css/dataTables.bootstrap.js"></script>
   <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/3/jquery.inputmask.bundle.js"></script>
   <script>
     $(":input").inputmask();
@@ -22,57 +22,40 @@
     $('#nomor_npwp').inputmask({
       "mask": "99.999.999.9-999.999"
     })
-    var rupiah = document.querySelector(".rupiah");
-    if(rupiah) {
-      rupiah.addEventListener("keyup", function(e) {
-      // tambahkan 'Rp.' pada saat form di ketik
-      // gunakan fungsi formatRupiah() untuk mengubah angka yang di ketik menjadi format angka
-      rupiah.value = formatRupiah(this.value, "Rp. ");
-    });
-
-    }
-    /* Fungsi formatRupiah */
-    function formatRupiah(angka, prefix) {
-      var number_string = angka.replace(/[^,\d]/g, "").toString(),
-        split = number_string.split(","),
-        sisa = split[0].length % 3,
-        rupiah = split[0].substr(0, sisa),
-        ribuan = split[0].substr(sisa).match(/\d{3}/gi);
-
-      // tambahkan titik jika yang di input sudah menjadi angka ribuan
-      if (ribuan) {
-        separator = sisa ? "." : "";
-        rupiah += separator + ribuan.join(".");
-      }
-
-      rupiah = split[1] != undefined ? rupiah + "," + split[1] : rupiah;
-      return prefix == undefined ? rupiah : rupiah ? "Rp. " + rupiah : "";
-    }
-
     window.TrackJS &&
       TrackJS.install({
         token: "ee6fab19c5a04ac1a32a645abde4613a",
         application: "argon-dashboard-free"
       });
-
-
-
-      $(document).ready( function () {
+      
+      $(document).ready(function() {
         $('#dataTable').DataTable();
-        $('#is_blocked').on('click', function() {
+        $('#is_blocked_customer').on('click', function() {
           const id = $(this).data('id')
           $.ajax({
-            url: "<?= base_url('perusahaan/customer/blocked/edit') ?>",
+            url: "<?= base_url('admin/customer/blocked/edit') ?>",
             type: "POST",
             data: {
               id: id
             },
             success: response => {
-              document.location.href = "<?= base_url('perusahaan/pegawai') ?>"
+              document.location.href = "<?= base_url('admin/customer') ?>"
             }
           })
         });
-        
+        $('#is_blocked').on('click', function() {
+          const id = $(this).data('id')
+          $.ajax({
+            url: "<?= base_url('admin/perusahaan/blocked/edit') ?>",
+            type: "POST",
+            data: {
+              id: id
+            },
+            success: response => {
+              document.location.href = "<?= base_url('admin/perusahaan') ?>"
+            }
+          })
+        });
         $('.custom-file-input').on('change', function() {
           let fileName = $(this).val().split('\\').pop()
           if(fileName.length > 15) {
