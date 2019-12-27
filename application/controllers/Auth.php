@@ -28,6 +28,8 @@ class Auth extends CI_Controller {
 				redirect('pegawai');
 			}else if($this->session->userdata('role_id') == array_search("admin", $this->data_role)) {
 				redirect('admin');
+			}else if($this->session->userdata('role_id') == array_search("customer", $this->data_role)) {
+				redirect('customer');
 			}
 		}
 
@@ -52,6 +54,8 @@ class Auth extends CI_Controller {
 								redirect('pegawai');
 							}else if($user['role_id'] == array_search('admin', $this->data_role)) {
 								redirect('admin');
+							}else if($user['role_id'] == array_search("customer", $this->data_role)) {
+								redirect('customer');
 							}
 						}else{
 							$this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Akun anda diblokir</strong> oleh admin, silahkan hubungi customer service.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
@@ -169,6 +173,7 @@ class Auth extends CI_Controller {
 			$data_perusahaan = array(
 				'id'               => uniqid(),
 				'nama_perusahaan'  => htmlspecialchars($this->input->post('nama_perusahaan')),
+				'nomor_ponsel'     => $this->input->post('nomor_ponsel'),
 				'nomor_npwp'       => $this->input->post('nomor_npwp'),
 				'foto_npwp'        => $foto_npwp,
 				'nomor_ktp'        => $this->input->post('nomor_ktp'),
@@ -205,10 +210,10 @@ class Auth extends CI_Controller {
 			}else{
 				if($this->upload->display_errors() == "<p>The filetype you are attempting to upload is not allowed.</p>") {
 					$this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Gagal</strong> upload foto pegawai, format foto harus jpg / png /jpeg.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-					redirect('perusahaan/pegawai');
+					redirect('auth/customer/register');
 				} else if($this->upload->display_errors() == "<p>The file you are attempting to upload is larger than the permitted size.</p>") {
 					$this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Gagal</strong> upload foto pegawai, size foto tidak boleh lebih dari 2mb.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-					redirect('perusahaan/pegawai');
+					redirect('auth/customer/register');
 				} else {
 					echo $this->upload->display_errors();die;	
 				}
@@ -231,7 +236,8 @@ class Auth extends CI_Controller {
 				'nomor_ponsel' => $this->input->post('nomor_ponsel'),
 				'foto_ktp'     => $foto_ktp,
 				'nomor_ktp'    => $this->input->post('nomor_ktp'),
-				'user_id'      => $data_user['id']
+				'user_id'      => $data_user['id'],
+				'latlon'       => $this->input->post('latlon')
 			);
 
 			// var_dump($data_customer); die;

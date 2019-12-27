@@ -135,7 +135,8 @@ class Perusahaan extends CI_Controller {
 					}
 				}
 			}
-			$this->db->set('nama_perusahaan', htmlspecialchars($this->input->post('nama_perusahaan')));
+			$this->db->set('nama', htmlspecialchars($this->input->post('nama_perusahaan')));
+			$this->db->set('nomor_ponsel', $this->input->post('nomor_ponsel'));
 			$this->db->set('alamat', htmlspecialchars($this->input->post('alamat')));
 			$this->db->set('nomor_npwp', $this->input->post('nomor_npwp'));
 			$this->db->set('nomor_ktp', $this->input->post('nomor_ktp'));
@@ -167,7 +168,7 @@ class Perusahaan extends CI_Controller {
 		$pegawai    = $this->db->select('*')->from('pegawai p')->join('users u', 'p.user_id=u.id')->get()->result_array();
 		$data = [
 			'title'             => 'Pegawai',
-			'title_main_header' => 'Pegawai '.$perusahaan['nama_perusahaan'],
+			'title_main_header' => 'Pegawai '.$perusahaan['nama'],
 			'data_perusahaan'   => $perusahaan,
 			'data_perusahaan2'  => $this->session->userdata(),
 			"data_pegawai"      => $pegawai
@@ -185,7 +186,7 @@ class Perusahaan extends CI_Controller {
 		if(!isset($_POST['tambah_pegawai'])) {
 			$data = [
 				'title'             => 'Pegawai',
-				'title_main_header' => 'Pegawai '.$perusahaan['nama_perusahaan'],
+				'title_main_header' => 'Pegawai '.$perusahaan['nama'],
 				'data_perusahaan'   => $perusahaan,
 				'data_perusahaan2'  => $this->session->userdata(),
 				"data_pegawai"      => $pegawai

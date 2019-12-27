@@ -7,11 +7,15 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <label for="nama_perusahaan">Nama Perusahaan</label>
-                  <input type="text" name="nama_perusahaan" id="nama_perusahaan" class="form-control" value="<?= $data_perusahaan['nama_perusahaan'] ?>">
+                  <input type="text" name="nama_perusahaan" id="nama_perusahaan" class="form-control" value="<?= $data_perusahaan['nama'] ?>">
                 </div>
                 <div class="form-group">
                   <label for="alamat">Alamat Perusahaan</label>
-                  <textarea name="alamat" id="alamat" cols="30" rows="11" class="form-control"><?= $data_perusahaan['alamat']; ?></textarea>
+                  <textarea name="alamat" id="alamat" cols="30" rows="6" class="form-control"><?= $data_perusahaan['alamat']; ?></textarea>
+                </div>
+                <div class="form-group">
+                  <label for="nomor_ponsel">Nomor Ponsel</label>
+                  <input type="text" name="nomor_ponsel" id="nomor_ponsel" class="form-control" value="<?= $data_perusahaan['nomor_ponsel'] ?>" required>
                 </div>
                 <div class="form-group">
                   <div class="row">

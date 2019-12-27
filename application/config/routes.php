@@ -65,4 +65,6 @@ $route["perusahaan/pegawai/(:any)/hapus"]  = "perusahaan/hapus_pegawai/$1";
 $route["perusahaan/pegawai/(:any)/edit"]   = "perusahaan/edit_pegawai/$1";
 $route["admin/perusahaan/verif/edit"]      = "admin/edit_verif_perusahaan";
 $route["admin/perusahaan/blocked/edit"]    = "admin/edit_blocked_perusahaan";
-$route["admin/customer/blocked/edit"] = "admin/edit_blocked_customer";
+$route["admin/customer/blocked/edit"]      = "admin/edit_blocked_customer";
+$route["admin/user/verifikasi/edit"]       = "admin/edit_verif_user";
+$route["admin/perusahaan/(:any)/detail"]   = "admin/detail_perusahaan/$1";

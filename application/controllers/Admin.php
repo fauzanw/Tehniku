@@ -81,12 +81,31 @@ class Admin extends CI_Controller {
 		$data = [
 			'title'           => 'Data Perusahaan',
 			'data_admin'      => $this->db->get()->row_array(),
-			'data_perusahaan' => $this->db->select('*')->from('perusahaan p')->join('users u', 'p.user_id=u.id')->get()->result_array()
+			'data_perusahaan' => $this->db->select('p.*, u.is_verified, u.is_blocked')->from('perusahaan p')->join('users u', 'p.user_id=u.id')->get()->result_array()
 		];
 		$this->load->view('admin/header', $data);
 		$this->load->view('admin/navigator');
 		$this->load->view('admin/main_header');
 		$this->load->view('admin/data_perusahaan', $data);
+		$this->load->view('admin/footer');
+	}
+
+	public function detail_perusahaan($id) {
+		checkAuthAdmin();
+		$this->db
+			 ->select('*')
+			 ->from('admin a')
+			 ->join('users u', 'a.user_id=u.id')
+			 ->where('u.email', $this->session->userdata('email'));
+		$data = [
+			'title'           => 'Detail Perusahaan',
+			'data_admin'      => $this->db->get()->row_array(),
+			'data_perusahaan' => $this->db->get_where('perusahaan', ['id' => $id])->row_array()
+		];
+		$this->load->view('admin/header', $data);
+		$this->load->view('admin/navigator');
+		$this->load->view('admin/main_header');
+		$this->load->view('admin/detail_perusahaan', $data);
 		$this->load->view('admin/footer');
 	}
 
@@ -218,25 +237,31 @@ class Admin extends CI_Controller {
 			'data_admin'           => $this->db->get()->row_array(),
 			'data_verifikasi'      => $this->db->select('u.*, ur.role')->from('users u')->join('user_role ur', 'u.role_id=ur.id')->where('u.is_verified', 0)->get()->result_array(),
 			'data_verifikasi_user' => []
-		];
-		array_filter($data['data_verifikasi'], function($data) {
-			if($data['role'] == 'Admin') {
-				$data['data_verifikasi_user'] = [$this->db->get_where('admin', ['user_id' => $data['id']])->row_array()];
-			}else if($data['role'] == 'Perusahaan') {
-				$data['data_verifikasi_user'] = [$this->db->get_where('perusahaan', ['user_id' => $data['id']])->row_array()];
-			}else if($data['role'] == 'Pegawai') {
-				$data['data_verifikasi_user'] = [$this->db->get_where('pegawai', ['user_id' => $data['id']])->row_array()];
-			}else if($data['role'] == 'Customer') {
-				$data['data_verifikasi_user'] = [$this->db->get_where('customer', ['user_id' => $data['id']])->row_array()];
+		];	
+		foreach($data['data_verifikasi'] as $data_verif) {
+			if($data_verif['role'] == 'Perusahaan') {
+				array_push($data['data_verifikasi_user'], $this->db->get_where('perusahaan', ['user_id'  => $data_verif['id']])->row_array());
+			}else if($data_verif['role'] == 'Customer') {
+				array_push($data['data_verifikasi_user'], $this->db->get_where('customer', ['user_id'  => $data_verif['id']])->row_array());
 			}
-		});
-		var_dump($data);
-		die;
+		}
 		$this->load->view('admin/header', $data);
 		$this->load->view('admin/navigator');
 		$this->load->view('admin/main_header');
 		$this->load->view('admin/data_verifikasi');
 		$this->load->view('admin/footer');
+	}
+
+	public function edit_verif_user() {
+		$user_id = $this->input->post('id');
+
+		$result = $this->db->get_where('users', ['id' => $user_id])->row_array();
+		if($result['is_verified'] == 0) {
+			$this->db->set('is_verified', 1);
+			$this->db->where('id', $user_id);
+			$this->db->update('users');
+			$this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Berhasil</strong> memverifikasi akun user.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+		}
 	}
 
 	public function logout()

@@ -20,7 +20,7 @@
                     <?php $i = 1;foreach($data_perusahaan as $data) : ?>
                         <tr>
                             <td><?= $i++; ?></td>
-                            <td><?= $data['nama_perusahaan']; ?></td>
+                            <td><?= $data['nama']; ?></td>
                             <td><?= $data['latlon'] ?></td>
                             <td>
                                 <div class="form-check">
@@ -38,7 +38,7 @@
                                         <i class="fas fa-ellipsis-v"></i>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                        <a class="dropdown-item" data-toggle="modal" data-target="#editDataPegawai-<?= $data['id'] ?>" href="#">Edit</a>
+                                        <a class="dropdown-item" href="<?= base_url('admin/perusahaan/') . $data['id'] . '/detail' ?>">Detail Perusahaan</a>
                                         <a class="dropdown-item" href="<?= base_url('perusahaan/pegawai/').$data['id']."/hapus" ?>">Hapus</a>
                                     </div>
                                 </div>

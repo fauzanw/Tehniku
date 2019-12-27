@@ -110,9 +110,6 @@
                       </div>
                     </div>
                     <div class="form-group">
-                        <textarea name="alamat" id="alamat" class="form-control" style="border: .1 solid black;" placeholder="Alamat Perusahaan" rows="7" required></textarea>
-                    </div>
-                    <div class="form-group">
                       <div class="input-group input-group-alternative">
                         <div class="input-group-prepend">
                           <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
@@ -120,8 +117,19 @@
                         <input class="form-control" name="password" placeholder="Password" type="password" required>
                       </div>
                     </div>
+                    <div class="form-group">
+                        <textarea name="alamat" id="alamat" class="form-control" style="border: .1 solid black;" placeholder="Alamat Perusahaan" rows="11" required></textarea>
+                    </div>
                   </div>
                   <div class="col-md-6">
+                    <div class="form-group">
+                      <div class="input-group input-group-alternative">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text"><i class="ni ni-credit-card"></i></span>
+                        </div>
+                        <input class="form-control" placeholder="Nomor Ponsel" type="text" id="nomor_ponsel" name="nomor_ponsel" required>
+                      </div>
+                    </div>
                     <div class="form-group">
                       <div class="input-group input-group-alternative">
                         <div class="input-group-prepend">

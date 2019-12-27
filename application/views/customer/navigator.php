@@ -14,7 +14,7 @@
           <a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <div class="media align-items-center">
               <span class="avatar avatar-sm rounded-circle">
-                <img alt="Image placeholder" src="<?= base_url('assets/argon') ?>/img/admin/<?= $data_admin['foto_admin'] ?>
+                <img alt="Image placeholder" src="<?= base_url('assets/argon') ?>/img/customer/<?= $data_customer['foto_customer'] ?>
 ">
               </span>
             </div>
@@ -67,34 +67,24 @@
         </div>
         <!-- Navigation -->
         <ul class="navbar-nav">
-          <li class="nav-item <?= ($this->uri->segment(1)) == "admin" && $this->uri->segment(2) == "" && $this->uri->segment(3) == "" ? "active":"" ?>">
-            <a class=" nav-link <?= ($this->uri->segment(1)) == "admin" && $this->uri->segment(2) == "" && $this->uri->segment(3) == "" ? "active":"" ?>" href="<?= base_url('admin') ?>"> 
+          <li class="nav-item <?= ($this->uri->segment(1)) == "customer" && $this->uri->segment(2) == "" && $this->uri->segment(3) == "" ? "active":"" ?>">
+            <a class=" nav-link <?= ($this->uri->segment(1)) == "customer" && $this->uri->segment(2) == "" && $this->uri->segment(3) == "" ? "active":"" ?>" href="<?= base_url('customer') ?>"> 
                 <i class="ni ni-tv-2 text-primary"></i> Dashboard
             </a>
           </li>
-          <li class="nav-item <?= ($this->uri->segment(1)) == "admin" && $this->uri->segment(2) == "perusahaan" && $this->uri->segment(3) == "" ? "active":"" ?>">
-            <a class="nav-link <?= ($this->uri->segment(1)) == "admin" && $this->uri->segment(2) == "perusahaan" && $this->uri->segment(3) == "" ? "active":"" ?>" href="<?= base_url('admin/perusahaan') ?>">
-              <i class="fas fa-city text-blue"></i> Data perusahaan
+          <li class="nav-item <?= ($this->uri->segment(1)) == "customer" && $this->uri->segment(2) == "pakejasa" && $this->uri->segment(3) == "" ? "active":"" ?>">
+            <a class="nav-link <?= ($this->uri->segment(1)) == "customer" && $this->uri->segment(2) == "pakejasa" && $this->uri->segment(3) == "" ? "active":"" ?>" href="<?= base_url('customer/pakejasa') ?>">
+              <i class="ni ni-bullet-list-67 text-red"></i> Pake Jasa
             </a>
           </li>
-          <li class="nav-item <?= ($this->uri->segment(1)) == "admin" && $this->uri->segment(2) == "customer" && $this->uri->segment(3) == "" ? "active":"" ?>">
-            <a class="nav-link <?= ($this->uri->segment(1)) == "admin" && $this->uri->segment(2) == "customer" && $this->uri->segment(3) == "" ? "active":"" ?>" href="<?= base_url('admin/customer') ?>">
-              <i class="fas fa-users text-orange"></i> Data Customer
-            </a>
-          </li>
-          <li class="nav-item <?= ($this->uri->segment(1)) == "admin" && $this->uri->segment(2) == "verifikasi" && $this->uri->segment(3) == "" ? "active":"" ?>">
-            <a class="nav-link <?= ($this->uri->segment(1)) == "admin" && $this->uri->segment(2) == "verifikasi" && $this->uri->segment(3) == "" ? "active":"" ?>" href="<?= base_url('admin/verifikasi') ?>">
-              <i class="fas fa-clipboard-list text-orange"></i> Data Verifikasi
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="<?= base_url('perusahaan/setting') ?>">
+          <li class="nav-item <?= ($this->uri->segment(1)) == "perusahaan" && $this->uri->segment(2) == "setting" && $this->uri->segment(3) == "" ? "active":"" ?>">
+            <a class="nav-link <?= ($this->uri->segment(1)) == "perusahaan" && $this->uri->segment(2) == "setting" && $this->uri->segment(3) == "" ? "active":"" ?>" href="<?= base_url('perusahaan/setting') ?>">
               <i class="ni ni-settings-gear-65 text-red"></i> Setting
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="<?= base_url('admin/logout') ?>">
-              <i class="fas fa-sign-out-alt text-red"></i> Logout
+            <a class="nav-link" href="<?= base_url('auth/logout') ?>">
+              <i class="ni ni-user-run text-red"></i> Logout
             </a>
           </li>
         </ul>
