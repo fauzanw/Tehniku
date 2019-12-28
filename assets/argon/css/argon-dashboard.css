@@ -20702,7 +20702,7 @@ pre>code.highlight {
   margin-left: 1rem;
 }
 
-/* Custom DataTable */
+/* Custom DataTable
 
 .dataTables_empty {
   background-color:  rgb(70, 70, 70) !important;
@@ -20718,7 +20718,7 @@ pre>code.highlight {
 
 table.dataTable tbody tr {
   background-color: rgb(70, 70, 70) !important;
-}
+} */
 
 .overlay { 
   width: 0;
@@ -20732,9 +20732,11 @@ table.dataTable tbody tr {
   transition: .8s;
   text-align: center;
   padding: 100px;
+  display: none;
 }
 
 .overlay:target{
+  display: block; 
   width: auto;
   height: auto;
   bottom: 0;

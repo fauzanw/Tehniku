@@ -69,12 +69,12 @@
         <ul class="navbar-nav">
           <li class="nav-item <?= ($this->uri->segment(1)) == "perusahaan" && $this->uri->segment(2) == "" && $this->uri->segment(3) == "" ? "active":"" ?>">
             <a class=" nav-link <?= ($this->uri->segment(1)) == "perusahaan" && $this->uri->segment(2) == "" && $this->uri->segment(3) == "" ? "active":"" ?>" href="<?= base_url('perusahaan') ?>"> 
-                <i class="ni ni-tv-2 text-primary"></i> Dashboard
+                <i class="ni ni-tv-2 text-orange"></i> Dashboard
             </a>
           </li>
           <li class="nav-item <?= ($this->uri->segment(1)) == "perusahaan" && $this->uri->segment(2) == "manage" && $this->uri->segment(3) == "" ? "active":"" ?>">
             <a class="nav-link <?= ($this->uri->segment(1)) == "perusahaan" && $this->uri->segment(2) == "manage" && $this->uri->segment(3) == "" ? "active":"" ?>" href="<?= base_url('perusahaan/manage') ?>">
-              <i class="ni ni-settings-gear-65 text-blue"></i> Manage Perusahaan
+              <i class="ni ni-settings-gear-65 text-orange"></i> Manage Perusahaan
             </a>
           </li>
           <li class="nav-item <?= ($this->uri->segment(1)) == "perusahaan" && $this->uri->segment(2) == "pegawai" && $this->uri->segment(3) == "" ? "active":"" ?>">
@@ -84,17 +84,17 @@
           </li>
           <li class="nav-item <?= ($this->uri->segment(1)) == "perusahaan" && $this->uri->segment(2) == "pesanan" && $this->uri->segment(3) == "" ? "active":"" ?>">
             <a class="nav-link <?= ($this->uri->segment(1)) == "perusahaan" && $this->uri->segment(2) == "pesanan" && $this->uri->segment(3) == "" ? "active":"" ?>" href="<?= base_url('perusahaan/setting') ?>">
-              <i class="ni ni-bullet-list-67 text-red"></i> Pesanan Customer
+              <i class="ni ni-bullet-list-67 text-orange"></i> Pesanan Customer
             </a>
           </li>
           <li class="nav-item <?= ($this->uri->segment(1)) == "perusahaan" && $this->uri->segment(2) == "setting" && $this->uri->segment(3) == "" ? "active":"" ?>">
             <a class="nav-link <?= ($this->uri->segment(1)) == "perusahaan" && $this->uri->segment(2) == "setting" && $this->uri->segment(3) == "" ? "active":"" ?>" href="<?= base_url('perusahaan/setting') ?>">
-              <i class="ni ni-settings-gear-65 text-red"></i> Setting
+              <i class="ni ni-settings-gear-65 text-orange"></i> Setting
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="<?= base_url('auth/logout') ?>">
-              <i class="ni ni-user-run text-red"></i> Logout
+              <i class="ni ni-user-run text-orange"></i> Logout
             </a>
           </li>
         </ul>

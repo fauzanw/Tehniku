@@ -1,12 +1,12 @@
     <div class="container-fluid mt--7">
       <?= $this->session->flashdata('message'); ?>
-      <div class="card bg-default shadow mb-5">
-        <div class="card-header bg-transparent border-0 d-sm-flex align-items-center justify-content-between mb-4">
-            <h3 class="text-white mb-0">Data Verifikasi</h3>
+      <div class="card shadow mb-5">
+        <div class="card-header border-0 d-sm-flex align-items-center justify-content-between mb-4">
+            <h3 class="text-dark mb-0">Data Verifikasi</h3>
         </div>
         <div class="card-body">
-            <table class="table table-responsive-md table-dark table-hover" id="dataTable">
-                <thead class="thead-dark">
+            <table class="table table-responsive-md table-hover" id="dataTable">
+                <thead>
                     <tr>
                         <th>No</th>
                         <th>Nama Lengkap</th>

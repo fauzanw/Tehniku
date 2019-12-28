@@ -2,16 +2,16 @@
       <div class="row">
         <div class="col-xl-12 mb-5 mb-xl-0">
           <?= $this->session->flashdata('message') ?>
-          <div class="card bg-default shadow mb-5">
-             <div class="card-header bg-transparent border-0 d-sm-flex align-items-center justify-content-between mb-4">
-                  <h3 class="text-white mb-0">Data Pegawai</h3>
+          <div class="card shadow-lg mb-5">
+             <div class="card-header border-0 d-sm-flex align-items-center justify-content-between mb-4">
+                  <h3 class="text-dark mb-0">Data Pegawai</h3>
                   <a href="<?= base_url('perusahaan/pegawai/tambah') ?>" class="d-none d-sm-inline-block btn btn-sm btn-orange shadow-sm text-white">
                       <i class="fas fa-user-plus"></i> Tambah Pegawai
                   </a>
               </div>
               <div class="card-body">
-                <table class="table table-responsive table-dark" id="dataTable">
-                    <thead class="thead-dark">
+                <table class="table table-responsive" id="dataTable">
+                    <thead>
                         <tr>
                             <th scope="col">No</th>
                             <th scope="col">Nama Pegawai</th>

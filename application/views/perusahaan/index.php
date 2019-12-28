@@ -6,11 +6,11 @@
       </div>
       <div class="row">
         <div class="col-xl-8 mb-5 mb-xl-0">
-          <div class="card bg-gradient-default shadow">
-            <div class="card-header bg-transparent">
+          <div class="card shadow-lg">
+            <div class="card-header">
               <div class="row align-items-center">
                 <div class="col">
-                  <h6 class="text-uppercase text-light ls-1 mb-1">Profile Perusahaan</h6>
+                  <h6 class="text-uppercase text-dark ls-1 mb-1">Profile Perusahaan</h6>
                 </div>
               </div>
             </div>
@@ -21,8 +21,8 @@
                 </center>
                 </div>
                 <div class="col-md-8">
-                <div class="card-body text-white">
-                    <h3 class="card-title text-white"><?= $data_perusahaan['nama']; ?></h3>
+                <div class="card-body text-dark">
+                    <h3 class="card-title text-dark"><?= $data_perusahaan['nama']; ?></h3>
                     <p class="card-text">Npwp: <?= $data_perusahaan['nomor_npwp']; ?></p>
                 </div>
                 <div class="card-footer bg-transparent">

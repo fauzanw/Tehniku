@@ -77,6 +77,11 @@
               <i class="fas fa-city text-blue"></i> Data perusahaan
             </a>
           </li>
+          <li class="nav-item <?= ($this->uri->segment(1)) == "admin" && $this->uri->segment(2) == "material" && $this->uri->segment(3) == "" ? "active":"" ?>">
+            <a class="nav-link <?= ($this->uri->segment(1)) == "admin" && $this->uri->segment(2) == "material" && $this->uri->segment(3) == "" ? "active":"" ?>" href="<?= base_url('perusahaan/material') ?>">
+            <i class="ni ni-app text-orange"></i> Data Material
+            </a>
+          </li>
           <li class="nav-item <?= ($this->uri->segment(1)) == "admin" && $this->uri->segment(2) == "customer" && $this->uri->segment(3) == "" ? "active":"" ?>">
             <a class="nav-link <?= ($this->uri->segment(1)) == "admin" && $this->uri->segment(2) == "customer" && $this->uri->segment(3) == "" ? "active":"" ?>" href="<?= base_url('admin/customer') ?>">
               <i class="fas fa-users text-orange"></i> Data Customer

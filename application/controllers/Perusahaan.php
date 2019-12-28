@@ -38,20 +38,46 @@ class Perusahaan extends CI_Controller {
 		$perusahaan = $this->db->get_where('perusahaan', ["user_id" => $this->session->userdata('id')])->row_array();
 		$this->db
 			 ->select('*')
-			 ->from('jasa j')
-			 ->join('jasa_type jt', 'jt.id=j.jasa_type_id')
-			 ->where('j.perusahaan_id', $perusahaan['id']);
+			 ->from('jasa_pivot_type jpt')
+			 ->join('jasa j', 'jpt.jasa_id=j.id')
+			 ->join('jasa_type jt', 'jpt.jasa_type_id=jt.id')
+			 ->join('perusahaan p', 'j.perusahaan_id=p.id')
+			 ->where('p.user_id', $this->session->userdata('id'));
 		$jasa = $this->db->get()->result_array();
 		$data = [
+			'data_jasa'         => $jasa,
+			'data_jasa_type'    => $this->db->get('jasa_type')->result_array(),
 			'title'             => 'Manage',
 			'title_main_header' => 'Manage Perusahaan',
 			'data_perusahaan'   => $perusahaan,
 			'data_perusahaan2'  => $this->session->userdata(),
-			'data_jasa'         => $jasa
 		];
-		if(isset($_POST['manage'])) {
-
-
+		if(isset($_POST['type_jasa'])) {
+			if($_POST['type_jasa'] == 'semua_jasa') {
+				$this->db
+				 ->select('*')
+				 ->from('jasa_pivot_type jpt')
+				 ->join('jasa j', 'jpt.jasa_id=j.id')
+				 ->join('jasa_type jt', 'jpt.jasa_type_id=jt.id')
+				 ->join('perusahaan p', 'j.perusahaan_id=p.id')
+				 ->where('p.user_id', $this->session->userdata('id'));
+			}else{
+				$this->db
+				 ->select('*')
+				 ->from('jasa_pivot_type jpt')
+				 ->join('jasa j', 'jpt.jasa_id=j.id')
+				 ->join('jasa_type jt', 'jpt.jasa_type_id=jt.id')
+				 ->join('perusahaan p', 'j.perusahaan_id=p.id')
+				 ->where('p.user_id', $this->session->userdata('id'))
+				 ->where('jt.type', $_POST['type_jasa']);
+			}
+			$data['data_jasa'] = $this->db->get()->result_array();
+			$this->load->view('perusahaan/header', $data);
+			$this->load->view('perusahaan/navigator', $data);
+			$this->load->view('perusahaan/main_header', $data);
+			$this->load->view('perusahaan/manage_perusahaan', $data);
+			$this->load->view('perusahaan/footer', $data);
+		}else if(isset($_POST['manage'])){
 			// jika logo perusahaan diubah
 			$edited_perusahaan_logo = $_FILES['logo_perusahaan']['name'];
 			if($edited_perusahaan_logo) {
@@ -146,7 +172,6 @@ class Perusahaan extends CI_Controller {
 			$this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Data Perusahaan</strong> berhasil di ubah.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
 			redirect('perusahaan/manage');
 		}else{
-			$data['data_jasa'] = $this->db->get_where('jasa', ['perusahaan_id' => $data['data_perusahaan']['id']])->result_array();
 			$this->load->view('perusahaan/header', $data);
 			$this->load->view('perusahaan/navigator', $data);
 			$this->load->view('perusahaan/main_header', $data);
@@ -156,10 +181,26 @@ class Perusahaan extends CI_Controller {
 	}
 
 	public function tambah_jasa() {
+		$perusahaan = $this->db->get_where('perusahaan', ["user_id" => $this->session->userdata('id')])->row_array();
+		$this->db
+			 ->select('*')
+			 ->from('jasa_pivot_type jpt')
+			 ->join('jasa j', 'jpt.jasa_id=j.id')
+			 ->join('jasa_type jt', 'jpt.jasa_type_id=jt.id')
+			 ->join('perusahaan p', 'j.perusahaan_id=p.id')
+			 ->where('p.user_id', $this->session->userdata('id'));
+		$jasa = $this->db->get()->result_array();
+		$data = [
+			'title'             => 'Tambah Jasa',
+			'title_main_header' => 'Tambah Jasa '.$perusahaan['nama'],
+			'data_perusahaan'   => $perusahaan,
+			'data_perusahaan2'  => $this->session->userdata(),
+			"data_jasa"         => $jasa
+		];
 		$this->load->view('perusahaan/header', $data);
 		$this->load->view('perusahaan/navigator', $data);
 		$this->load->view('perusahaan/main_header', $data);
-		$this->load->view('perusahaan/manage_perusahaan', $data);
+		$this->load->view('perusahaan/tambah_jasa', $data);
 		$this->load->view('perusahaan/footer', $data);
 	}
 
@@ -309,6 +350,7 @@ class Perusahaan extends CI_Controller {
 			$this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Berhasil</strong> memblokir pegawai.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
 		}
 	}
+
 
 	public function setting() {
 		$perusahaan = $this->db->get_where('perusahaan', ["user_id" => $this->session->userdata('id')])->row_array();

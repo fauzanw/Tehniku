@@ -58,6 +58,9 @@
 
 
       $(document).ready( function () {
+        $('#type_jasa').on('change', function() {
+          $('#form_type_jasa').submit();
+        })
         $('#dataTable').DataTable();
         $('#is_blocked').on('click', function() {
           const id = $(this).data('id')

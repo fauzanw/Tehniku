@@ -1,6 +1,6 @@
     <div class="container-fluid mt--7">
       <?= $this->session->flashdata('message'); ?>
-      <div class="card bg-dark shadow">
+      <div class="card shadow-lg">
         <div class="card-body">
           <form method="post" enctype="multipart/form-data">
             <div class="row">
@@ -101,19 +101,40 @@
           </form>
         </div>
       </div>
-      <div class="card shadow bg-dark mt-3 mb-3">
-        <div class="card-header bg-transparent border-0 d-sm-flex align-items-center justify-content-between mb-4">
-          <h3 class="text-white">Data Jasa</h3>
-          <a href="<?= base_url('perusahaan/pegawai/tambah') ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+      <div class="card shadow mt-3 mb-3">
+        <div class="card-header border-0 d-sm-flex align-items-center justify-content-between">
+          <h3 class="text-dark">Data Jasa</h3>
+          <a href="<?= base_url('perusahaan/pegawai/tambah') ?>" class="btn btn-sm btn-orange text-white shadow-sm">
             <i class="fas fa-user-plus"></i> Tambah Jasa
           </a>
         </div>
         <div class="card-body">
-          <table class="table table-responsive-md table-dark" id="dataTable">
-            <thead class="thead-dark">
+          <form method="post" id="form_type_jasa">
+            <div class="form-group">
+              <p>
+                <label for="type_jasa">Type Jasa : </label>
+                <select name="type_jasa" id="type_jasa" class="custom-select">
+                  <?php if(isset($_POST['type_jasa'])) : ?>
+                    <option <?= ($_POST['type_jasa'] == 'semua_jasa') ? 'selected':null ?> value="semua_jasa">Semua Jasa</option>
+                    <?php foreach($data_jasa_type as $data) : ?>
+                      <option <?= ($_POST['type_jasa'] == $data['type']) ? 'selected':null ?> value="<?= $data['type'] ?>"><?= $data['type']; ?></option>
+                    <?php endforeach; ?>
+                  <?php else: ?>
+                    <option value="semua_jasa">Semua Jasa</option>
+                    <?php foreach($data_jasa_type as $data) : ?>
+                      <option value="<?= $data['type'] ?>"><?= $data['type']; ?></option>
+                    <?php endforeach; ?>
+                  <?php endif; ?>
+                </select>
+              </p>
+            </div>
+          </form>
+          <table class="table table-responsive-md" id="dataTable">
+            <thead>
               <tr>
                 <th scope="col">No</th>
                 <th scope="col">Nama</th>
+                <th scope="col">Deskripsi</th>
                 <th scope="col">Harga</th>
                 <th scope="col">Type Jasa</th>
                 <th scope="col">Aksi</th>
@@ -123,7 +144,21 @@
               <?php $i = 1;foreach($data_jasa as $data) : ?>
               <tr>
                 <td><?= $i++; ?></td>
-                <td></td>
+                <td><?= $data['nama_jasa']; ?></td>
+                <td><?= $data['description']; ?></td>
+                <td><?= $data['harga']; ?></td>
+                <td><?= $data['type']; ?></td>
+                <td class='text-right'> 
+                  <div class="dropdown">
+                      <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <i class="fas fa-ellipsis-v"></i>
+                      </a>
+                      <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                          <a class="dropdown-item" href="<?= base_url('admin/perusahaan/') . $data['id'] . '/detail' ?>">Detail Perusahaan</a>
+                          <a class="dropdown-item" href="<?= base_url('perusahaan/pegawai/').$data['id']."/hapus" ?>">Hapus</a>
+                      </div>
+                  </div>
+                </td>
               </tr>
               <?php endforeach; ?>
             </tbody>
