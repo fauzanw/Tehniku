@@ -182,26 +182,39 @@ class Perusahaan extends CI_Controller {
 
 	public function tambah_jasa() {
 		$perusahaan = $this->db->get_where('perusahaan', ["user_id" => $this->session->userdata('id')])->row_array();
-		$this->db
-			 ->select('*')
-			 ->from('jasa_pivot_type jpt')
-			 ->join('jasa j', 'jpt.jasa_id=j.id')
-			 ->join('jasa_type jt', 'jpt.jasa_type_id=jt.id')
-			 ->join('perusahaan p', 'j.perusahaan_id=p.id')
-			 ->where('p.user_id', $this->session->userdata('id'));
-		$jasa = $this->db->get()->result_array();
-		$data = [
-			'title'             => 'Tambah Jasa',
-			'title_main_header' => 'Tambah Jasa '.$perusahaan['nama'],
-			'data_perusahaan'   => $perusahaan,
-			'data_perusahaan2'  => $this->session->userdata(),
-			"data_jasa"         => $jasa
-		];
-		$this->load->view('perusahaan/header', $data);
-		$this->load->view('perusahaan/navigator', $data);
-		$this->load->view('perusahaan/main_header', $data);
-		$this->load->view('perusahaan/tambah_jasa', $data);
-		$this->load->view('perusahaan/footer', $data);
+		if(!isset($_POST['tambah_jasa'])) {
+			$data = [
+				'title'             => 'Tambah Jasa',
+				'title_main_header' => 'Tambah Jasa '.$perusahaan['nama'],
+				'data_perusahaan'   => $perusahaan,
+				'data_perusahaan2'  => $this->session->userdata(),
+				'data_keyword'      => $this->db->get('jasa_keyword')->result_array(),
+				'data_type_jasa'    => $this->db->get('jasa_type')->result_array()
+			];
+			$this->load->view('perusahaan/header', $data);
+			$this->load->view('perusahaan/navigator', $data);
+			$this->load->view('perusahaan/main_header', $data);
+			$this->load->view('perusahaan/tambah_jasa', $data);
+			$this->load->view('perusahaan/footer', $data);
+		}else{
+			$jasa_id = uniqid();
+			$data_jasa = [
+				"id"               => $jasa_id,
+				"nama_jasa"        => htmlspecialchars($this->input->post('nama_jasa')),
+				"description"      => htmlspecialchars($this->input->post('description')),
+				"harga"            => $this->input->post('harga'),
+				"perusahaan_id"    => $perusahaan['id'],
+				"jasa_keyword_id"  => $this->input->post('keyword_jasa')
+			];
+			$data_jasa_pivot_type = [
+				"id"            => uniqid(),
+				"jasa_id"       => $jasa_id,
+				"jasa_type_id"  => $this->input->post('type_jasa')
+			];
+			$insert = $this->db->insert("jasa", $data_jasa);
+			$this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Berhasil</strong> tambah jasa.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+			redirect('perusahaan/manage');
+		}
 	}
 
 	public function pegawai() {

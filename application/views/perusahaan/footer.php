@@ -65,7 +65,7 @@
         $('#is_blocked').on('click', function() {
           const id = $(this).data('id')
           $.ajax({
-            url: "<?= base_url('perusahaan/customer/blocked/edit') ?>",
+            url: "<?= base_url('perusahaan/pegawai/blocked/edit') ?>",
             type: "POST",
             data: {
               id: id
@@ -134,7 +134,9 @@
         }, false);
       })();
 
-      $('#gender').val("").removeAttr('readonly').attr("placeholder", "Choose your country").prop('required', true).addClass('form-control');
+      $('#gender').val("").removeAttr('readonly').attr("placeholder", "Choose your gender").prop('required', true).addClass('form-control');
+      $('#type_jasa2').val("").removeAttr('readonly').attr("placeholder", "Choose your type jasa").prop('required', true).addClass('form-control');
+      $('#keyword_jasa').val("").removeAttr('readonly').attr("placeholder", "Choose your keyword jasa").prop('required', true).addClass('form-control');
   </script>
 </body>
 

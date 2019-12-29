@@ -109,6 +109,72 @@ class Admin extends CI_Controller {
 		$this->load->view('admin/footer');
 	}
 
+	public function material()
+	{
+		checkAuthAdmin();
+		if(!isset($_POST['cari_jasa'])) {
+			$this->db
+				 ->select('*')
+				 ->from('admin a')
+				 ->join('users u', 'a.user_id=u.id')
+				 ->where('u.email', $this->session->userdata('email'));
+			$data = [
+				'title'             => 'Data Material',
+				'data_admin'        => $this->db->get()->row_array(),
+				'data_material'     => $this->db->select('*')->from('material ml')->join('merek mk', 'ml.merek_id=mk.id')->join('jasa_keyword jk', 'ml.jasa_keyword_id=jk.id')->get()->result_array(),
+				'data_keyword_jasa' => $this->db->get('jasa_keyword')->result_array(),
+				'data_merek'        => $this->db->get('merek')->result_array()
+			];
+			$this->load->view('admin/header', $data);
+			$this->load->view('admin/navigator');
+			$this->load->view('admin/main_header');
+			$this->load->view('admin/data_material', $data);
+			$this->load->view('admin/footer');
+		}else{
+			if(isset($_POST['jasa']) == "semua_jasa" && isset($_POST['merek']) == 'semua_merek') {
+				$this->db
+					 ->select('*')
+					 ->from('admin a')
+					 ->join('users u', 'a.user_id=u.id')
+					 ->where('u.email', $this->session->userdata('email'));
+				$data = [
+					'title'             => 'Data Material',
+					'data_admin'        => $this->db->get()->row_array(),
+					'data_material'     => $this->db->select('*')->from('material ml')->join('merek mk', 'ml.merek_id=mk.id')->join('jasa_keyword jk', 'ml.jasa_keyword_id=jk.id')->get()->result_array(),
+					'data_keyword_jasa' => $this->db->get('jasa_keyword')->result_array(),
+					'data_merek'        => $this->db->get('merek')->result_array()
+				];
+				$this->load->view('admin/header', $data);
+				$this->load->view('admin/navigator');
+				$this->load->view('admin/main_header');
+				$this->load->view('admin/data_material', $data);
+				$this->load->view('admin/footer');
+			}else if(isset($_POST['jasa']) != 'semua_jasa' && isset($_POST['merek']) == 'semua_merek') {
+				echo 'oke'; die;
+				$this->db
+					 ->select('*')
+					 ->from('admin a')
+					 ->join('users u', 'a.user_id=u.id')
+					 ->where('u.email', $this->session->userdata('email'));
+				$data = [
+					'title'             => 'Data Material',
+					'data_admin'        => $this->db->get()->row_array(),
+					'data_material'     => $this->db->select('*')->from('material ml')->join('merek mk', 'ml.merek_id=mk.id')->join('jasa_keyword jk', 'ml.jasa_keyword_id=jk.id')->where('mk.id', $_POST['jasa'])->get()->result_array(),
+					'data_keyword_jasa' => $this->db->get('jasa_keyword')->result_array(),
+					'data_merek'        => $this->db->get('merek')->result_array()
+				];
+				$this->load->view('admin/header', $data);
+				$this->load->view('admin/navigator');
+				$this->load->view('admin/main_header');
+				$this->load->view('admin/data_material', $data);
+				$this->load->view('admin/footer');
+			}else{
+				var_dump($_POST);	
+			}
+			// var_dump($_POST);
+		}
+	}
+
 	public function edit_verif_perusahaan() {
 		$user_id = $this->input->post('id');
 

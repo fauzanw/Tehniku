@@ -1,8 +1,8 @@
     <div class="container-fluid mt--7">
         <div class="row justify-content-center">
             <div class="col-xl-12 mb-5 mb-xl-0">
-                <div class="card bg-default shadow mb-5">
-                    <div class="card-body text-white">
+                <div class="card shadow-lg mb-5">
+                    <div class="card-body text-dark">
                         <form enctype="multipart/form-data" action="<?= base_url('perusahaan/pegawai/tambah') ?>" novalidate class="needs-validation" method="post">
                             <div class="row">
                                 <div class="col-md-6">

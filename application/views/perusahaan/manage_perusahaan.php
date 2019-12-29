@@ -104,7 +104,7 @@
       <div class="card shadow mt-3 mb-3">
         <div class="card-header border-0 d-sm-flex align-items-center justify-content-between">
           <h3 class="text-dark">Data Jasa</h3>
-          <a href="<?= base_url('perusahaan/pegawai/tambah') ?>" class="btn btn-sm btn-orange text-white shadow-sm">
+          <a href="<?= base_url('perusahaan/jasa/tambah') ?>" class="btn btn-sm btn-orange text-white shadow-sm">
             <i class="fas fa-user-plus"></i> Tambah Jasa
           </a>
         </div>
@@ -120,7 +120,7 @@
                       <option <?= ($_POST['type_jasa'] == $data['type']) ? 'selected':null ?> value="<?= $data['type'] ?>"><?= $data['type']; ?></option>
                     <?php endforeach; ?>
                   <?php else: ?>
-                    <option value="semua_jasa">Semua Jasa</option>
+                    <option value="semua_jasa" selected>Semua Jasa</option>
                     <?php foreach($data_jasa_type as $data) : ?>
                       <option value="<?= $data['type'] ?>"><?= $data['type']; ?></option>
                     <?php endforeach; ?>
@@ -145,12 +145,12 @@
               <tr>
                 <td><?= $i++; ?></td>
                 <td><?= $data['nama_jasa']; ?></td>
-                <td><?= $data['description']; ?></td>
+                <td><?= character_limiter($data['description'], 50); ?></td>
                 <td><?= $data['harga']; ?></td>
                 <td><?= $data['type']; ?></td>
                 <td class='text-right'> 
                   <div class="dropdown">
-                      <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expandexd="false">
                           <i class="fas fa-ellipsis-v"></i>
                       </a>
                       <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">

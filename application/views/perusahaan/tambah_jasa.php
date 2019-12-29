@@ -7,26 +7,44 @@
                 <h3 class="text-dark mb-0">Tambah Jasa</h3>
               </div>
               <div class="card-body">
-                <form method="post">
+                <form method="post" novalidate class="needs-validation">
                   <div class="row">
                     <div class="col-md-6">
                       <div class="form-group">
                         <label for="nama_jasa">Nama Jasa</label>
-                        <input type="text" name="nama_jasa" id="nama_jasa" class="form-control">
+                        <input type="text" name="nama_jasa" id="nama_jasa" class="form-control" required>
                       </div>
                       <div class="form-group">
                         <label for="harga">Harga</label>
-                        <input type="text" name="harga" id="harga" class="form-control">
+                        <input type="text" name="harga" id="harga" class="rupiah form-control" required>
+                      </div>
+                      <div class="form-group">
+                        <label for="type_jasa2">Type Jasa</label>
+                        <select name="type_jasa" id="type_jasa2" class="custom-select" placeholder="Choose your type jasa" required>
+                          <option value="" selected readonly>--- TYPE JASA ---</option>
+                          <?php foreach($data_type_jasa as $data) : ?>
+                          <option value="<?= $data['id'] ?>"><?= $data['type'] ?></option>
+                          <?php endforeach; ?>
+                        </select>
                       </div>
                     </div>
                     <div class="col-md-6">
                       <div class="form-group">
+                        <label for="keyword_jasa">Keyword Jasa</label>
+                        <select name="keyword_jasa" id="keyword_jasa" class="custom-select" placeholder="Choose your keyword" required>
+                          <option value="" selected readonly>--- KEYWORD JASA ---</option>
+                          <?php foreach($data_keyword as $data) : ?>
+                          <option value="<?= $data['id'] ?>"><?= $data['keyword']; ?></option>
+                          <?php endforeach; ?>
+                        </select>
+                      </div>
+                      <div class="form-group">
                           <label for="description">Deksripsi</label>
-                          <textarea name="description" id="description" cols="30" rows="5" class="form-control"></textarea>
+                          <textarea name="description" id="description" cols="30" rows="6" class="form-control" required></textarea>
                       </div>
                     </div>
                   </div>
-                  <button type="submit" class="btn btn-orange btn-block">Tambah Jasa</button>
+                  <button type="submit" name="tambah_jasa" class="btn btn-orange btn-block">Tambah Jasa</button>
                 </form>
               </div>
             </div>

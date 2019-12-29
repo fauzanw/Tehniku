@@ -4,8 +4,8 @@
           <?= $this->session->flashdata('message'); ?>
         </div>
       </div>
-      <div class="card bg-default shadow mb-5">
-        <div class="card-header bg-transparent border-0 d-sm-flex align-items-center justify-content-between mb-4">
+      <div class="card shadow mb-5">
+        <div class="card-header border-0 d-sm-flex align-items-center justify-content-between mb-4">
             <h3 class="text-white mb-0">Data Perusahaan Terdekat</h3>
             <form method="post">
                 <input type="hidden" name='latlon' id="latlon">
@@ -15,8 +15,8 @@
             </form>
         </div>
         <div class="card-body">
-            <table class="table table-responsive-md table-dark" id="dataTable">
-                <thead class="thead-dark">
+            <table class="table table-responsive-md table-hover" id="dataTable">
+                <thead>
                     <tr>
                         <th scope="col">No</th>
                         <th scope="col">Logo Perusahaan</th>

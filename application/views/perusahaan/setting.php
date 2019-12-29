@@ -1,7 +1,7 @@
     <div class="container-fluid mt--7">
       <div class="row mb-3">
         <div class="col-md-8">
-            <div class="card shadow bg-dark">
+            <div class="card shadow">
                 <div class="card-header bg-orange" style="border: none !important;"><h3 class='text-white'>Setting Akun Perusahaan</h3></div>
                 <div class="card-body">
                     <form method="post" novalidate class="needs-validation" enctype="multipart/form-data">

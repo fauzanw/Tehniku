@@ -68,3 +68,5 @@ $route["admin/perusahaan/blocked/edit"]    = "admin/edit_blocked_perusahaan";
 $route["admin/customer/blocked/edit"]      = "admin/edit_blocked_customer";
 $route["admin/user/verifikasi/edit"]       = "admin/edit_verif_user";
 $route["admin/perusahaan/(:any)/detail"]   = "admin/detail_perusahaan/$1";
+$route["perusahaan/pegawai/blocked/edit"]  = "perusahaan/edit_blocked_pegawai";
+$route["perusahaan/jasa/tambah"]           = "perusahaan/tambah_jasa";

@@ -78,7 +78,7 @@
             </a>
           </li>
           <li class="nav-item <?= ($this->uri->segment(1)) == "admin" && $this->uri->segment(2) == "material" && $this->uri->segment(3) == "" ? "active":"" ?>">
-            <a class="nav-link <?= ($this->uri->segment(1)) == "admin" && $this->uri->segment(2) == "material" && $this->uri->segment(3) == "" ? "active":"" ?>" href="<?= base_url('perusahaan/material') ?>">
+            <a class="nav-link <?= ($this->uri->segment(1)) == "admin" && $this->uri->segment(2) == "material" && $this->uri->segment(3) == "" ? "active":"" ?>" href="<?= base_url('admin/material') ?>">
             <i class="ni ni-app text-orange"></i> Data Material
             </a>
           </li>
