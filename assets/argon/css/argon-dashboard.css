@@ -20797,5 +20797,302 @@ table.dataTable tbody tr {
     margin-top: 0;
   }
 }
+/* drag and drop  */
 
+.dropload {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  text-align: center;
+  cursor: pointer;
+  width: 100%;
+  height: 350px;
+  border-radius: 8px;
+  background-color: #fbfbfb;
+  border: 1px solid #efefef;
+  background-position: center;
+  background-size: cover;
+  position: relative;
+}
+
+.drogload label {
+  cursor: pointer;
+}
+
+.dropload p {
+  max-width: 100%;
+}
+
+.dropload .dropload-ready,
+.dropload .dropload-drag,
+.dropload .dropload-drop {
+  transition: all .35s ease-in-out;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  -webkit-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+.dropload .dropload-drop {
+  height: 100%;
+  position: relative;
+  -webkit-transform: translateY(0);
+  transform: translateY(0);
+  top: 0;
+}
+
+.dropload .dropload-drop .btn-control {
+  position: absolute;
+  right: 15px;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  top: 15px;
+  background: rgba(0, 0, 0, 0.7) !important;
+  border: 0 !important;
+}
+
+.dropload .dropload-drop .btn-control:hover {
+  background: #e74c3c !important;
+  transition: all 0.3;
+}
+
+.dropload__dragged {
+  border: 1px solid #efefef;
+}
+
+.dropload__ready .dropload-ready .info {
+  color: #cccccc;
+}
+
+.dropload__ready .dropload-ready .header {
+  color: #cccccc;
+  font-size: 20px;
+  margin-bottom: 5px;
+  margin-top: 10px;
+}
+
+.dropload__ready .dropload-ready .fas {
+  font-size: 82px;
+  color: #cccccc;
+  transition: all 0.8s;
+}
+
+.dropload__ready .dropload-drag {
+  opacity: 0;
+}
+
+.dropload__ready .dropload-drop {
+  opacity: 0;
+}
+
+.dropload__dragged .dropload-ready {
+  opacity: 0;
+}
+
+.dropload__dragged .dropload-drag {
+  opacity: 1;
+}
+
+.dropload__dragged .dropload-drop {
+  opacity: 0;
+}
+
+.dropload__dropped .dropload-ready {
+  opacity: 0;
+}
+
+.dropload__dropped .dropload-drag {
+  opacity: 0;
+}
+
+.dropload__dropped .dropload-drop {
+  opacity: 1;
+  z-index: 99;
+}
+
+.dropload__dropped {
+  background-image: url('../img/excel-icon.png')
+}
+
+.dropload:hover .dropload-ready .fas {
+  color: #fb6340;
+  transition: all 0.3s;
+  -webkit-transform: translateY(-10px);
+  transform: translateY(-10px);
+}
+
+.dropload:hover {
+  border: 1px solid #fb6340;
+  transition: all 0.8s;
+}
+
+.dropload__error {
+  border: 1px solid var(--red);
+}
+
+.dropload__error:hover {
+  border: 1px solid var(--red) !important;
+}
+
+.download-materi .material-icons {
+  float: left;
+  margin-right: 10px;
+  margin-top: -2px;
+}
+
+.progress-data .item-materi {
+  margin-bottom: 12px;
+}
+
+.progress-data .item-konsultasi img {
+  width: 70px;
+  height: 70px;
+  float: left;
+  margin-right: 16px;
+}
+
+.main-goals .materidesign .perc {
+  color: #fb6340 !important;
+  font-size: 18px !important;
+  width: 100px !important;
+  line-height: 90px !important;
+}
+
+.main-goals .materidesign .cir {
+  top: 5px !important;
+  left: 5px !important;
+  width: 90px !important;
+  height: 90px !important;
+}
+
+.main-goals .materidesign>div {
+  margin: auto;
+}
+
+.main-goals .text-secondary {
+  max-width: 100% !important;
+}
+
+.progress-data .item-konsultasi .btn {
+  font-size: 12px;
+  float: left;
+  margin-top: 18px;
+}
+
+.progress-data .no-history img {
+  height: 120px;
+}
+
+.progress-data .item-konsultasi .text-secondary,
+.title {
+  min-width: 100% !important;
+}
+
+.progress-data .item-materi .text-secondary {
+  max-width: 100% !important;
+}
+
+.progress-data .no-history .text-secondary {
+  max-width: 100%;
+}
+
+.progress-data .item-konsultasi .progress .progress-bar {
+  background: #fb6340;
+  font-size: 10px;
+}
+
+.progress-data .no-history .btn {
+  font-size: 12px;
+}
+
+.progress-data .item-konsultasi .title {
+  font-size: 16px;
+  font-family: 'Montserrat';
+  margin-bottom: 0;
+  margin-bottom: 2px;
+  margin-top: 10px;
+}
+
+.progress-data .item-materi img {
+  width: 100px;
+  height: 70px;
+  border-radius: 11px;
+  float: left;
+  margin-right: 16px;
+}
+
+.progress-data .item-materi .btn {
+  font-size: 12px;
+  float: left;
+  margin-top: 18px;
+}
+
+.progress-data .item-materi .title {
+  font-size: 16px;
+  font-family: 'Montserrat';
+  margin-bottom: 0;
+  margin-bottom: 2px;
+  margin-top: 10px;
+}
+
+.progress-data .title {
+  font-size: 20px;
+  font-weight: 500;
+  margin: 0;
+  margin-bottom: 4px;
+  font-family: 'Merriweather';
+}
+
+.progress-data .sub-title {
+  font-size: 14px;
+  margin-top: 0;
+}
+
+.progress-notice {
+  padding-top: 20px;
+  margin-top: 20px;
+  width: 90%;
+}
+
+.progress-notice .header {
+  margin-left: 30px;
+  margin-top: 0px !important;
+  font-size: 20px;
+  font-family: 'Merriweather';
+}
+
+.progress-notice .sub-header {
+  margin-left: 30px;
+}
+
+.progress-notice .icon-one {
+  margin-top: -80px;
+  height: 200px;
+  width: 300px;
+}
+
+.heading .btn-success {
+  background: #1abc9c;
+  border: 1px solid #1abc9c;
+}
+
+.heading .btn-success:hover {
+  background: #16a085;
+  border: 1px solid #16a085;
+}
 /*# sourceMappingURL=dashboard-free.css.map */

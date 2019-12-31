@@ -17,4 +17,9 @@ function hitungJarak($latitude1, $longitude1, $latitude2, $longitude2, $unit = '
 	return $split[0];
 }
 
+function formatRupiah($uang) {
+	return number_format($uang, 0, ".", ".");
+}
+
+
 ?>

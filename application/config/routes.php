@@ -70,3 +70,6 @@ $route["admin/user/verifikasi/edit"]       = "admin/edit_verif_user";
 $route["admin/perusahaan/(:any)/detail"]   = "admin/detail_perusahaan/$1";
 $route["perusahaan/pegawai/blocked/edit"]  = "perusahaan/edit_blocked_pegawai";
 $route["perusahaan/jasa/tambah"]           = "perusahaan/tambah_jasa";
+$route["admin/material/tambah"] = "admin/tambah_material";
+$route["admin/material/(:any)/hapus"] = "admin/hapus_material/$1";
+$route["admin/material/impor_excel"] = "admin/impor_excel_material";
