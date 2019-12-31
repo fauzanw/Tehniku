@@ -348,7 +348,34 @@ class Admin extends CI_Controller {
 	 * */  
 
 	public function merek() {
-		
+		if(isset($_POST['tambah_merek'])) {
+			foreach($_POST['nama_merek'] as $nama) {
+				$data_merek = [
+					'id'          => uniqid(),
+					'nama_merek'  => htmlspecialchars($nama)
+				];
+				$this->db->insert('merek', $data_merek);
+			}
+			$this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Berhasil</strong> tambah merek.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+			redirect('admin/merek');
+
+		}else{
+			$this->db
+				 ->select('*')
+				 ->from('admin a')
+				 ->join('users u', 'a.user_id=u.id')
+				 ->where('u.email', $this->session->userdata('email'));
+			$data = [
+				'title'             => 'Data Merek',
+				'data_admin'        => $this->db->get()->row_array(),
+				'data_merek'        => $this->db->get('merek')->result_array()
+			];
+			$this->load->view('admin/header', $data);
+			$this->load->view('admin/navigator');
+			$this->load->view('admin/main_header');
+			$this->load->view('admin/data_merek', $data);
+			$this->load->view('admin/footer');
+		}
 	}
 
 	/**
