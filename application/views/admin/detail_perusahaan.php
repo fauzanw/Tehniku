@@ -11,7 +11,7 @@
                     <p>Latitude & Longitude : <?= $data_perusahaan['latlon']; ?></p>
                 </div>
             </div>
-            <a href="<?= base_url('admin/perusahaan') ?>" class="btn btn-orange btn-block text-white mb-2">Kembali ke data perusahaan</a>
+            <a href="<?= base_url('admin/perusahaan') ?>" class="btn btn-orange btn-block text-white mb-2"><i class="fas fa-arrow-left"></i> &nbsp;Kembali ke data perusahaan</a>
         </div>
         <div class="col-md-8">
             <div class="card shadow pt-2">

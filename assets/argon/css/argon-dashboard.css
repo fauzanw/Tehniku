@@ -5370,6 +5370,18 @@ input[type="button"].btn-block {
   background-color: rgba(203, 210, 246, 0.5);
 }
 
+.badge-orange {
+  color: white;
+  background-color: #f4813f;
+}
+
+.badge-orange[href]:hover,
+.badge-orange[href]:focus {
+  color: #fff;
+  text-decoration: none;
+  background-color: #fa6914;
+}
+
 .badge-primary[href]:hover,
 .badge-primary[href]:focus {
   color: #fff;

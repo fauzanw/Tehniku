@@ -83,6 +83,7 @@
                                         <i class="fas fa-ellipsis-v"></i>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                        <a class="dropdown-item" href="<?= base_url('admin/material/').$data['id']."/edit" ?>">Edit</a>
                                         <a class="dropdown-item" href="<?= base_url('admin/material/').$data['id']."/hapus" ?>">Hapus</a>
                                     </div>
                                 </div>

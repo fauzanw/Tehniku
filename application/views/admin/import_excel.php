@@ -8,6 +8,11 @@
             <div class="col-md-6">
                 <div class="card shadow-lg">
                     <div class="card-body">
+                        <div class="row mb-2">
+                            <div class="col-md-6">
+                                <a href="<?= base_url('admin/material') ?>" class="badge badge-orange"><i class="fas fa-arrow-left"></i> &nbsp;Kembali</a>
+                            </div>
+                        </div>
                         <form method="post" novalidate class="needs-validation" enctype="multipart/form-data">
                             <div class="dropload dropload__ready">
                                 <div class="dropload-ready">

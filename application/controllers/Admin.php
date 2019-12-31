@@ -213,6 +213,48 @@ class Admin extends CI_Controller {
 		}
 	}
 
+	public function edit_material($id)
+	{
+		$material = $this->db->get_where('material', ['id' => $id])->row_array();
+		if($material) {
+			if(isset($_POST['edit_material'])) {
+				$data_material = [
+					'nama_material'     => htmlspecialchars($this->input->post('nama_material')),
+					'description'       => htmlspecialchars($this->input->post('description')),
+					'merek_id'          => $this->input->post('merek'),
+					'harga'             => $this->input->post('harga'),
+					'jasa_keyword_id'   => $this->input->post('jasa_keyword')
+				];
+
+				$this->db->where('id', $id);
+				$this->db->update('material', $data_material);
+				$this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Success</strong> edit material.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+				redirect('admin/material');
+			}else{
+				$this->db
+					 ->select('*')
+					 ->from('admin a')
+					 ->join('users u', 'a.user_id=u.id')
+					 ->where('u.email', $this->session->userdata('email'));
+				$data = [
+					'title'             => 'Data Material',
+					'data_admin'        => $this->db->get()->row_array(),
+					'data_merek'        => $this->db->get('merek')->result_array(),
+					'data_jasa_keyword' => $this->db->get('jasa_keyword')->result_array(),
+					'data_material'     => $material
+				];
+				$this->load->view('admin/header', $data);
+				$this->load->view('admin/navigator');
+				$this->load->view('admin/main_header');
+				$this->load->view('admin/edit_material', $data);
+				$this->load->view('admin/footer');
+			}
+		}else{
+			$this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Gagal</strong> edit material, id tidak valid.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+			redirect('admin/material');
+		}
+	}
+
 	public function impor_excel_material()
 	{
 		if(isset($_POST['impor_material'])) {
@@ -235,8 +277,10 @@ class Admin extends CI_Controller {
 							'jasa_keyword_id'  => $xls->rows()[$i][5]
 						];
 
-						var_dump($data_material);
+						$this->db->insert('material', $data_material);
 					}
+					$this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Berhasil</strong> impor material.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+					redirect('admin/material');
 				}else{
 					echo SimpleXLS::parseError();
 				}
@@ -298,6 +342,18 @@ class Admin extends CI_Controller {
 	/**
 	 * End @method Perusahaan
 	 * */ 
+
+	/**
+	 * @method Merek
+	 * */  
+
+	public function merek() {
+		
+	}
+
+	/**
+	 * End @method merek
+	 * */  
 
 	/**
 	 * @method Pegawai
