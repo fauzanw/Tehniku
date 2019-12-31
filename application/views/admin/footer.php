@@ -148,6 +148,17 @@
 				})
       })
 
+      $(document).on('click', '#add_input_jasa', e => {
+        if(x < max_fields) {
+          x++;
+					$('#output').append('<div class=\"input-group\ form-group\ text-dark\" id=\"out\"><input type=\"text\" class=\"form-control\" name=\"nama_jasa[]\" placeholder=\"Nama Jasa...\" required><div class=\"input-group-prepend\ remove\"><div class=\"input-group-text\"><a href="#" class="text-danger"><i class=\"fa fa-minus\"></i></a></div></div></div>');
+        } 
+        $('#output').on("click",".remove", function(e){
+					e.preventDefault(); $(this).parent('#out').remove(); x--;
+					repeat();
+				})
+      })
+
       (function() {
         'use strict';
         window.addEventListener('load', function() {
