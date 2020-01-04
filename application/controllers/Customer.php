@@ -9,6 +9,7 @@ class Customer extends CI_Controller {
 
 	public function index()
 	{
+		checkAuthUser('Customer');
 		$perusahaan = $this->db->get_where('customer', ["user_id" => $this->session->userdata('id')])->row_array();
 		$data = [
 			'title'             => 'Dashboard',
@@ -25,31 +26,15 @@ class Customer extends CI_Controller {
 
 	public function pakejasa()
 	{
+		checkAuthUser('Customer');
 		$customer = $this->db->get_where('customer', ["user_id" => $this->session->userdata('id')])->row_array();
 		$data = [
-			'title'             => 'Dashboard',
-			'title_main_header' => 'Dashboard',
+			'title'             => 'Pake Jasa',
+			'title_main_header' => 'Pake Jasa',
 			'data_customer'     => $customer,
 			'data_customer2'    => $this->session->userdata(),
-			'data_perusahaan'   => [
-				$this->db->get('perusahaan')->result_array(),
-				'jarak' => []
-			]
+			'data_jasa'         => $this->db->get('jasa')->result_array()
 		];
-		if(isset($_POST['latlon'])) {
-			foreach($data['data_perusahaan'][0] as $data_perusahaan) {
-				$latlon_perusahaan = explode(", ", $data_perusahaan['latlon']);
-				$latlon_customer   = explode(", ", $_POST['latlon']);
-				array_push($data['data_perusahaan']['jarak'], hitungJarak($latlon_perusahaan[0], $latlon_perusahaan[1],$latlon_customer[0], $latlon_customer[1]) . " Km");
-			}	
-		}else{
-			foreach($data['data_perusahaan'][0] as $data_perusahaan) {
-				$latlon_perusahaan = explode(", ", $data_perusahaan['latlon']);
-				$latlon_customer   = explode(", ", $data['data_customer']['latlon']);
-				array_push($data['data_perusahaan']['jarak'], hitungJarak($latlon_perusahaan[0], $latlon_perusahaan[1],$latlon_customer[0], $latlon_customer[1]) . " Km");
-			}
-		}
-
 		$this->load->view('customer/header', $data);
 		$this->load->view('customer/navigator', $data);
 		$this->load->view('customer/main_header', $data);
@@ -57,9 +42,17 @@ class Customer extends CI_Controller {
 		$this->load->view('customer/footer', $data);
 	}
 
+	public function pakejasa_type($id)
+	{
+		$type = $this->db->get_where('jasa_pivot_type', ['jasa_id' => $id])->result_array();
+		$type = $this->db->from('jasa_pivot_type jpt')->join('jasa j', 'jpt.jasa_id=j.id')->join('jasa_type jt', 'jpt.jasa_type_id=jt.id')->get()->result_array();
+
+		var_dump($type);
+	}
+
 	public function setting() 
 	{
-		
+		checkAuthUser('Customer');
 	}
 
 }

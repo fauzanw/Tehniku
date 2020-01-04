@@ -102,8 +102,8 @@
               <i class="fas fa-clipboard-list text-orange"></i> Data Verifikasi
             </a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="<?= base_url('perusahaan/setting') ?>">
+          <li class="nav-item <?= ($this->uri->segment(1)) == "admin" && $this->uri->segment(2) == "setting" && $this->uri->segment(3) == "" ? "active":"" ?>">
+            <a class="nav-link <?= ($this->uri->segment(1)) == "admin" && $this->uri->segment(2) == "setting" && $this->uri->segment(3) == "" ? "active":"" ?>" href="<?= base_url('admin/setting') ?>">
               <i class="ni ni-settings-gear-65 text-red"></i> Setting
             </a>
           </li>

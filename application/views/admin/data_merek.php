@@ -27,7 +27,7 @@
                                         <i class="fas fa-ellipsis-v"></i>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                        <a class="dropdown-item" href="<?= base_url('admin/material/').$data['id']."/edit" ?>">Edit</a>
+                                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#editMerek-<?= $data['id'] ?>">Edit</a>
                                         <a class="dropdown-item" href="<?= base_url('admin/merek/').$data['id']."/hapus" ?>">Hapus</a>
                                     </div>
                                 </div>
@@ -37,6 +37,31 @@
                 </tbody>
             </table>
         </div>
+        <?php foreach($data_merek as $data) : ?>
+        <div class="modal fade bd-example-modal-lg" id="editMerek-<?= $data['id'] ?>" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editDataPegawaiLabel">Edit Merek</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action='<?= base_url("admin/merek/") . $data['id'] . '/edit' ?>' novalidate class='needs-validation' enctype="multipart/form-data">
+                    <div class="form-group">
+                        <input type='text' class='form-control' name='nama_merek' placeholder='Nama Merek...' required value="<?= $data['nama_merek'] ?>">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" name="edit_merek" class="btn btn-orange">Edit Merek</button>
+                    </form>
+                </div>
+                </div>
+            </div>
+        </div>
+        <?php endforeach; ?>
         <div class="modal fade bd-example-modal-lg" id="tambahMerek" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">

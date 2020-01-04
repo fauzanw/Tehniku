@@ -10,7 +10,7 @@
             <div class="card-header bg-transparent">
               <div class="row align-items-center">
                 <div class="col">
-                  <h6 class="text-uppercase text-light ls-1 mb-1">Profile Admin <?= $data_admin['nama'] ?></h6>
+                  <h6 class="text-uppercase text-light ls-1 mb-1">Profile Admin</h6>
                 </div>
               </div>
             </div>
@@ -23,7 +23,7 @@
                 <div class="col-md-8">
                 <div class="card-body text-white">
                     <h3 class="card-title text-white"><?= $data_admin['nama']; ?></h3>
-                    <p class="card-text">Nomor Ktp: <?= $data_admin['nomor_ponsel']; ?></p>
+                    <p class="card-text">Nomor Ponsel: <?= $data_admin['nomor_ponsel']; ?></p>
                 </div>
                 <div class="card-footer bg-transparent">
                 <p class="card-text"><small class="text-muted">Bergabung ke <b>Tehniku</b> sejak <?= $this->session->userdata('date_joined') ?> </small></p>

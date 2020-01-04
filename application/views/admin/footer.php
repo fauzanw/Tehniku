@@ -159,7 +159,7 @@
 				})
       })
 
-      (function() {
+      $(function() {
         'use strict';
         window.addEventListener('load', function() {
           // Fetch all the forms we want to apply custom Bootstrap validation styles to
@@ -175,14 +175,11 @@
             }, false);
           });
         }, false);
-      })();
-
-      $(function() {
-        $(document).on("click", "#remove-preview", function(e) {
-            e.preventDefault();
-            $(".dropload").removeClass("dropload__dropped").addClass("dropload__ready")
-            $('#cover').val('');
-        })
+    })
+    $(document).on("click", "#remove-preview", function(e) {
+        e.preventDefault();
+        $(".dropload").removeClass("dropload__dropped").addClass("dropload__ready")
+        $('#cover').val('');
     })
 
       $('#gender').val("").removeAttr('readonly').attr("placeholder", "Choose your country").prop('required', true).addClass('form-control');

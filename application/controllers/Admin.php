@@ -378,6 +378,21 @@ class Admin extends CI_Controller {
 		}
 	}
 
+	public function edit_merek($id) {
+		$merek = $this->db->get_where('merek', ['id' => $id])->row_array();
+
+		if($merek) {
+			$this->db->where('id', $id);
+			$this->db->set('nama_merek',$_POST['nama_merek']);
+			$this->db->update('merek');
+			$this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Berhasil</strong> edit merek.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+			redirect('admin/merek');
+		}else{
+			$this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Gagal</strong> edit merek, id tidak valid.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+			redirect('admin/merek');
+		}
+	}
+
 	public function hapus_merek($id) {
 		$merek = $this->db->get_where('merek', ['id' => $id])->row_array();
 
@@ -538,6 +553,55 @@ class Admin extends CI_Controller {
 			$this->db->where('id', $user_id);
 			$this->db->update('users');
 			$this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Berhasil</strong> memverifikasi akun user.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+		}
+	}
+
+	public function setting()
+	{
+		checkAuthAdmin();
+		$this->db
+			 ->select('*')
+			 ->from('admin a')
+			 ->join('users u', 'a.user_id=u.id')
+			 ->where('u.email', $this->session->userdata('email'));
+		$data = [
+			'title'                => 'Setting Akun',
+			'data_admin'           => $this->db->get()->row_array(),
+			'data_user_admin'      => $this->db->get('admin', ['user_id' => $this->session->userdata('id')])->row_array()
+		];	
+		if(isset($_POST['setting'])) {
+
+			$email           = $this->input->post('email');
+			$edited_password = $this->input->post('new_password');
+			$new_password    = password_hash($edited_password, PASSWORD_DEFAULT);
+			$old_password    = $this->input->post('old_password');
+			// jika password mau diubah
+			if($edited_password) {
+				if(!$old_password) {
+					$this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Gagal</strong> ganti password, password lama tidak boleh kosong.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+					redirect('admin/setting');
+				}else if(password_verify($old_password, $data['data_perusahaan2']['password'])) {
+					$this->db->set('password', $new_password);
+				}
+			}
+
+			$this->db->set('email', $this->input->post('email'));
+			$this->db->where('id', $this->session->userdata('id'));
+			$this->db->update('users');
+
+
+			$this->db->set('nama', htmlspecialchars($this->input->post('nama')));
+			$this->db->set('nomor_ponsel', $this->input->post('nomor_ponsel'));
+			$this->db->where('user_id', $this->session->userdata('id'));
+			$this->db->update('admin');
+			$this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Berhasil</strong> setting profile!.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+			redirect('admin');
+		}else{
+			$this->load->view('admin/header', $data);
+			$this->load->view('admin/navigator');
+			$this->load->view('admin/main_header');
+			$this->load->view('admin/setting');
+			$this->load->view('admin/footer');
 		}
 	}
 
