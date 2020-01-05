@@ -33,8 +33,10 @@ class Customer extends CI_Controller {
 			'title_main_header' => 'Pake Jasa',
 			'data_customer'     => $customer,
 			'data_customer2'    => $this->session->userdata(),
-			'data_jasa'         => $this->db->get('jasa')->result_array()
+			'data_jasa'         => $this->db->select('*')->from('jasa_pivot_type jpt')->join('jasa j', 'jpt.jasa_id=j.id')->join('jasa_type jt', 'jpt.jasa_type_id=jt.id')->join('perusahaan p', 'j.perusahaan_id=p.id')->get()->result_array(),
+			'data_type_jasa'    => $this->db->get('jasa_type')->result_array()
 		];
+		// echo "<pre>";print_r($data['data_jasa']); die;
 		$this->load->view('customer/header', $data);
 		$this->load->view('customer/navigator', $data);
 		$this->load->view('customer/main_header', $data);
