@@ -34,7 +34,8 @@ class Customer extends CI_Controller {
 			'data_customer'     => $customer,
 			'data_customer2'    => $this->session->userdata(),
 			'data_jasa'         => $this->db->select('*')->from('jasa_pivot_type jpt')->join('jasa j', 'jpt.jasa_id=j.id')->join('jasa_type jt', 'jpt.jasa_type_id=jt.id')->join('perusahaan p', 'j.perusahaan_id=p.id')->get()->result_array(),
-			'data_type_jasa'    => $this->db->get('jasa_type')->result_array()
+			'data_type_jasa'    => $this->db->get('jasa_type')->result_array(),
+			'data_keyword_jasa' => $this->db->get('jasa_keyword')->result_array()
 		];
 		// echo "<pre>";print_r($data['data_jasa']); die;
 		$this->load->view('customer/header', $data);
@@ -44,12 +45,33 @@ class Customer extends CI_Controller {
 		$this->load->view('customer/footer', $data);
 	}
 
-	public function pakejasa_type($id)
+	public function cari_jasa()
 	{
-		$type = $this->db->get_where('jasa_pivot_type', ['jasa_id' => $id])->result_array();
-		$type = $this->db->from('jasa_pivot_type jpt')->join('jasa j', 'jpt.jasa_id=j.id')->join('jasa_type jt', 'jpt.jasa_type_id=jt.id')->get()->result_array();
-
-		var_dump($type);
+		$customer = $this->db->get_where('customer', ["user_id" => $this->session->userdata('id')])->row_array();
+		$_DATA = [
+			'data_customer'     => $customer,
+			'data_customer2'    => $this->session->userdata(),
+		];
+		if(isset($_GET['keyword'])){
+			$keyword = $_GET['keyword'];
+			$output = '';
+			$this->db
+				 ->select('*')
+				 ->from('jasa_pivot_type jpt')
+				 ->join('jasa j', 'jpt.jasa_id=j.id')
+				 ->join('jasa_keyword jk', 'j.jasa_keyword_id=jk.id')
+				 ->join('jasa_type jt', 'jpt.jasa_type_id=jt.id')
+				 ->join('perusahaan p', 'j.perusahaan_id=p.id');
+			if($keyword != '') {
+				$this->db->like('j.nama_jasa', $keyword);
+				$this->db->or_like('p.nama', $keyword);
+				$this->db->or_like('jt.type', $keyword);
+				$this->db->or_like('jk.keyword', $keyword);
+			}
+			$data_jasa = $this->db->get()->result_array();
+			// echo "<pre>"; print_r($data_jasa->result_array()); die;
+			echo json_encode($data_jasa, JSON_PRETTY_PRINT);
+		}
 	}
 
 	public function setting() 

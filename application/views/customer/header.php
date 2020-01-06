@@ -29,10 +29,13 @@
   <!-- Icons -->
   <link href="<?= base_url('assets/argon') ?>/js/plugins/nucleo/css/nucleo.css" rel="stylesheet" />
   <link href="<?= base_url('assets/argon') ?>/js/plugins/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="<?= base_url('assets/argon/css/animate.css') ?>">
   <!-- CSS Files -->
   <link href="<?= base_url('assets/argon') ?>/css/argon-dashboard.css?v=1.1.0" rel="stylesheet" />
   <link rel="stylesheet" type="text/css" href="<?= base_url('assets/argon/') ?>DataTables/datatables.min.css"/>
   <!-- <link rel="stylesheet" href="<?= base_url('assets/argon/') ?>DataTables/DataTables-1.10.20/css/dataTables.bootstrap.min.css"> -->
+  <link rel="stylesheet" href="<?= base_url('assets/argon/select2-4.0.12/dist/css/select2.min.css') ?>">
+  <link rel="stylesheet" href="<?= base_url('assets/argon/select2-4.0.12/dist/css/select2-bootstrap.css') ?>">
 </head>
 
 <body class="">

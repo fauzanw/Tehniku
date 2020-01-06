@@ -211,7 +211,8 @@ class Perusahaan extends CI_Controller {
 				"jasa_id"       => $jasa_id,
 				"jasa_type_id"  => $this->input->post('type_jasa')
 			];
-			$insert = $this->db->insert("jasa", $data_jasa);
+			$this->db->insert("jasa", $data_jasa);
+			$this->db->insert("jasa_pivot_type", $data_jasa_pivot_type);
 			$this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Berhasil</strong> tambah jasa.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
 			redirect('perusahaan/manage');
 		}

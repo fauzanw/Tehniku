@@ -77,3 +77,4 @@ $route["admin/material/(:any)/edit"]       = "admin/edit_material/$1";
 $route["admin/merek/(:any)/hapus"] = "admin/hapus_merek/$1";
 $route["admin/merek/(:any)/edit"] = "admin/edit_merek/$1";
 $route["customer/pakejasa/(:any)/type"] = "customer/pakejasa_type/$1";
+$route["customer/jasa/search"] = "customer/cari_jasa";

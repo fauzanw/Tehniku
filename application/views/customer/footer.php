@@ -10,7 +10,10 @@
   <script type="text/javascript" src="<?= base_url('assets/argon/') ?>DataTables/datatables.min.js"></script>
   <!-- <script src="<?= base_url('assets/argon/') ?>DataTables/DataTables-1.10.20/js/dataTables.bootstrap.js"></script> -->
   <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/3/jquery.inputmask.bundle.js"></script>
+  <script src="<?= base_url('assets/argon/select2-4.0.12/dist/js/select2.min.js') ?>"></script>
+  <script src="<?= base_url('assets/argon/js/wow.min.js') ?>"></script>
   <script>
+    new WOW().init();
     $(":input").inputmask();
     $('#nomor_ponsel').inputmask({
       "mask": "999-999-999-999"
@@ -59,6 +62,58 @@
 
       $('#dataTable').DataTable();
       $(document).ready( function () {
+        $.fn.select2.defaults.set( "theme", "bootstrap" );
+
+        function formatJasa( jasa ) {
+          if (jasa.loading) return jasa.text
+          var markup = `
+            <div class="row ml-2 select2-search">
+              <img src="<?= base_url('assets/argon/img/perusahaan/') ?>${jasa.logo_perusahaan}" style='width:75px;height:75px;'>
+              <div class='ml-3 text-white'>
+                <h3>${jasa.nama}/${jasa.nama_jasa}</h3>
+                <hr class="mt--2">
+                <div class="row justify-content-between mt--3">
+                                <div class="row ml-3">
+                                    <img src="<?= base_url('assets/argon/img/theme/iconWork.png') ?>" style="width: 20px;height:20px;" alt="">
+                                    <p class="ml-2 mt--1">${jasa.type}</p>
+                                </div>
+                                <div class="row mr-3">
+                                    <img src="<?= base_url('assets/argon/img/theme/iconLocation.png') ?>" style="width: 20px;height:18px;" alt="">
+                                </div>
+                            </div>
+              </div>
+            </div>
+          `
+
+          return markup
+				
+			}
+      function formatJasaSelection( jasa ) {
+				return jasa.nama_jasa;
+			}
+        $( ".select2" ).select2({
+				width : null,
+				ajax: {
+					url: "<?= base_url('customer/jasa/search') ?>",
+					dataType: 'json',
+					delay: 250,
+					data: function (params) {
+						return {
+							keyword: params.term,
+						};
+					},
+					processResults: function (data, params) {
+
+						return {
+							results: data
+						};
+					},
+				},
+        escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+				minimumInputLength: 1,
+				templateResult: formatJasa,
+				templateSelection: formatJasaSelection
+			});
         $('#cari-perusahaan-terdekat').on('click', e => {
           if(navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(position => {
@@ -144,6 +199,38 @@
       })();
 
       $('#gender').val("").removeAttr('readonly').attr("placeholder", "Choose your country").prop('required', true).addClass('form-control');
+      var typingTimer;
+      $('#keyword_jasa').on('keyup', function() {
+        if (typingTimer) clearTimeout(typingTimer);
+        typingTimer = setTimeout(doneTypingSearchJasa, 500);
+      })
+
+      $('#keyword_jasa').on('keydown', function() {
+        clearTimeout(typingTimer)
+      })
+
+      function doneTypingSearchJasa()
+      {
+        var keyword = $('#keyword_jasa').val();
+        function load_data(keyword) {
+          $.ajax({
+            url: "<?= base_url('customer/jasa/search') ?>",
+            method: 'POST',
+            data: {
+              cari_jasa: true,
+              keyword: keyword
+            },
+            success: response => {
+              $('#result_cari_jasa').html(response)
+            }
+          })
+        }
+        if(keyword != '') {
+          load_data(keyword)
+        }else{
+          load_data()
+        }
+      }
   </script>
 </body>
 

@@ -43,18 +43,20 @@
                     <div class="input-group-prepend">
                         <img src="<?= base_url('assets/argon/img/theme/iconSearch.png') ?>" style='width: 46px;height:46px;'  class="input-group-text" alt="">
                     </div>
-                    <input type="text" class="form-control" placeholder="Cari jasa...">
+                    <select name="nama_jasa" id="nama_jasa" class="select2 select2-container select2-container--bootstrap select2-container--above select2-container--focus">
+                        <option value="2126244" selected="selected">twbs/bootstrap</option>
+                    </select>
                 </div>
             </form>
         </div>
       </div>
-      <div class="row mb-5">
+      <div class="row mb-5" id="result_cari_jasa">
           <?php foreach($data_jasa as $data) : ?>
           <?php 
             $latlon_perusahaan = explode(", ", $data['latlon']);
             $latlon_customer   = explode(", ", $data_customer['latlon']);
           ?>
-          <div class="col-md-4">
+          <div class="col-md-4 wow fadeInUp">
             <div class="card card-pakejasa shadow-lg">
                 <img src="<?= base_url('assets/argon/img/theme/wave.png') ?>" class="wave-pakejasa" alt="">
                 <center class="mt--15">
