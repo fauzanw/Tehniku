@@ -21185,5 +21185,21 @@ table.dataTable tbody tr {
   border-radius: 25px !important;
 }
 
+.select2-search:active .contain h3 {
+  color: white !important;
+}
+
+.select2-search:hover .contain h3{
+  color: white !important;
+}
+
+.select2-search .contain .select2-type {
+  color: #32325d !important;
+}
+
+.select2-search:hover .contain .select2-type {
+  color: white !important;
+}
+
 
 /*# sourceMappingURL=dashboard-free.css.map */

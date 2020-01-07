@@ -39,13 +39,12 @@
                         </div>
                     </div>
                 </div>
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        <img src="<?= base_url('assets/argon/img/theme/iconSearch.png') ?>" style='width: 46px;height:46px;'  class="input-group-text" alt="">
+                <div class="form-group">
+                    <label>Cari Jasa : </label>
+                    <div class="input-group input-group-lg">
+                        <select class="form-control select2">
+                        </select>
                     </div>
-                    <select name="nama_jasa" id="nama_jasa" class="select2 select2-container select2-container--bootstrap select2-container--above select2-container--focus">
-                        <option value="2126244" selected="selected">twbs/bootstrap</option>
-                    </select>
                 </div>
             </form>
         </div>

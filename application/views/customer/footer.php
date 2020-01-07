@@ -63,35 +63,8 @@
       $('#dataTable').DataTable();
       $(document).ready( function () {
         $.fn.select2.defaults.set( "theme", "bootstrap" );
-
-        function formatJasa( jasa ) {
-          if (jasa.loading) return jasa.text
-          var markup = `
-            <div class="row ml-2 select2-search">
-              <img src="<?= base_url('assets/argon/img/perusahaan/') ?>${jasa.logo_perusahaan}" style='width:75px;height:75px;'>
-              <div class='ml-3 text-white'>
-                <h3>${jasa.nama}/${jasa.nama_jasa}</h3>
-                <hr class="mt--2">
-                <div class="row justify-content-between mt--3">
-                                <div class="row ml-3">
-                                    <img src="<?= base_url('assets/argon/img/theme/iconWork.png') ?>" style="width: 20px;height:20px;" alt="">
-                                    <p class="ml-2 mt--1">${jasa.type}</p>
-                                </div>
-                                <div class="row mr-3">
-                                    <img src="<?= base_url('assets/argon/img/theme/iconLocation.png') ?>" style="width: 20px;height:18px;" alt="">
-                                </div>
-                            </div>
-              </div>
-            </div>
-          `
-
-          return markup
-				
-			}
-      function formatJasaSelection( jasa ) {
-				return jasa.nama_jasa;
-			}
         $( ".select2" ).select2({
+        placeholder: "Pilih jasa",
 				width : null,
 				ajax: {
 					url: "<?= base_url('customer/jasa/search') ?>",
@@ -111,8 +84,32 @@
 				},
         escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
 				minimumInputLength: 1,
-				templateResult: formatJasa,
-				templateSelection: formatJasaSelection
+				templateResult: jasa => {
+          if (jasa.loading) return jasa.text
+
+          markup = `
+            <div class='select2-result-repository clearfix'>
+              <div class='select2-result-repository__avatar'><img src='<?= base_url('assets/argon/img/perusahaan/') ?>${jasa.logo_perusahaan}'/></div>
+              <div class='select2-result-repository__meta'>
+                <div class='select2-result-repository__title'>${jasa.nama_jasa}</div>
+              <div class='select2-result-repository__statistics'>
+                <div class='select2-result-repository__forks'><i class='fas fa-building'></i>  ${jasa.nama}</div>
+                <div class='select2-result-repository__stargazers'><i class='fas fa-briefcase'></i>  ${jasa.type} </div>
+                <div class='select2-result-repository__watchers'><i class='fas fa-search-location'></i> 70 Km</div>
+                <div class='select2-result-repository__price'><i class='fas fa-money-bill-wave'></i>  ${jasa.harga}</div>
+              </div>
+            </div></div>`
+
+          return markup
+        },
+				templateSelection: jasa => jasa.nama_jasa
+			})
+      $('.select2').on('change', function() {
+        var value = $(this).val()
+        $('.select2').val(value)
+      })
+      $( ":checkbox" ).on( "click", function() {
+				$( this ).parent().nextAll( "select" ).prop( "disabled", !this.checked );
 			});
         $('#cari-perusahaan-terdekat').on('click', e => {
           if(navigator.geolocation) {

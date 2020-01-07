@@ -77,8 +77,8 @@
               <i class="ni ni-bullet-list-67 text-red"></i> Pake Jasa
             </a>
           </li>
-          <li class="nav-item <?= ($this->uri->segment(1)) == "perusahaan" && $this->uri->segment(2) == "setting" && $this->uri->segment(3) == "" ? "active":"" ?>">
-            <a class="nav-link <?= ($this->uri->segment(1)) == "perusahaan" && $this->uri->segment(2) == "setting" && $this->uri->segment(3) == "" ? "active":"" ?>" href="<?= base_url('perusahaan/setting') ?>">
+          <li class="nav-item <?= ($this->uri->segment(1)) == "customer" && $this->uri->segment(2) == "setting" && $this->uri->segment(3) == "" ? "active":"" ?>">
+            <a class="nav-link <?= ($this->uri->segment(1)) == "customer" && $this->uri->segment(2) == "setting" && $this->uri->segment(3) == "" ? "active":"" ?>" href="<?= base_url('customer/setting') ?>">
               <i class="ni ni-settings-gear-65 text-red"></i> Setting
             </a>
           </li>
