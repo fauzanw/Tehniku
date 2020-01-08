@@ -10,7 +10,7 @@
   <script type="text/javascript" src="<?= base_url('assets/argon/') ?>DataTables/datatables.min.js"></script>
   <!-- <script src="<?= base_url('assets/argon/') ?>DataTables/DataTables-1.10.20/js/dataTables.bootstrap.js"></script> -->
   <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/3/jquery.inputmask.bundle.js"></script>
-  <script src="<?= base_url('assets/argon/select2-4.0.12/dist/js/select2.min.js') ?>"></script>
+  <script src="<?= base_url('assets/argon/select2-4.0.3/dist/js/select2.full.js') ?>"></script>
   <script src="<?= base_url('assets/argon/js/wow.min.js') ?>"></script>
   <script>
     new WOW().init();
@@ -62,55 +62,27 @@
 
       $('#dataTable').DataTable();
       $(document).ready( function () {
+        function load_data_jasa(keyword) {
+          $.ajax({
+            url: "<?= base_url('customer/jasa/search') ?>",
+            method: 'POST',
+            data: {
+              cari_jasa: true,
+              keyword: keyword
+            },
+            beforeSend: () => {
+              $('#result_cari_jasa').html('<div class="container mt-5 text-center"><i class="fa fa-sync-alt fa-spin" style="font-size:150px"></i><h1>Tunggu kami mengambil data...</h1></div>');
+            },
+            success: response => {
+              $('#result_cari_jasa').html(response)
+            }
+          })
+        }
         $.fn.select2.defaults.set( "theme", "bootstrap" );
-        $( ".select2" ).select2({
-        placeholder: "Pilih jasa",
-				width : null,
-				ajax: {
-					url: "<?= base_url('customer/jasa/search') ?>",
-					dataType: 'json',
-					delay: 250,
-					data: function (params) {
-						return {
-							keyword: params.term,
-						};
-					},
-					processResults: function (data, params) {
-
-						return {
-							results: data
-						};
-					},
-				},
-        escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-				minimumInputLength: 1,
-				templateResult: jasa => {
-          if (jasa.loading) return jasa.text
-
-          markup = `
-            <div class='select2-result-repository clearfix'>
-              <div class='select2-result-repository__avatar'><img src='<?= base_url('assets/argon/img/perusahaan/') ?>${jasa.logo_perusahaan}'/></div>
-              <div class='select2-result-repository__meta'>
-                <div class='select2-result-repository__title'>${jasa.nama_jasa}</div>
-              <div class='select2-result-repository__statistics'>
-                <div class='select2-result-repository__forks'><i class='fas fa-building'></i>  ${jasa.nama}</div>
-                <div class='select2-result-repository__stargazers'><i class='fas fa-briefcase'></i>  ${jasa.type} </div>
-                <div class='select2-result-repository__watchers'><i class='fas fa-search-location'></i> 70 Km</div>
-                <div class='select2-result-repository__price'><i class='fas fa-money-bill-wave'></i>  ${jasa.harga}</div>
-              </div>
-            </div></div>`
-
-          return markup
-        },
-				templateSelection: jasa => jasa.nama_jasa
-			})
-      $('.select2').on('change', function() {
-        var value = $(this).val()
-        $('.select2').val(value)
-      })
-      $( ":checkbox" ).on( "click", function() {
-				$( this ).parent().nextAll( "select" ).prop( "disabled", !this.checked );
-			});
+        $(".select2" ).select2()
+        $('.select2').change(function() {
+          load_data_jasa($('.select2').val())
+        })
         $('#cari-perusahaan-terdekat').on('click', e => {
           if(navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(position => {

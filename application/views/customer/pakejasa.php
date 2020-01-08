@@ -43,6 +43,10 @@
                     <label>Cari Jasa : </label>
                     <div class="input-group input-group-lg">
                         <select class="form-control select2">
+                            <?php foreach($data_keyword_jasa as $data) : ?>
+                            <?php var_dump($data) ?>
+                            <option value="<?= $data['id'] ?>"><?= $data['keyword']; ?></option>
+                            <?php endforeach; ?>
                         </select>
                     </div>
                 </div>

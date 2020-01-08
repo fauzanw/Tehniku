@@ -52,25 +52,69 @@ class Customer extends CI_Controller {
 			'data_customer'     => $customer,
 			'data_customer2'    => $this->session->userdata(),
 		];
-		if(isset($_GET['keyword'])){
-			$keyword = $_GET['keyword'];
+		if(isset($_POST['keyword'])){
+			$keyword = $_POST['keyword'];
 			$output = '';
 			$this->db
 				 ->select('*')
 				 ->from('jasa_pivot_type jpt')
 				 ->join('jasa j', 'jpt.jasa_id=j.id')
-				 ->join('jasa_keyword jk', 'j.jasa_keyword_id=jk.id')
 				 ->join('jasa_type jt', 'jpt.jasa_type_id=jt.id')
-				 ->join('perusahaan p', 'j.perusahaan_id=p.id');
-			if($keyword != '') {
-				$this->db->like('j.nama_jasa', $keyword);
-				$this->db->or_like('p.nama', $keyword);
-				$this->db->or_like('jt.type', $keyword);
-				$this->db->or_like('jk.keyword', $keyword);
+				 ->join('perusahaan p', 'j.perusahaan_id=p.id')
+				 ->join('jasa_keyword jk', 'j.jasa_keyword_id=jk.id')
+				 ->where('jk.id', $keyword);
+			$data_jasa = $this->db->get();
+			if($data_jasa->num_rows() > 0) {
+				$data = [
+					'data_jasa' => $data_jasa->result_array(),
+					'jarak'     => []
+				];
+				foreach($data['data_jasa'] as $index => $data__jasa) {
+					$latlon_perusahaan = explode(", ", $data__jasa['latlon']);
+					$latlon_customer   = explode(", ", $_DATA['data_customer']['latlon']);
+					array_push($data['jarak'], hitungJarak($latlon_perusahaan[0], $latlon_perusahaan[1],$latlon_customer[0], $latlon_customer[1]) . " Km");
+				}
+				foreach($data['data_jasa'] as $i => $data__jasa) {
+					echo '
+					<div class="col-md-4">
+						<div class="card card-pakejasa shadow-lg">
+							<img src="'.base_url("assets/argon/img/theme/wave.png").'" class="wave-pakejasa" alt="">
+							<center class="mt--15">
+								<h2 class="text-white" style="font-weight: bold;">'.$data__jasa["nama"].'</h2>
+								<img src="'.base_url("assets/argon/img/perusahaan/") . $data__jasa["logo_perusahaan"] .'" class="mt--1 card-img-top mt-3" style="width: 80px;height:80px;" alt="">
+							</center>
+							<div class="card-body mr-3 ml-3">
+								<div class="mt-5 text-center">
+									<h1 class="mt-5">'.$data__jasa["nama_jasa"].'</h1>
+									<div class="mt--4">
+										<hr>
+										<div class="row justify-content-between mt--3">
+											<div class="row ml-3">
+												<img src="'.base_url("assets/argon/img/theme/iconWork.png").'" style="width: 20px;height:20px;" alt="">
+												<p class="ml-2 mt--1">'.$data__jasa["type"].'</p>
+											</div>
+											<div class="row mr-3">
+												<img src="'.base_url("assets/argon/img/theme/iconLocation.png").'" style="width: 20px;height:18px;" alt="">
+												<p class="ml-2 mt--1">'. $data['jarak'][$i] .'</p>
+											</div>
+										</div>
+									</div>
+									<h1 class="mt-3 text-orange" style="font-weight: bold;"><?= $data["harga"]; ?></h1>
+									<a href="#" class="btn btn-orange btn-block mt-4">Pilih jasa ini</a>
+								</div>
+							</div>
+						</div>
+					</div>
+					';
+				} 
+			}else{
+				echo '
+					<div class="container text-center mt-2">
+						<img src="'. base_url("assets/argon/img/theme/empty.svg").'" style="width: 250px;height: 230px;">
+						<h1>Jasa yang kamu cari belum ada</h1>
+					</div>
+				';
 			}
-			$data_jasa = $this->db->get()->result_array();
-			// echo "<pre>"; print_r($data_jasa->result_array()); die;
-			echo json_encode($data_jasa, JSON_PRETTY_PRINT);
 		}
 	}
 
