@@ -10,14 +10,15 @@
         </div>
         <div class="card-body">
             <form method='post'>
-                <div class="row" style="margin-left: 2px;">
+                <div class="row">
+                    <div class="col-md-6">
                     <div class="form-group">
                         <label for="jasa">Type Jasa : </label>
-                        <select name="jasa" id="jasa" class="custom-select">
+                        <select name="type_jasa" id="type_jasa" class="custom-select">
                             <?php if(isset($_POST['cari_jasa'])) : ?>
                                 <option value="semua_jasa">Semua Type Jasa</option>
                                 <?php foreach($data_type_jasa as $data) : ?>
-                                <option value="<?= $data['id'] ?>" <?= ($_POST['jasa'] == $data['id']) ? 'selected':null ?>><?= $data['type'] ?></option>
+                                <option value="<?= $data['id'] ?>" <?= ($_POST['type_jasa'] == $data['id']) ? 'selected':null ?>><?= $data['type'] ?></option>
                                 <?php endforeach; ?>
                             <?php else: ?>
                                 <option value="semua_jasa" selected>Semua Type Jasa</option>
@@ -27,39 +28,53 @@
                             <?php endif; ?>
                         </select>
                     </div>
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-orange ml-md-3" style="margin-top: 34px;"><i class="fas fa-search"></i> Cari</button>
                     </div>
-                </div>
-                <div class="row" style='margin-left: 2px;'>
-                    <div class="form-group">
-                        <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="customCheck" name="example1">
-                            <label class="custom-control-label" for="customCheck">Cari perusahaan terdekat</label>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Cari Jasa : </label>
+                            <div class="input-group input-group-lg">
+                                <select class="form-control select2" name="keyword_jasa">
+                                    <?php if(isset($_POST['cari_jasa'])) : ?>
+                                        <option value="semua_jasa" selected>Semua Jasa</option>
+                                        <?php foreach($data_keyword_jasa as $data) : ?>
+                                        <option value="<?= $data['id'] ?>" <?= ($_POST['keyword_jasa'] == $data['id']) ? 'selected':null ?>><?= $data['keyword']; ?></option>
+                                        <?php endforeach; ?>
+                                    <?php else: ?>
+                                        <option value="semua_jasa" selected>Semua Jasa</option>
+                                        <?php foreach($data_keyword_jasa as $data) : ?>
+                                        <option value="<?= $data['id'] ?>"><?= $data['keyword']; ?></option>
+                                        <?php endforeach; ?>
+                                    <?php endif; ?>
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label>Cari Jasa : </label>
-                    <div class="input-group input-group-lg">
-                        <select class="form-control select2">
-                            <?php foreach($data_keyword_jasa as $data) : ?>
-                            <?php var_dump($data) ?>
-                            <option value="<?= $data['id'] ?>"><?= $data['keyword']; ?></option>
-                            <?php endforeach; ?>
-                        </select>
+                    <?php if(isset($_POST['latlon'])) : ?>
+                        <input type="hidden" name="latlon" id="latlon" value="<?= $_POST['latlon'] ?>">
+                    <?php else: ?>
+                        <input type="hidden" name="latlon" id="latlon">
+                    <?php endif; ?>
+                    <div class="custom-control custom-checkbox">
+                        <?php if(isset($_POST['cari_jasa'])) : ?>
+                            <input type="checkbox" class="custom-control-input" id="cari-perusahaan-terdekat" <?= ($_POST['latlon']) ? 'checked':null ?> name="cari-perusahaan-terdekat">
+                        <?php else: ?>
+                            <input type="checkbox" class="custom-control-input" id="cari-perusahaan-terdekat" name="cari-perusahaan-terdekat">
+                        <?php endif; ?>
+                        <label class="custom-control-label" for="cari-perusahaan-terdekat">Cari perusahaan terdekat</label>
                     </div>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-orange btn-block" name="cari_jasa" id="cari_jasa"><i class="fas fa-search"></i> Cari</button>
                 </div>
             </form>
         </div>
       </div>
       <div class="row mb-5" id="result_cari_jasa">
-          <?php foreach($data_jasa as $data) : ?>
-          <?php 
-            $latlon_perusahaan = explode(", ", $data['latlon']);
-            $latlon_customer   = explode(", ", $data_customer['latlon']);
-          ?>
-          <div class="col-md-4 wow fadeInUp">
+          <?php if($data_jasa) : ?>
+            <?php foreach($data_jasa as $data) : ?>
+            <div class="col-md-4 wow fadeInUp">
             <div class="card card-pakejasa shadow-lg">
                 <img src="<?= base_url('assets/argon/img/theme/wave.png') ?>" class="wave-pakejasa" alt="">
                 <center class="mt--15">
@@ -78,16 +93,22 @@
                                 </div>
                                 <div class="row mr-3">
                                     <img src="<?= base_url('assets/argon/img/theme/iconLocation.png') ?>" style="width: 20px;height:18px;" alt="">
-                                    <p class="ml-2 mt--1"><?= hitungJarak($latlon_customer[0], $latlon_customer[1], $latlon_perusahaan[0], $latlon_perusahaan[1]) . " Km"; ?></p>
+                                    <p class="ml-2 mt--1"><?= $data['jarak']; ?> Km</p>
                                 </div>
                             </div>
                         </div>
                         <h1 class="mt-3 text-orange" style="font-weight: bold;"><?= $data['harga']; ?></h1>
-                        <a href="#" class="btn btn-orange btn-block mt-4">Pilih jasa ini</a>
+                        <a href="<?= base_url('customer/pakejasa/process/'.$data['id'].'?type='.$data['jasa_type_id'].'&coor='.base64_encode(openssl_encrypt($data['jarak'], 'AES-128-CBC', 'T3hn1ku', OPENSSL_RAW_DATA, openssl_random_pseudo_bytes(16)))) ?>" class="btn btn-orange btn-block mt-4">Pilih jasa ini</a>
                     </div>
                 </div>
             </div>
           </div>
           <?php endforeach; ?>
+          <?php else: ?>
+            <div class="container text-center mt-2">
+                <img src="<?= base_url('assets/argon/img/theme/empty.svg') ?>" style="width: 250px;height: 230px;">
+				<h1>Jasa yang kamu cari belum ada</h1>
+            </div>
+          <?php endif; ?>
       </div>
   </div>

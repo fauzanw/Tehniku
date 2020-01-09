@@ -27,17 +27,108 @@ class Customer extends CI_Controller {
 	public function pakejasa()
 	{
 		checkAuthUser('Customer');
-		$customer = $this->db->get_where('customer', ["user_id" => $this->session->userdata('id')])->row_array();
-		$data = [
-			'title'             => 'Pake Jasa',
-			'title_main_header' => 'Pake Jasa',
-			'data_customer'     => $customer,
-			'data_customer2'    => $this->session->userdata(),
-			'data_jasa'         => $this->db->select('*')->from('jasa_pivot_type jpt')->join('jasa j', 'jpt.jasa_id=j.id')->join('jasa_type jt', 'jpt.jasa_type_id=jt.id')->join('perusahaan p', 'j.perusahaan_id=p.id')->get()->result_array(),
-			'data_type_jasa'    => $this->db->get('jasa_type')->result_array(),
-			'data_keyword_jasa' => $this->db->get('jasa_keyword')->result_array()
-		];
 		// echo "<pre>";print_r($data['data_jasa']); die;
+		if(isset($_POST['cari_jasa'])) {
+			// [$jasa, $latlon] = $_POST;
+			list('type_jasa' => $type_jasa, 'keyword_jasa' => $keyword_jasa, 'latlon' => $latlon) = $_POST;
+			// echo "<pre>";print_r($_POST); die;
+			if($latlon) {
+				$this->db
+					 ->select('*')
+					 ->from('jasa_pivot_type jpt')
+					 ->join('jasa j', 'jpt.jasa_id=j.id')
+					 ->join('jasa_type jt', 'jpt.jasa_type_id=jt.id')
+					 ->join('perusahaan p', 'j.perusahaan_id=p.id')
+					 ->join('jasa_keyword jk', 'j.jasa_keyword_id=jk.id');
+				if($type_jasa != 'semua_jasa' && $keyword_jasa != 'semua_jasa') {
+					$this->db->where('jt.id', $type_jasa);
+					$this->db->where('jk.id', $keyword_jasa);
+				}else if($type_jasa != 'semua_jasa' && $keyword_jasa == 'semua_jasa') {
+					$this->db->where('jt.id', $type_jasa);
+				}else if($type_jasa == 'semua_jasa' && $keyword_jasa != 'semua_jasa') {
+					$this->db->where('jk.id', $keyword_jasa);
+				}
+				$data_jasa = $this->db->get()->result_array();
+				foreach($data_jasa as $i => $_DATA_JASA) {
+					$latlon_perusahaan = explode(", ", $_DATA_JASA['latlon']);
+					$latlon_customer   = explode(", ", $latlon);
+					$data_jasa[$i]['jarak'] = hitungJarak($latlon_perusahaan[0], $latlon_perusahaan[1],$latlon_customer[0], $latlon_customer[1]);
+				}
+				sort($data_jasa);
+				// echo "<pre>";print_r($data_jasa); die;
+				$customer = $this->db->get_where('customer', ["user_id" => $this->session->userdata('id')])->row_array();
+				$data = [
+					'title'             => 'Pake Jasa',
+					'title_main_header' => 'Pake Jasa',
+					'data_customer'     => $customer,
+					'data_customer2'    => $this->session->userdata(),
+					'data_jasa'         => $data_jasa,
+					'data_type_jasa'    => $this->db->get('jasa_type')->result_array(),
+					'data_keyword_jasa' => $this->db->get('jasa_keyword')->result_array()
+				];
+			}else{
+				$this->db
+					 ->select('j.*, 
+								jpt.jasa_id, 
+								jpt.jasa_type_id, 
+								jt.type, 
+								p.nama,
+								p.nomor_ponsel,
+								p.nomor_npwp,
+								p.user_id,
+								p.logo_perusahaan,
+								p.latlon,
+								jk.keyword
+					')
+					 ->from('jasa_pivot_type jpt')
+					 ->join('jasa j', 'jpt.jasa_id=j.id')
+					 ->join('jasa_type jt', 'jpt.jasa_type_id=jt.id')
+					 ->join('perusahaan p', 'j.perusahaan_id=p.id')
+					 ->join('jasa_keyword jk', 'j.jasa_keyword_id=jk.id');
+				if($type_jasa != 'semua_jasa' && $keyword_jasa != 'semua_jasa') {
+					$this->db->where('jt.id', $type_jasa);
+					$this->db->where('jk.id', $keyword_jasa);
+				}else if($type_jasa != 'semua_jasa' && $keyword_jasa == 'semua_jasa') {
+					$this->db->where('jt.id', $type_jasa);
+				}else if($type_jasa == 'semua_jasa' && $keyword_jasa != 'semua_jasa') {
+					$this->db->where('jk.id', $keyword_jasa);
+				}
+				$data_jasa = $this->db->get()->result_array();
+				sort($data_jasa);
+				// echo "<pre>";print_r($data_jasa); die;
+				$customer = $this->db->get_where('customer', ["user_id" => $this->session->userdata('id')])->row_array();
+				$data = [
+					'title'             => 'Pake Jasa',
+					'title_main_header' => 'Pake Jasa',
+					'data_customer'     => $customer,
+					'data_customer2'    => $this->session->userdata(),
+					'data_jasa'         => $data_jasa,
+					'data_type_jasa'    => $this->db->get('jasa_type')->result_array(),
+					'data_keyword_jasa' => $this->db->get('jasa_keyword')->result_array()
+				];
+				foreach($data['data_jasa'] as $i => $_DATA_JASA) {
+					$latlon_perusahaan = explode(", ", $_DATA_JASA['latlon']);
+					$latlon_customer   = explode(", ", $customer['latlon']);
+					$data['data_jasa'][$i]['jarak'] = hitungJarak($latlon_perusahaan[0], $latlon_perusahaan[1],$latlon_customer[0], $latlon_customer[1]);
+				}
+			}
+		}else{
+			$customer = $this->db->get_where('customer', ["user_id" => $this->session->userdata('id')])->row_array();
+			$data = [
+				'title'             => 'Pake Jasa',
+				'title_main_header' => 'Pake Jasa',
+				'data_customer'     => $customer,
+				'data_customer2'    => $this->session->userdata(),
+				'data_jasa'         => $this->db->select('j.*, jpt.jasa_id, jpt.jasa_type_id, jt.type, p.nama,p.nomor_ponsel,p.nomor_npwp,p.user_id,p.logo_perusahaan,p.latlon,jk.keyword')->from('jasa_pivot_type jpt')->join('jasa j', 'jpt.jasa_id=j.id')->join('jasa_type jt', 'jpt.jasa_type_id=jt.id')->join('perusahaan p', 'j.perusahaan_id=p.id')->join('jasa_keyword jk', 'j.jasa_keyword_id=jk.id')->get()->result_array(),
+				'data_type_jasa'    => $this->db->get('jasa_type')->result_array(),
+				'data_keyword_jasa' => $this->db->get('jasa_keyword')->result_array()
+			];
+			foreach($data['data_jasa'] as $i => $_DATA_JASA) {
+				$latlon_perusahaan = explode(", ", $_DATA_JASA['latlon']);
+				$latlon_customer   = explode(", ", $customer['latlon']);
+				$data['data_jasa'][$i]['jarak'] = hitungJarak($latlon_perusahaan[0], $latlon_perusahaan[1],$latlon_customer[0], $latlon_customer[1]);
+			}
+		}
 		$this->load->view('customer/header', $data);
 		$this->load->view('customer/navigator', $data);
 		$this->load->view('customer/main_header', $data);
@@ -45,82 +136,87 @@ class Customer extends CI_Controller {
 		$this->load->view('customer/footer', $data);
 	}
 
-	public function cari_jasa()
-	{
+	public function process_pakejasa($jasa_id) {
 		$customer = $this->db->get_where('customer', ["user_id" => $this->session->userdata('id')])->row_array();
-		$_DATA = [
+		$this->db
+			 ->select('*')
+			 ->from('jasa_pivot_type jpt')
+			 ->join('jasa j', 'jpt.jasa_id=j.id')
+			 ->join('jasa_type jt', 'jpt.jasa_type_id=jt.id')
+			 ->join('perusahaan p', 'j.perusahaan_id=p.id')
+			 ->join('jasa_keyword jk', 'j.jasa_keyword_id=jk.id')
+			 ->where('j.id', $jasa_id);
+		$cekjasa = $this->db->get()->row_array();
+		$cektype = $this->db->get_where('jasa_type', ['id' => $_GET['type']])->row_array();
+		$latlon_perusahaan = explode(", ", $cekjasa['latlon']);
+		// $latlon_customer   = explode(", ", );
+		// $jarak = openssl_decrypt($_GET['coor'], 'AES-128-CBC', 'T3hn1ku', OPENSSL_RAW_DATA, openssl_random_pseudo_bytes(16));
+		// var_dump(base64_decode($_GET['coor'])); die;
+		// $jarak = hitungJarak($latlon_perusahaan[0], $latlon_perusahaan[1],$latlon_customer[0], $latlon_customer[1]);
+		$data = [
+			'title'             => 'Setting',
+			'title_main_header' => 'Setting',
 			'data_customer'     => $customer,
 			'data_customer2'    => $this->session->userdata(),
+			'data_jasa'         => $cekjasa,
 		];
-		if(isset($_POST['keyword'])){
-			$keyword = $_POST['keyword'];
-			$output = '';
-			$this->db
-				 ->select('*')
-				 ->from('jasa_pivot_type jpt')
-				 ->join('jasa j', 'jpt.jasa_id=j.id')
-				 ->join('jasa_type jt', 'jpt.jasa_type_id=jt.id')
-				 ->join('perusahaan p', 'j.perusahaan_id=p.id')
-				 ->join('jasa_keyword jk', 'j.jasa_keyword_id=jk.id')
-				 ->where('jk.id', $keyword);
-			$data_jasa = $this->db->get();
-			if($data_jasa->num_rows() > 0) {
-				$data = [
-					'data_jasa' => $data_jasa->result_array(),
-					'jarak'     => []
-				];
-				foreach($data['data_jasa'] as $index => $data__jasa) {
-					$latlon_perusahaan = explode(", ", $data__jasa['latlon']);
-					$latlon_customer   = explode(", ", $_DATA['data_customer']['latlon']);
-					array_push($data['jarak'], hitungJarak($latlon_perusahaan[0], $latlon_perusahaan[1],$latlon_customer[0], $latlon_customer[1]) . " Km");
-				}
-				foreach($data['data_jasa'] as $i => $data__jasa) {
-					echo '
-					<div class="col-md-4">
-						<div class="card card-pakejasa shadow-lg">
-							<img src="'.base_url("assets/argon/img/theme/wave.png").'" class="wave-pakejasa" alt="">
-							<center class="mt--15">
-								<h2 class="text-white" style="font-weight: bold;">'.$data__jasa["nama"].'</h2>
-								<img src="'.base_url("assets/argon/img/perusahaan/") . $data__jasa["logo_perusahaan"] .'" class="mt--1 card-img-top mt-3" style="width: 80px;height:80px;" alt="">
-							</center>
-							<div class="card-body mr-3 ml-3">
-								<div class="mt-5 text-center">
-									<h1 class="mt-5">'.$data__jasa["nama_jasa"].'</h1>
-									<div class="mt--4">
-										<hr>
-										<div class="row justify-content-between mt--3">
-											<div class="row ml-3">
-												<img src="'.base_url("assets/argon/img/theme/iconWork.png").'" style="width: 20px;height:20px;" alt="">
-												<p class="ml-2 mt--1">'.$data__jasa["type"].'</p>
-											</div>
-											<div class="row mr-3">
-												<img src="'.base_url("assets/argon/img/theme/iconLocation.png").'" style="width: 20px;height:18px;" alt="">
-												<p class="ml-2 mt--1">'. $data['jarak'][$i] .'</p>
-											</div>
-										</div>
-									</div>
-									<h1 class="mt-3 text-orange" style="font-weight: bold;"><?= $data["harga"]; ?></h1>
-									<a href="#" class="btn btn-orange btn-block mt-4">Pilih jasa ini</a>
-								</div>
-							</div>
-						</div>
-					</div>
-					';
-				} 
+		if(isset($_GET['type']) && isset($_GET['coor'])) {
+			if(!$cekjasa) {
+				show_404();
+			}else if(!$cektype) {
+				show_404();	
 			}else{
-				echo '
-					<div class="container text-center mt-2">
-						<img src="'. base_url("assets/argon/img/theme/empty.svg").'" style="width: 250px;height: 230px;">
-						<h1>Jasa yang kamu cari belum ada</h1>
-					</div>
-				';
+				$this->load->view('customer/header', $data);
+				$this->load->view('customer/navigator', $data);
+				$this->load->view('customer/main_header', $data);
+				$this->load->view('customer/process_pakejasa', $data);
+				$this->load->view('customer/footer', $data);
 			}
+		}else{
+			show_404();
 		}
 	}
 
 	public function setting() 
 	{
 		checkAuthUser('Customer');
+		$customer = $this->db->get_where('customer', ["user_id" => $this->session->userdata('id')])->row_array();
+		$data = [
+			'title'             => 'Setting',
+			'title_main_header' => 'Setting',
+			'data_customer'     => $customer,
+			'data_customer2'    => $this->session->userdata(),
+		];
+		if(!isset($_POST['edit_data'])) {
+			$this->load->view('customer/header', $data);
+			$this->load->view('customer/navigator', $data);
+			$this->load->view('customer/main_header', $data);
+			$this->load->view('customer/setting', $data);
+			$this->load->view('customer/footer', $data);
+		}else{
+			$email           = $this->input->post('email');
+			$edited_password = $this->input->post('password');
+			$new_password    = password_hash($edited_password, PASSWORD_DEFAULT);
+			$old_password    = $this->input->post('password_lama');
+			// jika password mau diubah
+			if($edited_password) {
+				if(!$old_password) {
+					$this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Gagal</strong> ganti password, password lama tidak boleh kosong.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+					redirect('perusahaan');
+				}else if(password_verify($old_password, $data['data_customer2']['password'])) {
+					$this->db->set('password', $new_password);
+				}
+			}
+			$this->db->set('email', $email);
+			$this->db->where('id', $data['data_customer2']['id']);
+			$up = $this->db->update('users');
+
+			$this->session->set_userdata('email', $email);
+			$this->session->set_userdata('password', $new_password);
+
+			$this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Akun Customer</strong> berhasil di ubah.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+			redirect('customer');
+		}
 	}
 
 }

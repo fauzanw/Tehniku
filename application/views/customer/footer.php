@@ -12,6 +12,7 @@
   <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/3/jquery.inputmask.bundle.js"></script>
   <script src="<?= base_url('assets/argon/select2-4.0.3/dist/js/select2.full.js') ?>"></script>
   <script src="<?= base_url('assets/argon/js/wow.min.js') ?>"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
   <script>
     new WOW().init();
     $(":input").inputmask();
@@ -62,38 +63,25 @@
 
       $('#dataTable').DataTable();
       $(document).ready( function () {
-        function load_data_jasa(keyword) {
-          $.ajax({
-            url: "<?= base_url('customer/jasa/search') ?>",
-            method: 'POST',
-            data: {
-              cari_jasa: true,
-              keyword: keyword
-            },
-            beforeSend: () => {
-              $('#result_cari_jasa').html('<div class="container mt-5 text-center"><i class="fa fa-sync-alt fa-spin" style="font-size:150px"></i><h1>Tunggu kami mengambil data...</h1></div>');
-            },
-            success: response => {
-              $('#result_cari_jasa').html(response)
-            }
-          })
-        }
         $.fn.select2.defaults.set( "theme", "bootstrap" );
         $(".select2" ).select2()
-        $('.select2').change(function() {
-          load_data_jasa($('.select2').val())
-        })
         $('#cari-perusahaan-terdekat').on('click', e => {
-          if(navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(position => {
-              const {latitude, longitude} = position.coords
-              $('#latlon').val(`${latitude}, ${longitude}`)
-              $('form').unbind('submit').submit();
-            }, showError);
+          if($('#cari-perusahaan-terdekat').prop('checked') == false) {
+            $('#cari-perusahaan-terdekat').attr('checked', true)
+            $('#latlon').val('')
           }else{
-            e.preventDefault( )
+            if(navigator.geolocation) {
+              $('#cari_jasa').attr('disabled', true);
+              navigator.geolocation.getCurrentPosition(position => {
+                const {latitude, longitude} = position.coords
+                $('#latlon').val(`${latitude}, ${longitude}`)
+                $('#cari_jasa').attr('disabled', false)
+                return true
+              }, showError);
+            }else{
+              e.preventDefault()
+            }
           }
-          e.preventDefault()
         })
         $('#is_blocked').on('click', function() {
           const id = $(this).data('id')
@@ -126,16 +114,36 @@
         function showError(error) {
           switch(error.code) {
             case error.PERMISSION_DENIED:
-              $('#latlon').removeAttr('readonly')
+              $('#cari-perusahaan-terdekat').removeAttr('checked', 'checked')
+              Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Kami membutuhkan akses lokasi anda',
+              })
               break;
             case error.POSITION_UNAVAILABLE:
-              $('#latlon').removeAttr('readonly')
+              $('#cari-perusahaan-terdekat').removeAttr('checked', 'checked')
+              Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Kami tidak dapat mendapatkan lokasi anda',
+              })
               break;
             case error.TIMEOUT:
-              $('#latlon').removeAttr('readonly')
+              $('#cari-perusahaan-terdekat').removeAttr('checked', 'checked')
+              Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Tehniku tidak dapat mendapatkan lokasi anda',
+              })
               break;
             case error.UNKNOWN_ERROR:
-              $('#latlon').removeAttr('readonly')
+              $('#cari-perusahaan-terdekat').removeAttr('checked', 'checked')
+              Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Tehniku mengalami kesalahan',
+              })
               break;
           }
         }
@@ -168,38 +176,38 @@
       })();
 
       $('#gender').val("").removeAttr('readonly').attr("placeholder", "Choose your country").prop('required', true).addClass('form-control');
-      var typingTimer;
-      $('#keyword_jasa').on('keyup', function() {
-        if (typingTimer) clearTimeout(typingTimer);
-        typingTimer = setTimeout(doneTypingSearchJasa, 500);
-      })
+      // var typingTimer;
+      // $('#keyword_jasa').on('keyup', function() {
+      //   if (typingTimer) clearTimeout(typingTimer);
+      //   typingTimer = setTimeout(doneTypingSearchJasa, 500);
+      // })
 
-      $('#keyword_jasa').on('keydown', function() {
-        clearTimeout(typingTimer)
-      })
+      // $('#keyword_jasa').on('keydown', function() {
+      //   clearTimeout(typingTimer)
+      // })
 
-      function doneTypingSearchJasa()
-      {
-        var keyword = $('#keyword_jasa').val();
-        function load_data(keyword) {
-          $.ajax({
-            url: "<?= base_url('customer/jasa/search') ?>",
-            method: 'POST',
-            data: {
-              cari_jasa: true,
-              keyword: keyword
-            },
-            success: response => {
-              $('#result_cari_jasa').html(response)
-            }
-          })
-        }
-        if(keyword != '') {
-          load_data(keyword)
-        }else{
-          load_data()
-        }
-      }
+      // function doneTypingSearchJasa()
+      // {
+      //   var keyword = $('#keyword_jasa').val();
+      //   function load_data(keyword) {
+      //     $.ajax({
+      //       url: "<?= base_url('customer/jasa/search') ?>",
+      //       method: 'POST',
+      //       data: {
+      //         cari_jasa: true,
+      //         keyword: keyword
+      //       },
+      //       success: response => {
+      //         $('#result_cari_jasa').html(response)
+      //       }
+      //     })
+      //   }
+      //   if(keyword != '') {
+      //     load_data(keyword)
+      //   }else{
+      //     load_data()
+      //   }
+      // }
   </script>
 </body>
 
