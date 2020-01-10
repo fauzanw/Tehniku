@@ -10,27 +10,27 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="nama">Nama : </label>
-                                    <input type="text" name="nama" id="nama" class="form-control" value="<?= $data_customer['nama'] ?>">
+                                    <input type="text" name="nama" id="nama" class="form-control" value="<?= $data_pegawai['nama'] ?>">
                                 </div>
                                 <div class="form-group">
                                     <label for="nomor_ponsel">Nomor Ponsel : </label>
-                                    <input type="text" name="nomor_ponsel" id="nomor_ponsel" class="form-control" value="<?= $data_customer['nomor_ponsel'] ?>" required>
+                                    <input type="text" name="nomor_ponsel" id="nomor_ponsel" class="form-control" value="<?= $data_pegawai['nomor_ponsel'] ?>" required>
                                     
                                 </div>
                                 <div class="form-group">
                                     <label for="foto_customer">Profile Customer : </label>
                                     <div class="row">
                                         <div class="col-sm-2">
-                                            <a href="#foto_customer"><img src="<?= base_url('assets/argon/img/customer/') . $data_customer['foto_customer'] ?>" class="img-thumbnail" alt=""></a>
-                                            <div class="overlay" id="foto_customer">
+                                            <a href="#foto_pegawai"><img src="<?= base_url('assets/argon/img/pegawai/') . $data_pegawai['foto_pegawai'] ?>" class="img-thumbnail" alt=""></a>
+                                            <div class="overlay" id="foto_pegawai">
                                                 <a href="#" class="close">x close</a>
-                                                <img src="<?= base_url('assets/argon/img/customer/') . $data_customer["foto_customer"] ?>" alt="Foto Customer">
+                                                <img src="<?= base_url('assets/argon/img/pegawai/') . $data_pegawai["foto_pegawai"] ?>" alt="Foto Pegawai">
                                             </div>
                                         </div>
                                         <div class="col-md-10">
                                             <div class="custom-file">
-                                                <input type="file" class="custom-file-input" id="change_foto_customer" name="foto_customer" aria-describedby="inputGroupFileAddon01">
-                                                <label class="custom-file-label" for="change_foto_customer">Choose file</label>
+                                                <input type="file" class="custom-file-input" id="change_foto_pegawai" name="foto_pegawai" aria-describedby="inputGroupFileAddon01">
+                                                <label class="custom-file-label" for="change_foto_pegawai">Choose file</label>
                                             </div>
                                         </div>
                                     </div>
@@ -39,7 +39,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="email">Email : </label>
-                                    <input type="email" name="email" id="email" class="form-control" value="<?= $data_customer2["email"] ?>" required>
+                                    <input type="email" name="email" id="email" class="form-control" value="<?= $data_pegawai2["email"] ?>" required>
                                 </div>
 
                                 <div class="form-group">

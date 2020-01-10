@@ -74,7 +74,12 @@
           </li>
           <li class="nav-item <?= ($this->uri->segment(1)) == "customer" && $this->uri->segment(2) == "pakejasa" && $this->uri->segment(3) == "" ? "active":"" ?>">
             <a class="nav-link <?= ($this->uri->segment(1)) == "customer" && $this->uri->segment(2) == "pakejasa" && $this->uri->segment(3) == "" ? "active":"" ?>" href="<?= base_url('customer/pakejasa') ?>">
-              <i class="ni ni-bullet-list-67 text-red"></i> Pake Jasa
+              <i class="fas fa-truck-moving text-red"></i> Pake Jasa
+            </a>
+          </li>
+          <li class="nav-item <?= ($this->uri->segment(1)) == "customer" && $this->uri->segment(2) == "pakejasa" && $this->uri->segment(3) == "pesanan" ? "active":"" ?>">
+            <a class="nav-link <?= ($this->uri->segment(1)) == "customer" && $this->uri->segment(2) == "pakejasa" && $this->uri->segment(3) == "pesanan" ? "active":"" ?>" href="<?= base_url('customer/pakejasa/pesanan') ?>">
+              <i class="ni ni-bullet-list-67 text-red"></i> Pesanan
             </a>
           </li>
           <li class="nav-item <?= ($this->uri->segment(1)) == "customer" && $this->uri->segment(2) == "setting" && $this->uri->segment(3) == "" ? "active":"" ?>">

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Dec 31, 2019 at 06:40 PM
+-- Generation Time: Jan 11, 2020 at 01:37 AM
 -- Server version: 5.7.28-0ubuntu0.18.04.4
 -- PHP Version: 7.2.24-0ubuntu0.18.04.1
 
@@ -39,7 +39,7 @@ CREATE TABLE `admin` (
 --
 
 INSERT INTO `admin` (`id`, `nama`, `nomor_ponsel`, `user_id`, `foto_admin`) VALUES
-('5dff41bf96258', 'Muhammad Fauzan W', '082-112-848-887', '5dff4088205c5', 'default.png');
+('5dff41bf96258', 'Fathiah Hana Nur Aisyah', '082-112-848-887', '5dff4088205c5', 'default.png');
 
 -- --------------------------------------------------------
 
@@ -86,7 +86,8 @@ CREATE TABLE `jasa` (
 --
 
 INSERT INTO `jasa` (`id`, `nama_jasa`, `description`, `harga`, `perusahaan_id`, `jasa_keyword_id`) VALUES
-('5e08d1fb1df95', 'Air Conditioner', 'pemasangan ac', 'Rp. 2.000.000', '8a345e15-9690-4a89-9b63-da230e170490', '5e08bb32a8161');
+('5e08d1fb1df95', 'Air Conditioner', 'pemasangan ac', 'Rp. 2.000.000', '8a345e15-9690-4a89-9b63-da230e170490', '5e08bb32a8161'),
+('5e134ab006a1d', 'CCTV', 'pemasangan ac', 'Rp. 1.500.000', '8a345e15-9690-4a89-9b63-da230e170490', '5e08bb32a8161');
 
 -- --------------------------------------------------------
 
@@ -124,7 +125,8 @@ CREATE TABLE `jasa_pivot_type` (
 --
 
 INSERT INTO `jasa_pivot_type` (`id`, `jasa_id`, `jasa_type_id`) VALUES
-('5e08d26078b6e', '5e08d1fb1df95', '5e070e95b9fee');
+('5e08d26078b6e', '5e08d1fb1df95', '5e070e95b9fee'),
+('5e134ab006a2c', '5e134ab006a1d', '5e070e95b9fee');
 
 -- --------------------------------------------------------
 
@@ -165,7 +167,13 @@ CREATE TABLE `material` (
 --
 
 INSERT INTO `material` (`id`, `nama_material`, `description`, `merek_id`, `harga`, `jasa_keyword_id`) VALUES
-('5e08dab219870', 'Compressor', 'For AC', '5e077baa69918', '300.000', '5e08bb32a8161');
+('5e0d9a3ebb97a', 'Compressor', 'FOR AC', '5e0b6e792469a', '200.000', '5e08bb32a8161'),
+('5e0d9a3ecc1ae', 'Capasitor Fan', 'FOR AC', '5e0b6e792469a', '300.000', '5e08bb32a8161'),
+('5e0d9a3ed6af6', 'Capasitor Compressor', 'FOR AC', '5e0b6e792469a', '400.000', '5e08bb32a8161'),
+('5e0d9a3ef2019', 'Overload', 'FOR AC', '5e0b6e792469a', '500.000', '5e08bb32a8161'),
+('5e0d9a3f08d4e', 'Kontraktor', 'FOR AC', '5e0b6e792469a', '100.000', '5e08bb32a8161'),
+('5e0d9a3f13d9b', 'Thermis Indoor', 'FOR AC', '5e0b6e792469a', '100.000', '5e08bb32a8161'),
+('5e0d9a3f1ec09', 'Thermis Outdoor', 'FOR AC', '5e0b6e792469a', '200.000', '5e08bb32a8161');
 
 -- --------------------------------------------------------
 
@@ -183,7 +191,11 @@ CREATE TABLE `merek` (
 --
 
 INSERT INTO `merek` (`id`, `nama_merek`) VALUES
-('5e077baa69918', 'Panasonic');
+('5e0b6e78bf650', 'LG'),
+('5e0b6e78d8c1d', 'Polytron'),
+('5e0b6e790e9cc', 'Sharp'),
+('5e0b6e792469a', 'Samsung'),
+('5e0b99b753ba6', 'Panasonic');
 
 -- --------------------------------------------------------
 
@@ -236,7 +248,7 @@ CREATE TABLE `perusahaan` (
 --
 
 INSERT INTO `perusahaan` (`id`, `nama`, `nomor_ponsel`, `nomor_npwp`, `foto_npwp`, `nomor_ktp`, `foto_ktp`, `user_id`, `logo_perusahaan`, `alamat`, `latlon`) VALUES
-('8a345e15-9690-4a89-9b63-da230e170490', 'LG Tech', '028-984-989-298', '66.422.976.2-405.000', '233b4a025ba212ec11dca240f9b31800.jpeg', '3174096112900001', '902e75187c6dbb34898130acb8fd8d4b.jpeg', '7a0cee80-f48d-4fc2-af8f-f927aa67878e', 'fc4843d5f8ef302d3d2f72d0878e67f5.png', 'South Jakarta City', '-6.205439999999999, 106.87692799999999');
+('8a345e15-9690-4a89-9b63-da230e170490', 'LG Tech', '028-984-989-298', '66.422.976.2-405.000', '233b4a025ba212ec11dca240f9b31800.jpeg', '3174096112900001', '902e75187c6dbb34898130acb8fd8d4b.jpeg', '7a0cee80-f48d-4fc2-af8f-f927aa67878e', '41618a127507e1b8c032f575088ad747.png', 'South Jakarta City', '-6.205439999999999, 106.87692799999999');
 
 -- --------------------------------------------------------
 
@@ -248,8 +260,17 @@ CREATE TABLE `pesanan` (
   `id` varchar(288) NOT NULL,
   `jasa_id` varchar(288) NOT NULL,
   `perusahaan_id` varchar(288) NOT NULL,
-  `customer_id` varchar(288) NOT NULL
+  `customer_id` varchar(288) NOT NULL,
+  `waktu` varchar(288) NOT NULL,
+  `pegawai_id` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `pesanan`
+--
+
+INSERT INTO `pesanan` (`id`, `jasa_id`, `perusahaan_id`, `customer_id`, `waktu`, `pegawai_id`) VALUES
+('5e18a63423788', '5e08d1fb1df95', '8a345e15-9690-4a89-9b63-da230e170490', '5e024299723af', 'Sabtu, 11 Januari 2020 Jam 22:59', '');
 
 -- --------------------------------------------------------
 
@@ -272,9 +293,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `email`, `password`, `role_id`, `is_verified`, `is_blocked`, `date_joined`) VALUES
-('5dff4088205c5', 'fgaming386@gmail.com', '$2y$10$sdbTMuh6DQXsSd83mL4voeQr9P.m6.jhnVAj7I5wKnhAq1e1w/MF2', '2c282814-d165-4625-8ed3-492f82c57116', 1, 0, 'Minggu, 22 Desember 2019'),
-('5e017625c3951', 'brilly4n@gmail.com', '$2y$10$NBn8gIePPLa5I1nTCfRABek904DqQ1SCKtFxxAmERNBF1AONVuhwS', 'adc5ce5d-0491-4d88-b9d4-8bc11b40415a', 1, 1, 'Selasa, 24 Desember 2019'),
-('5e0242991fa89', 'pojan@gmail.com', '$2y$10$Rr4/xo4ZXnDl92r3uBP5Te.DHaeSudBVyBRno2yjg9pzG2HzsEE4e', 'ef40c680-03f0-45b9-ab98-290200f5ff13', 1, 0, 'Selasa, 24 Desember 2019'),
+('5dff4088205c5', 'fgaming386@gmail.com', '$2y$10$QDxp40NrVjFVVugJJdyxaeG2qY/eTo0XqjQ43nWPZHhqorLu74bm2', '2c282814-d165-4625-8ed3-492f82c57116', 1, 0, 'Minggu, 22 Desember 2019'),
+('5e017625c3951', 'brilly4n@gmail.com', '$2y$10$NBn8gIePPLa5I1nTCfRABek904DqQ1SCKtFxxAmERNBF1AONVuhwS', 'adc5ce5d-0491-4d88-b9d4-8bc11b40415a', 1, 0, 'Selasa, 24 Desember 2019'),
+('5e0242991fa89', 'pojan@gmail.com', '$2y$10$MQjY8s9iDxLPWC64vQDFT.qUttZUbsj1Z.E5hEduJ24JoaULkrgKO', 'ef40c680-03f0-45b9-ab98-290200f5ff13', 1, 0, 'Selasa, 24 Desember 2019'),
 ('7a0cee80-f48d-4fc2-af8f-f927aa67878e', 'lg_tech@gmail.com', '$2y$10$7feDHCG9QCMDt5kbN0i.a.wfR.R2LunxK2Syr0rF0stj2Sj2bQt2W', 'a3253f9d-0741-4838-8583-20816cd63e11', 1, 0, 'Senin, 16 Desember 2019');
 
 -- --------------------------------------------------------
@@ -429,8 +450,8 @@ ALTER TABLE `jasa_pivot_type`
 -- Constraints for table `material`
 --
 ALTER TABLE `material`
-  ADD CONSTRAINT `material_fk1` FOREIGN KEY (`merek_id`) REFERENCES `merek` (`id`),
-  ADD CONSTRAINT `material_fk2` FOREIGN KEY (`jasa_keyword_id`) REFERENCES `jasa_keyword` (`id`);
+  ADD CONSTRAINT `material_fk1` FOREIGN KEY (`merek_id`) REFERENCES `merek` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `material_fk2` FOREIGN KEY (`jasa_keyword_id`) REFERENCES `jasa_keyword` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `pegawai`

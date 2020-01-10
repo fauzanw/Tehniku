@@ -79,3 +79,4 @@ $route["admin/merek/(:any)/edit"] = "admin/edit_merek/$1";
 $route["customer/pakejasa/(:any)/type"] = "customer/pakejasa_type/$1";
 $route["customer/jasa/search"] = "customer/cari_jasa";
 $route["customer/pakejasa/process/(:any)"] = "customer/process_pakejasa/$1";
+$route["customer/pakejasa/pesanan"] = "customer/pesanan_pakejasa";

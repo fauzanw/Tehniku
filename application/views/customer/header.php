@@ -36,6 +36,7 @@
   <!-- <link rel="stylesheet" href="<?= base_url('assets/argon/') ?>DataTables/DataTables-1.10.20/css/dataTables.bootstrap.min.css"> -->
   <link rel="stylesheet" href="<?= base_url('assets/argon/select2-4.0.3/dist/css/select2.min.css') ?>">
   <link rel="stylesheet" href="<?= base_url('assets/argon/select2-4.0.3/dist/css/select2-bootstrap.css') ?>">
+  <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body class="">

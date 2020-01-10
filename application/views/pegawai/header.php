@@ -20,7 +20,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>
-    <?= $title; ?> Pegawai <?= $data_perusahaan['nama_perusahaan'] ?> | Tehniku
+    <?= $title; ?> Pegawai <?= $data_perusahaan['nama'] ?> | Tehniku
   </title>
   <!-- Favicon -->
   <link href="<?= base_url('assets/argon') ?>/img/perusahaan/<?= $data_perusahaan['logo_perusahaan'] ?>" rel="icon" type="image/png">

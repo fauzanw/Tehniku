@@ -3,10 +3,10 @@
         <div class="col-md-7 pb-3">
             <div class="card shadow-lg">
                 <div class="card-body">
-                    <form>
+                    <form method="post">
                         <div class="form-group">
                             <label for="jadwal">Jadwal:</label>
-                            <input type="text" name="jadwal" id="jadwal" class="form-control">
+                            <input type="text" name="jadwal" id="datetimepicker" class="form-control">
                         </div>
                         <div class="form-group">
                             <button type="submit" name="set_jadwal" class="btn btn-orange btn-block">Set jadwal</button>
@@ -34,7 +34,7 @@
                                 </div>
                                 <div class="row mr-3">
                                     <img src="<?= base_url('assets/argon/img/theme/iconLocation.png') ?>" style="width: 20px;height:18px;" alt="">
-                                    <p class="ml-2 mt--1"> Km</p>
+                                    <p class="ml-2 mt--1"><?= $jarak; ?> Km</p>
                                 </div>
                             </div>
                         </div>

@@ -16,11 +16,7 @@ class Pegawai extends CI_Controller {
 
 	public function __construct() {
 		parent::__construct();
-		if(!$this->session->userdata('email')) {
-			redirect('auth/login');
-		}elseif($this->session->userdata('email') && $this->session->userdata('role_id') != array_search("pegawai",$this->data_role)) {
-			show_404();
-		}
+		checkAuthUser('Pegawai');
 	}
 
 	public function index()
@@ -39,6 +35,94 @@ class Pegawai extends CI_Controller {
 		$this->load->view('pegawai/main_header', $data);
 		$this->load->view('pegawai/index', $data);
 		$this->load->view('pegawai/footer', $data);
+	}
+
+	public function setting()
+	{
+		$pegawai = $this->db->get_where('pegawai', ["user_id" => $this->session->userdata('id')])->row_array();
+		$perusahaan = $this->db->get_where('perusahaan', ["id" => $pegawai['perusahaan_id']])->row_array();
+		$data = [
+			'title'             => 'Setting',
+			'title_main_header' => 'Setting',
+			'data_pegawai'     => $pegawai,
+			'data_perusahaan'   => $perusahaan,
+			'data_pegawai2'    => $this->session->userdata(),
+		];
+		if(!isset($_POST['edit_data'])) {
+			$this->load->view('pegawai/header', $data);
+			$this->load->view('pegawai/navigator', $data);
+			$this->load->view('pegawai/main_header', $data);
+			$this->load->view('pegawai/setting', $data);
+			$this->load->view('pegawai/footer', $data);
+		}else{
+			list('nama' => $nama, 'email' => $email, 'new_password' => $edited_password, 'old_password' => $old_password, 'nomor_ponsel' => $nomor_ponsel) = $_POST;
+			$new_password    = password_hash($edited_password, PASSWORD_DEFAULT);
+			$data_pegawai   = $this->db->get_where('users', ['id' => $this->session->userdata('id')])->row_array();
+			$cek_email       = $this->db->select('*')->from('users')->where_not_in('email', $data['data_pegawai2']['email'])->where('email', $email)->get()->row_array();
+
+			if($cek_email) {
+				$this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Gagal</strong> edit email, email yang anda masukkan sudah digunakan.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+				redirect('pegawai');
+			}
+			$edited_foto     = $_FILES['foto_pegawai']['name'];
+			// jika password mau diubah
+			if($edited_password) {
+				if(!$old_password) {
+					$this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Gagal</strong> ganti password, password lama tidak boleh kosong.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+					redirect('pegawai');
+				}else {
+					if(password_verify($old_password, $data_pegawai['password'])) {
+						$this->db->set('password', $new_password);
+					}else{
+						// echo $old_password."<br><br>",
+						// $data['data_pegawai2']['password']."<br><br>";
+						// echo password_verify($old_password, $data['data_pegawai2']['password']); die;
+						$this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Gagal</strong> ganti password, password lama salah.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+						redirect('pegawai');
+					}
+				}
+			}
+			$this->db->set('email', $email);
+			$this->db->where('id', $data['data_pegawai2']['id']);
+			$this->db->update('users');
+
+			if($edited_foto) {
+				$config = array(
+					'allowed_types' => 'jpeg|jpg|png',
+					'max_size'      => '2048',
+					'upload_path'   => './assets/argon/img/pegawai/',
+					'encrypt_name'  => TRUE
+				);
+				$this->load->library('upload', $config);
+
+				if($this->upload->do_upload('foto_pegawai')) {
+					$new_logo = $this->upload->data('file_name');
+					if($data['data_pegawai']['foto_pegawai'] != 'default.png') {
+						unlink(FCPATH."assets/argon/img/pegawai/".$data['data_pegawai']['foto_pegawai']);
+					}
+					$this->db->set('foto_pegawai', $new_logo);
+				}else{
+					if($this->upload->display_errors() == "<p>The filetype you are attempting to upload is not allowed.</p>") {
+						$this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Gagal</strong> edit foto, format foto harus jpg / png /jpeg.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+						redirect('pegawai');
+					} else if($this->upload->display_errors() == "<p>The file you are attempting to upload is larger than the permitted size.</p>") {
+						$this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Gagal</strong> edit foto, size foto tidak boleh lebih dari 2mb.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+						redirect('pegawai');
+					} else {
+						echo $this->upload->display_errors();die;	
+					}
+				}
+			} 
+			$this->db->set('nama', $nama);
+			$this->db->set('nomor_ponsel', $nomor_ponsel);
+			$this->db->update('pegawai');
+
+			$this->session->set_userdata('email', $email);
+			$this->session->set_userdata('password', $new_password);
+
+			$this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Akun Pegawai</strong> berhasil di ubah.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+			redirect('pegawai');
+		}
 	}
 
 }

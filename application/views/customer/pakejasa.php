@@ -98,7 +98,7 @@
                             </div>
                         </div>
                         <h1 class="mt-3 text-orange" style="font-weight: bold;"><?= $data['harga']; ?></h1>
-                        <a href="<?= base_url('customer/pakejasa/process/'.$data['id'].'?type='.$data['jasa_type_id'].'&coor='.base64_encode(openssl_encrypt($data['jarak'], 'AES-128-CBC', 'T3hn1ku', OPENSSL_RAW_DATA, openssl_random_pseudo_bytes(16)))) ?>" class="btn btn-orange btn-block mt-4">Pilih jasa ini</a>
+                        <a href="<?= base_url('customer/pakejasa/process/'.$data['id'].'?type='.$data['jasa_type_id'].'&coor='.base64_encode($data['jarak'])) ?>" class="btn btn-orange btn-block mt-4">Pilih jasa ini</a>
                     </div>
                 </div>
             </div>

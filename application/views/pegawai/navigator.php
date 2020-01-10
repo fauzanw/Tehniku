@@ -69,47 +69,27 @@
         <ul class="navbar-nav">
           <li class="nav-item <?= ($this->uri->segment(1)) == "pegawai" && $this->uri->segment(2) == "" && $this->uri->segment(3) == "" ? "active":"" ?>">
             <a class=" nav-link <?= ($this->uri->segment(1)) == "pegawai" && $this->uri->segment(2) == "" && $this->uri->segment(3) == "" ? "active":"" ?>" href="<?= base_url('pegawai') ?>"> 
-                <i class="ni ni-tv-2 text-primary"></i> Dashboard
+                <i class="ni ni-tv-2 text-orange"></i> Dashboard
             </a>
           </li>
-          <li class="nav-item <?= ($this->uri->segment(1)) == "perusahaan" && $this->uri->segment(2) == "manage" && $this->uri->segment(3) == "" ? "active":"" ?>">
-            <a class="nav-link <?= ($this->uri->segment(1)) == "perusahaan" && $this->uri->segment(2) == "manage" && $this->uri->segment(3) == "" ? "active":"" ?>" href="<?= base_url('perusahaan/manage') ?>">
-              <i class="ni ni-settings-gear-65 text-blue"></i> Manage Perusahaan
+          <li class="nav-item <?= ($this->uri->segment(1)) == "pegawai" && $this->uri->segment(2) == "tugas" && $this->uri->segment(3) == "" ? "active":"" ?>">
+            <a class="nav-link <?= ($this->uri->segment(1)) == "pegawai" && $this->uri->segment(2) == "tugas" && $this->uri->segment(3) == "" ? "active":"" ?>" href="<?= base_url('perusahaan/pegawai') ?>">
+              <i class="fas fa-briefcase text-orange"></i> Tugas
             </a>
           </li>
-          <li class="nav-item <?= ($this->uri->segment(1)) == "perusahaan" && $this->uri->segment(2) == "pegawai" && $this->uri->segment(3) == "" ? "active":"" ?>">
-            <a class="nav-link <?= ($this->uri->segment(1)) == "perusahaan" && $this->uri->segment(2) == "pegawai" && $this->uri->segment(3) == "" ? "active":"" ?>" href="<?= base_url('perusahaan/pegawai') ?>">
-              <i class="fas fa-users text-orange"></i> Data Pegawai
+          <li class="nav-item <?= ($this->uri->segment(1)) == "pegawai" && $this->uri->segment(2) == "setting" && $this->uri->segment(3) == "" ? "active":"" ?>">
+            <a class="nav-link <?= ($this->uri->segment(1)) == "pegawai" && $this->uri->segment(2) == "setting" && $this->uri->segment(3) == "" ? "active":"" ?>" href="<?= base_url('pegawai/setting') ?>">
+              <i class="ni ni-settings-gear-65 text-orange"></i> Setting
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="<?= base_url('perusahaan/setting') ?>">
-              <i class="ni ni-settings-gear-65 text-red"></i> Setting
+            <a class="nav-link" href="<?= base_url('auth/logout') ?>">
+              <i class="ni ni-user-run text-orange"></i> Logout
             </a>
           </li>
         </ul>
         <!-- Divider -->
         <hr class="my-3">
-        <!-- Heading -->
-        <h6 class="navbar-heading text-muted">Documentation</h6>
-        <!-- Navigation -->
-        <ul class="navbar-nav mb-md-3">
-          <li class="nav-item">
-            <a class="nav-link" href="https://demos.creative-tim.com/argon-dashboard/docs/getting-started/overview.html">
-              <i class="ni ni-spaceship"></i> Getting started
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="https://demos.creative-tim.com/argon-dashboard/docs/foundation/colors.html">
-              <i class="ni ni-palette"></i> Foundation
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="https://demos.creative-tim.com/argon-dashboard/docs/components/alerts.html">
-              <i class="ni ni-ui-04"></i> Components
-            </a>
-          </li>
-        </ul>
       </div>
     </div>
   </nav>
