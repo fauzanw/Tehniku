@@ -3,8 +3,8 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jan 11, 2020 at 01:37 AM
--- Server version: 5.7.28-0ubuntu0.18.04.4
+-- Generation Time: 12 Jan 2020 pada 00.48
+-- Versi Server: 5.7.28-0ubuntu0.18.04.4
 -- PHP Version: 7.2.24-0ubuntu0.18.04.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -23,7 +23,7 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `admin`
+-- Struktur dari tabel `admin`
 --
 
 CREATE TABLE `admin` (
@@ -35,7 +35,7 @@ CREATE TABLE `admin` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `admin`
+-- Dumping data untuk tabel `admin`
 --
 
 INSERT INTO `admin` (`id`, `nama`, `nomor_ponsel`, `user_id`, `foto_admin`) VALUES
@@ -44,7 +44,7 @@ INSERT INTO `admin` (`id`, `nama`, `nomor_ponsel`, `user_id`, `foto_admin`) VALU
 -- --------------------------------------------------------
 
 --
--- Table structure for table `customer`
+-- Struktur dari tabel `customer`
 --
 
 CREATE TABLE `customer` (
@@ -60,7 +60,7 @@ CREATE TABLE `customer` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `customer`
+-- Dumping data untuk tabel `customer`
 --
 
 INSERT INTO `customer` (`id`, `nama`, `alamat`, `nomor_ponsel`, `foto_ktp`, `nomor_ktp`, `user_id`, `foto_customer`, `latlon`) VALUES
@@ -69,7 +69,7 @@ INSERT INTO `customer` (`id`, `nama`, `alamat`, `nomor_ponsel`, `foto_ktp`, `nom
 -- --------------------------------------------------------
 
 --
--- Table structure for table `jasa`
+-- Struktur dari tabel `jasa`
 --
 
 CREATE TABLE `jasa` (
@@ -82,7 +82,7 @@ CREATE TABLE `jasa` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `jasa`
+-- Dumping data untuk tabel `jasa`
 --
 
 INSERT INTO `jasa` (`id`, `nama_jasa`, `description`, `harga`, `perusahaan_id`, `jasa_keyword_id`) VALUES
@@ -92,7 +92,7 @@ INSERT INTO `jasa` (`id`, `nama_jasa`, `description`, `harga`, `perusahaan_id`, 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `jasa_keyword`
+-- Struktur dari tabel `jasa_keyword`
 --
 
 CREATE TABLE `jasa_keyword` (
@@ -101,7 +101,7 @@ CREATE TABLE `jasa_keyword` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `jasa_keyword`
+-- Dumping data untuk tabel `jasa_keyword`
 --
 
 INSERT INTO `jasa_keyword` (`id`, `keyword`) VALUES
@@ -111,7 +111,7 @@ INSERT INTO `jasa_keyword` (`id`, `keyword`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `jasa_pivot_type`
+-- Struktur dari tabel `jasa_pivot_type`
 --
 
 CREATE TABLE `jasa_pivot_type` (
@@ -121,7 +121,7 @@ CREATE TABLE `jasa_pivot_type` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `jasa_pivot_type`
+-- Dumping data untuk tabel `jasa_pivot_type`
 --
 
 INSERT INTO `jasa_pivot_type` (`id`, `jasa_id`, `jasa_type_id`) VALUES
@@ -131,7 +131,7 @@ INSERT INTO `jasa_pivot_type` (`id`, `jasa_id`, `jasa_type_id`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `jasa_type`
+-- Struktur dari tabel `jasa_type`
 --
 
 CREATE TABLE `jasa_type` (
@@ -140,7 +140,7 @@ CREATE TABLE `jasa_type` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `jasa_type`
+-- Dumping data untuk tabel `jasa_type`
 --
 
 INSERT INTO `jasa_type` (`id`, `type`) VALUES
@@ -150,7 +150,7 @@ INSERT INTO `jasa_type` (`id`, `type`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `material`
+-- Struktur dari tabel `material`
 --
 
 CREATE TABLE `material` (
@@ -163,7 +163,7 @@ CREATE TABLE `material` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `material`
+-- Dumping data untuk tabel `material`
 --
 
 INSERT INTO `material` (`id`, `nama_material`, `description`, `merek_id`, `harga`, `jasa_keyword_id`) VALUES
@@ -178,7 +178,7 @@ INSERT INTO `material` (`id`, `nama_material`, `description`, `merek_id`, `harga
 -- --------------------------------------------------------
 
 --
--- Table structure for table `merek`
+-- Struktur dari tabel `merek`
 --
 
 CREATE TABLE `merek` (
@@ -187,7 +187,7 @@ CREATE TABLE `merek` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `merek`
+-- Dumping data untuk tabel `merek`
 --
 
 INSERT INTO `merek` (`id`, `nama_merek`) VALUES
@@ -200,7 +200,7 @@ INSERT INTO `merek` (`id`, `nama_merek`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `pegawai`
+-- Struktur dari tabel `pegawai`
 --
 
 CREATE TABLE `pegawai` (
@@ -217,16 +217,16 @@ CREATE TABLE `pegawai` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `pegawai`
+-- Dumping data untuk tabel `pegawai`
 --
 
 INSERT INTO `pegawai` (`id`, `nama`, `umur`, `nomor_ponsel`, `nomor_ktp`, `gender`, `perusahaan_id`, `user_id`, `foto_pegawai`, `status`) VALUES
-('5e017625df559', 'Brilly4n', 23, '082-813-892-838', 2147483647, 'perempuan', '8a345e15-9690-4a89-9b63-da230e170490', '5e017625c3951', 'd16a701df2df860c7d10189950211c16.png', 1);
+('5e017625df559', 'Brilly4n', 23, '082-813-892-838', 2147483647, 'laki-laki', '8a345e15-9690-4a89-9b63-da230e170490', '5e017625c3951', 'd16a701df2df860c7d10189950211c16.png', 0);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `perusahaan`
+-- Struktur dari tabel `perusahaan`
 --
 
 CREATE TABLE `perusahaan` (
@@ -244,7 +244,7 @@ CREATE TABLE `perusahaan` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `perusahaan`
+-- Dumping data untuk tabel `perusahaan`
 --
 
 INSERT INTO `perusahaan` (`id`, `nama`, `nomor_ponsel`, `nomor_npwp`, `foto_npwp`, `nomor_ktp`, `foto_ktp`, `user_id`, `logo_perusahaan`, `alamat`, `latlon`) VALUES
@@ -253,7 +253,7 @@ INSERT INTO `perusahaan` (`id`, `nama`, `nomor_ponsel`, `nomor_npwp`, `foto_npwp
 -- --------------------------------------------------------
 
 --
--- Table structure for table `pesanan`
+-- Struktur dari tabel `pesanan`
 --
 
 CREATE TABLE `pesanan` (
@@ -262,20 +262,22 @@ CREATE TABLE `pesanan` (
   `perusahaan_id` varchar(288) NOT NULL,
   `customer_id` varchar(288) NOT NULL,
   `waktu` varchar(288) NOT NULL,
-  `pegawai_id` text NOT NULL
+  `description` varchar(288) NOT NULL,
+  `pegawai_id` text NOT NULL,
+  `status` varchar(288) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `pesanan`
+-- Dumping data untuk tabel `pesanan`
 --
 
-INSERT INTO `pesanan` (`id`, `jasa_id`, `perusahaan_id`, `customer_id`, `waktu`, `pegawai_id`) VALUES
-('5e18a63423788', '5e08d1fb1df95', '8a345e15-9690-4a89-9b63-da230e170490', '5e024299723af', 'Sabtu, 11 Januari 2020 Jam 22:59', '');
+INSERT INTO `pesanan` (`id`, `jasa_id`, `perusahaan_id`, `customer_id`, `waktu`, `description`, `pegawai_id`, `status`) VALUES
+('5e18a63423788', '5e08d1fb1df95', '8a345e15-9690-4a89-9b63-da230e170490', '5e024299723af', 'Sabtu, 11 Januari 2020 Jam 22:59', '', '5e017625df559', '2');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `users`
+-- Struktur dari tabel `users`
 --
 
 CREATE TABLE `users` (
@@ -289,7 +291,7 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `users`
+-- Dumping data untuk tabel `users`
 --
 
 INSERT INTO `users` (`id`, `email`, `password`, `role_id`, `is_verified`, `is_blocked`, `date_joined`) VALUES
@@ -301,7 +303,7 @@ INSERT INTO `users` (`id`, `email`, `password`, `role_id`, `is_verified`, `is_bl
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user_role`
+-- Struktur dari tabel `user_role`
 --
 
 CREATE TABLE `user_role` (
@@ -310,7 +312,7 @@ CREATE TABLE `user_role` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `user_role`
+-- Dumping data untuk tabel `user_role`
 --
 
 INSERT INTO `user_role` (`id`, `role`) VALUES
@@ -417,57 +419,57 @@ ALTER TABLE `user_role`
   ADD PRIMARY KEY (`id`,`role`);
 
 --
--- Constraints for dumped tables
+-- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
 --
 
 --
--- Constraints for table `admin`
+-- Ketidakleluasaan untuk tabel `admin`
 --
 ALTER TABLE `admin`
   ADD CONSTRAINT `admin_fk0` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
 --
--- Constraints for table `customer`
+-- Ketidakleluasaan untuk tabel `customer`
 --
 ALTER TABLE `customer`
   ADD CONSTRAINT `customer_fk0` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
--- Constraints for table `jasa`
+-- Ketidakleluasaan untuk tabel `jasa`
 --
 ALTER TABLE `jasa`
   ADD CONSTRAINT `jasa_fk0` FOREIGN KEY (`perusahaan_id`) REFERENCES `perusahaan` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `jasa_fk1` FOREIGN KEY (`jasa_keyword_id`) REFERENCES `jasa_keyword` (`id`);
 
 --
--- Constraints for table `jasa_pivot_type`
+-- Ketidakleluasaan untuk tabel `jasa_pivot_type`
 --
 ALTER TABLE `jasa_pivot_type`
   ADD CONSTRAINT `jasa_pivot_type_fk0` FOREIGN KEY (`jasa_id`) REFERENCES `jasa` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `jasa_pivot_type_fk1` FOREIGN KEY (`jasa_type_id`) REFERENCES `jasa_type` (`id`) ON DELETE CASCADE;
 
 --
--- Constraints for table `material`
+-- Ketidakleluasaan untuk tabel `material`
 --
 ALTER TABLE `material`
   ADD CONSTRAINT `material_fk1` FOREIGN KEY (`merek_id`) REFERENCES `merek` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `material_fk2` FOREIGN KEY (`jasa_keyword_id`) REFERENCES `jasa_keyword` (`id`) ON DELETE CASCADE;
 
 --
--- Constraints for table `pegawai`
+-- Ketidakleluasaan untuk tabel `pegawai`
 --
 ALTER TABLE `pegawai`
   ADD CONSTRAINT `pegawai_fk0` FOREIGN KEY (`perusahaan_id`) REFERENCES `perusahaan` (`id`),
   ADD CONSTRAINT `pegawai_fk1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
 --
--- Constraints for table `perusahaan`
+-- Ketidakleluasaan untuk tabel `perusahaan`
 --
 ALTER TABLE `perusahaan`
   ADD CONSTRAINT `perusahaan_fk0` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
--- Constraints for table `pesanan`
+-- Ketidakleluasaan untuk tabel `pesanan`
 --
 ALTER TABLE `pesanan`
   ADD CONSTRAINT `pesanan_fk0` FOREIGN KEY (`jasa_id`) REFERENCES `jasa` (`id`),
@@ -475,7 +477,7 @@ ALTER TABLE `pesanan`
   ADD CONSTRAINT `pesanan_fk2` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`id`);
 
 --
--- Constraints for table `users`
+-- Ketidakleluasaan untuk tabel `users`
 --
 ALTER TABLE `users`
   ADD CONSTRAINT `users_fk0` FOREIGN KEY (`role_id`) REFERENCES `user_role` (`id`);
