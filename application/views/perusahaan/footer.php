@@ -62,6 +62,7 @@
           $('#form_type_jasa').submit();
         })
         $('#dataTable').DataTable();
+        $('.dataTable').DataTable();
         $('#is_blocked').on('click', function() {
           const id = $(this).data('id')
           $.ajax({

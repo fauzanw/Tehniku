@@ -37,14 +37,19 @@ class Cmd {
         }
     }
 
+    public function show_menu()
+    {
+        $tbl = new Console_table();
+        $tbl->setHeaders(array('Command', 'Description', 'Example'));
+        $tbl->addRow(array('make:controller <name>', 'Generate a new Controller', 'php '.$this->argument[0].' make:controller Admin'));
+        $tbl->addRow(array('make:model <name>', 'Generate a new model', 'php '.$this->argument[0].' make:model Admin'));
+        $tbl->addRow(array('make:route <custom_route> <controller/method>', 'Make a new route', 'php '.$this->argument[0].' make:route admin/perusahaan/tambah admin/tambah_perusahaan'));
+        echo $tbl->getTable()."\n\n";
+    }
+
     public function main() {
         if(sizeof($this->argument) === 1) {
-            $tbl = new Console_table();
-            $tbl->setHeaders(array('Command', 'Description', 'Example'));
-            $tbl->addRow(array('make:controller <name>', 'Generate a new Controller', 'php '.$this->argument[0].' make:controller Admin'));
-            $tbl->addRow(array('make:model <name>', 'Generate a new model', 'php '.$this->argument[0].' make:model Admin'));
-            $tbl->addRow(array('make:route <custom_route> <controller/method>', 'Make a new route', 'php '.$this->argument[0].' make:route admin/perusahaan/tambah admin/tambah_perusahaan'));
-            echo $tbl->getTable()."\n\n";
+            $this->show_menu();
         }else{
             if(preg_match("/make/", $this->argument[1])) {
                 $cmd = explode(":", $this->argument[1]);
@@ -60,6 +65,9 @@ class Cmd {
                     }else{
                         echo "\033[93m[\033[91m!\033[93m] \033[91mFailed make new route!\n";
                     }
+                }else{
+                    $this->show_menu();
+                    echo "\033[93m[\033[91m!\033[93m] \033[91mCommand Not Found\n";
                 }
             }
         }

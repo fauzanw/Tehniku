@@ -9,6 +9,10 @@
                             <input type="text" name="jadwal" id="datetimepicker" class="form-control">
                         </div>
                         <div class="form-group">
+                            <label for="description">Deskripsi : </label>
+                            <textarea name="description" id="description" rows="6" class="form-control"></textarea>
+                        </div>
+                        <div class="form-group">
                             <button type="submit" name="set_jadwal" class="btn btn-orange btn-block">Set jadwal</button>
                         </div>
                     </form>

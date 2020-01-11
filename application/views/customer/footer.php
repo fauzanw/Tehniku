@@ -63,6 +63,7 @@
 
 
       $('#dataTable').DataTable();
+      $('.dataTable').DataTable();
       $(document).ready( function () {
         $('#datetimepicker').datetimepicker();
         $.fn.select2.defaults.set( "theme", "bootstrap" );

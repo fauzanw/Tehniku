@@ -7,7 +7,7 @@
                     <div class="card mb-3 shadow-lg">
                         <div class="card-header" style="border: none !important;">
                             <div class="text-right">
-                            <a href="<?= base_url('customer/pakejasa/pesanan/') . $data['id']. '/detail' ?>" class="btn btn-orange"><i class="fas fa-info-circle"></i> Detail</a>
+                            <a href="<?= base_url('perusahaan/pesanan/') . $data['id']. '/detail' ?>" class="btn btn-orange"><i class="fas fa-info-circle"></i> Detail</a>
                             </div>
                         </div>
                         <div class="row no-gutters">
@@ -31,23 +31,19 @@
                                     <div class="mt--4">
                                         <hr>
                                         <div class="row justify-content-between mt--3">
-                                            <div class="col-md-4 row">
+                                            <div class="col-md-6 row">
                                                 <i class="fas fa-briefcase" style="font-size: 20px;color: #939393;"></i>
                                                 <p class="ml-2 mt--1"><?= $data_jasa[$i]['type']; ?></p>
                                             </div>
-                                            <div class="col-md-4 row">
+                                            <div class="col-md-6 row">
                                                 <i class="fas fa-money-bill-wave" style="font-size: 20px;color: #939393;"></i>
                                                 <p class="ml-2 mt--1 text-orange" style='font-weight: bold;'><?= $data_jasa[$i]['harga']; ?></p>
-                                            </div>
-                                            <div class="col-md-4 row">
-                                                <i class="fas fa-search-location" style="font-size: 20px;color: #939393;"></i>
-                                                <p class="ml-2 mt--1"><?= $data_jasa[$i]['jarak']; ?> Km</p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="card-footer bg-transparent mt--3">
-                                <p class="card-text"><small class="text-muted">Pegawai <b><?= $data_jasa[$i]['nama'] ?></b> akan survey pada <?= $data['waktu'] ?> </small></p>
+                                <p class="card-text"><small class="text-muted">Jadwal pesanan: <?= $data['waktu'] ?> </small></p>
                                 </div>
                             </div>
                         </div>

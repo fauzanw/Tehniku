@@ -252,6 +252,12 @@ class Perusahaan extends CI_Controller {
 			$this->load->view('perusahaan/tambah_pegawai', $data);
 			$this->load->view('perusahaan/footer', $data);
 		}else{
+			$cek_email = $this->db->select('*')->from('users')->where('email', $this->input->post('email'))->get()->row_array();
+
+			if($cek_email) {
+				$this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Gagal</strong> edit email, email yang anda masukkan sudah digunakan.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+				redirect('perusahaan');
+			}
 			$upload_image = $_FILES['foto_pegawai']['name'];
 			$config['upload_path']   = './assets/argon/img/pegawai/';
 			$config['allowed_types'] = 'jpg|png|jpeg';
@@ -365,6 +371,120 @@ class Perusahaan extends CI_Controller {
 		}
 	}
 
+	public function pesanan()
+	{
+		$perusahaan = $this->db->get_where('perusahaan', ["user_id" => $this->session->userdata('id')])->row_array();
+		$pesanan = $this->db->get('pesanan')->result_array();
+		$data_jasa = [];
+		foreach($pesanan as $data) {
+			$this->db
+				 ->select('*')
+				 ->from('jasa_pivot_type jpt')
+				 ->join('jasa j', 'jpt.jasa_id=j.id')
+				 ->join('jasa_type jt', 'jpt.jasa_type_id=jt.id')
+				 ->join('perusahaan p', 'j.perusahaan_id=p.id')
+				 ->join('jasa_keyword jk', 'j.jasa_keyword_id=jk.id')
+				 ->where('jpt.jasa_id', $data['jasa_id']);
+			$data_jasa = $this->db->get()->result_array();	
+		}
+		$data = [
+			'title'             => 'Setting Akun Perusahaan',
+			'title_main_header' => 'Setting Akun Perusahaan',
+			'data_perusahaan'   => $perusahaan,
+			'data_perusahaan2'  => $this->session->userdata(),
+			'data_pesanan'      => $pesanan,
+			'data_jasa'         => $data_jasa
+		];
+		$this->load->view('perusahaan/header', $data);
+		$this->load->view('perusahaan/navigator', $data);
+		$this->load->view('perusahaan/main_header', $data);
+		$this->load->view('perusahaan/pesanan', $data);
+		$this->load->view('perusahaan/footer', $data);
+	}
+
+	public function pesanan_detail($jasa_id)
+	{
+		$perusahaan = $this->db->get_where('perusahaan', ["user_id" => $this->session->userdata('id')])->row_array();
+		$this->db
+			 ->select('*')
+			 ->from('pesanan ps')
+			 ->join('customer c', 'ps.customer_id=c.id');
+		$pesanan = $this->db->get()->row_array();
+		$this->db
+			 ->select('*')
+			 ->from('jasa_pivot_type jpt')
+			 ->join('jasa j', 'jpt.jasa_id=j.id')
+			 ->join('jasa_type jt', 'jpt.jasa_type_id=jt.id')
+			 ->join('jasa_keyword jk', 'j.jasa_keyword_id=jk.id')
+			 ->join('perusahaan p', 'j.perusahaan_id=p.id')
+			 ->where('jpt.jasa_id', $pesanan['jasa_id']);
+		$data_jasa = $this->db->get()->row_array();
+		$latlon_customer   = explode(", ", $pesanan['latlon']);
+		$latlon_perusahaan = explode(", ", $perusahaan['latlon']);
+		$data_jasa['jarak'] = hitungJarak($latlon_perusahaan[0], $latlon_perusahaan[1],$latlon_customer[0], $latlon_customer[1]);
+		$data_pegawai = [];
+		if($pesanan['pegawai_id'] != "") {
+			$id_pegawai = explode(",", $pesanan['pegawai_id']);
+			foreach($id_pegawai as $id) {
+				array_push($data_pegawai, $this->db->get_where('pegawai', ['id' => $id])->row_array());
+			}
+		}
+		$data = [
+			'title'               => 'Detail Pesanan Pakejasa',
+			'title_main_header'   => 'Detail Pesanan Pakejasa',
+			'data_perusahaan'     => $perusahaan,
+			'data_perusahaan2'    => $this->session->userdata(),
+			'data_pesanan'        => $pesanan,
+			'data_jasa'           => $data_jasa,
+			'data_pegawai'        => $data_pegawai,
+			'data_tambah_pegawai' => $this->db->get_where('pegawai', ['perusahaan_id' => $perusahaan['id'], 'status !=' => 0])->result_array() // status pegawai 1 = ready dan 0 = sedang bekerja
+		];
+		if($pesanan['status'] == 1) {
+			if(!isset($_POST['verif'])) {
+				$this->load->view('perusahaan/header', $data);
+				$this->load->view('perusahaan/navigator', $data);
+				$this->load->view('perusahaan/main_header', $data);
+				$this->load->view('perusahaan/wait_verified_pesanan', $data);
+				$this->load->view('perusahaan/footer', $data);
+			}else{
+				$this->db->set('status', 2);
+				$this->db->where('id', $jasa_id);
+				$this->db->update('pesanan');
+				$this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Berhasil</strong> verifikasi pesanan.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+				redirect("perusahaan/pesanan/$jasa_id/detail");
+			}
+		}else if($pesanan['status'] == 2) {
+			if(!isset($_POST['tambah_pegawai'])) {
+				$this->load->view('perusahaan/header', $data);
+				$this->load->view('perusahaan/navigator', $data);
+				$this->load->view('perusahaan/main_header', $data);
+				$this->load->view('perusahaan/verified_pesanan', $data);
+				$this->load->view('perusahaan/footer', $data);
+			}else{
+				if(isset($_POST['id_pegawai'])) {
+					list('id_pegawai' => $id_pegawai) = $_POST;
+					$pegawai_id = "";
+					foreach($id_pegawai as $id) {
+						$pegawai_id .= "$id,";
+						$this->db->set('status', 0);
+						$this->db->where('id', $id);
+					}
+					$this->db->update('pegawai');
+					$pegawai_id = substr($pegawai_id, 0, -1);
+
+					$this->db->set('pegawai_id', $pegawai_id);
+					$this->db->where('id', $jasa_id);
+					$this->db->update('pesanan');
+					$this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Berhasil</strong> menambahkan pegawai.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+					redirect("perusahaan/pesanan/$jasa_id/detail");
+				}else{
+					redirect("perusahaan/pesanan/$jasa_id/detail");
+				}
+			}
+		}
+		
+	}
+
 
 	public function setting() {
 		$perusahaan = $this->db->get_where('perusahaan', ["user_id" => $this->session->userdata('id')])->row_array();
@@ -385,6 +505,12 @@ class Perusahaan extends CI_Controller {
 			$edited_password = $this->input->post('password');
 			$new_password    = password_hash($edited_password, PASSWORD_DEFAULT);
 			$old_password    = $this->input->post('password_lama');
+			$cek_email       = $this->db->select('*')->from('users')->where_not_in('email', $data['data_perusahaan2']['email'])->where('email', $email)->get()->row_array();
+
+			if($cek_email) {
+				$this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Gagal</strong> edit email, email yang anda masukkan sudah digunakan.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+				redirect('perusahaan');
+			}
 			// jika password mau diubah
 			if($edited_password) {
 				if(!$old_password) {

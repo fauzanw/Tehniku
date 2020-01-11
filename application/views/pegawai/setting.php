@@ -35,6 +35,13 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <label for="gender">Jenis Kelamin</label>
+                                    <select name="gender" id="gender2" class="custom-select">
+                                        <option value="laki-laki" <?= $data_pegawai['gender'] == 'laki-laki' ? 'selected':null ?>>Laki Laki</option>
+                                        <option value="perempuan" <?= $data_pegawai['gender'] == 'perempuan' ? 'selected':null ?>>Perempuan</option>
+                                    </select>
+                                </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
@@ -53,11 +60,8 @@
                                     <input type="password" name="old_password" id="old_password" class="form-control">
                                     <p>(Isi field password jika password ingin diubah)</p>
                                 </div>
-                            </div>
-
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                <button type="submit" name="edit_data" class="btn btn-orange btn-block">Setting Akun Customer</button>
+                                <div class="form-group mt-4">
+                                    <button type="submit" name="edit_data" class="btn btn-orange btn-block">Setting Akun Customer</button>
                                 </div>
                             </div>
                         </div>

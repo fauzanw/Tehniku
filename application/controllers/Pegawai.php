@@ -55,7 +55,7 @@ class Pegawai extends CI_Controller {
 			$this->load->view('pegawai/setting', $data);
 			$this->load->view('pegawai/footer', $data);
 		}else{
-			list('nama' => $nama, 'email' => $email, 'new_password' => $edited_password, 'old_password' => $old_password, 'nomor_ponsel' => $nomor_ponsel) = $_POST;
+			list('nama' => $nama, 'email' => $email, 'new_password' => $edited_password, 'old_password' => $old_password, 'nomor_ponsel' => $nomor_ponsel, 'gender' => $gender) = $_POST;
 			$new_password    = password_hash($edited_password, PASSWORD_DEFAULT);
 			$data_pegawai   = $this->db->get_where('users', ['id' => $this->session->userdata('id')])->row_array();
 			$cek_email       = $this->db->select('*')->from('users')->where_not_in('email', $data['data_pegawai2']['email'])->where('email', $email)->get()->row_array();
@@ -115,6 +115,7 @@ class Pegawai extends CI_Controller {
 			} 
 			$this->db->set('nama', $nama);
 			$this->db->set('nomor_ponsel', $nomor_ponsel);
+			$this->db->set('gender', $gender);
 			$this->db->update('pegawai');
 
 			$this->session->set_userdata('email', $email);

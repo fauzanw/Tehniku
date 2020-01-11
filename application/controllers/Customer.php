@@ -172,24 +172,21 @@ class Customer extends CI_Controller {
 				'jasa_id'       => $jasa_id,
 				'perusahaan_id' => $cekjasa['id'],
 				'customer_id'   => $data['data_customer']['id'],
-				'waktu'         => $jadwal
-			];
+				'waktu'         => $jadwal,
+				'description'   => htmlspecialchars($_POST['description']),
+				'pegawai_id'    => '',
+				'status'        => 1
+ 			];
 			$this->db->insert('pesanan', $data_pesanan);
 			$this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Berhasil</strong> pesan jasa.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
 			redirect('customer/pakejasa/pesanan');
 		}else{
 			if(isset($_GET['type']) && isset($_GET['coor'])) {
-				if(!$cekjasa) {
-					show_404();
-				}else if(!$cektype) {
-					show_404();	
-				}else{
-					$this->load->view('customer/header', $data);
-					$this->load->view('customer/navigator', $data);
-					$this->load->view('customer/main_header', $data);
-					$this->load->view('customer/process_pakejasa', $data);
-					$this->load->view('customer/footer', $data);
-				}
+				$this->load->view('customer/header', $data);
+				$this->load->view('customer/navigator', $data);
+				$this->load->view('customer/main_header', $data);
+				$this->load->view('customer/process_pakejasa', $data);
+				$this->load->view('customer/footer', $data);
 			}else{
 				show_404();
 			}
@@ -230,6 +227,49 @@ class Customer extends CI_Controller {
 		$this->load->view('customer/main_header', $data);
 		$this->load->view('customer/pesanan', $data);
 		$this->load->view('customer/footer', $data);
+	}
+
+	public function pesanan_detail_pakejasa($id_pesanan)
+	{
+		$customer = $this->db->get_where('customer', ["user_id" => $this->session->userdata('id')])->row_array();
+		$this->db
+			 ->select('*')
+			 ->from('pesanan ps')
+			 ->join('customer c', 'ps.customer_id=c.id')
+			 ->join('perusahaan p', 'ps.perusahaan_id=p.id');
+		$pesanan = $this->db->get()->row_array();
+		$this->db
+			 ->select('*')
+			 ->from('jasa_pivot_type jpt')
+			 ->join('jasa j', 'jpt.jasa_id=j.id')
+			 ->join('jasa_type jt', 'jpt.jasa_type_id=jt.id')
+			 ->join('jasa_keyword jk', 'j.jasa_keyword_id=jk.id')
+			 ->where('jpt.jasa_id', $pesanan['jasa_id']);
+		$data_jasa = $this->db->get()->row_array();
+		$latlon_customer   = explode(", ", $customer['latlon']);
+		$latlon_perusahaan = explode(", ", $pesanan['latlon']);
+		$data_jasa['jarak'] = hitungJarak($latlon_perusahaan[0], $latlon_perusahaan[1],$latlon_customer[0], $latlon_customer[1]);
+		$data = [
+			'title'             => 'Detail Pesanan Pakejasa',
+			'title_main_header' => 'Detail Pesanan Pakejasa',
+			'data_customer'     => $customer,
+			'data_customer2'    => $this->session->userdata(),
+			'data_pesanan'      => $pesanan,
+			'data_jasa'         => $data_jasa
+		];
+		if($pesanan['status'] == 1) {
+			$this->load->view('customer/header', $data);
+			$this->load->view('customer/navigator', $data);
+			$this->load->view('customer/main_header', $data);
+			$this->load->view('customer/wait_verified_pesanan', $data);
+			$this->load->view('customer/footer', $data);
+		}else if($pesanan['status'] == 2) {
+			$this->load->view('customer/header', $data);
+			$this->load->view('customer/navigator', $data);
+			$this->load->view('customer/main_header', $data);
+			$this->load->view('customer/verified_pesanan', $data);
+			$this->load->view('customer/footer', $data);
+		}
 	}
 
 	public function setting() 

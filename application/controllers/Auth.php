@@ -91,6 +91,12 @@ class Auth extends CI_Controller {
 		if(!isset($_POST['daftar'])) {
 		    $this->load->view('auth/register_perusahaan');
 		}else{
+			$cek_email = $this->db->select('*')->from('users')->where('email', $this->input->post('email'))->get()->row_array();
+
+			if($cek_email) {
+				$this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Gagal</strong> edit email, email yang anda masukkan sudah digunakan.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+				redirect('auth/perusahaan/register');
+			}
 			$foto_npwp       = '';
 			$foto_ktp        = '';
 			$logo_perusahaan = '';
@@ -196,6 +202,12 @@ class Auth extends CI_Controller {
 		if(!isset($_POST['daftar'])) {
 			$this->load->view('auth/register_customer');
 		}else{
+			$cek_email = $this->db->select('*')->from('users')->where('email', $this->input->post('email'))->get()->row_array();
+
+			if($cek_email) {
+				$this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Gagal</strong> edit email, email yang anda masukkan sudah digunakan.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+				redirect('auth/customer/register');
+			}
 			$foto_ktp                = '';
 			$uploaded_foto_ktp       = $_FILES['foto_ktp']['name'];
 			$config['upload_path']   = './assets/argon/img/ktp/';

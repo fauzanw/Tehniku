@@ -83,7 +83,7 @@
             </a>
           </li>
           <li class="nav-item <?= ($this->uri->segment(1)) == "perusahaan" && $this->uri->segment(2) == "pesanan" && $this->uri->segment(3) == "" ? "active":"" ?>">
-            <a class="nav-link <?= ($this->uri->segment(1)) == "perusahaan" && $this->uri->segment(2) == "pesanan" && $this->uri->segment(3) == "" ? "active":"" ?>" href="<?= base_url('perusahaan/setting') ?>">
+            <a class="nav-link <?= ($this->uri->segment(1)) == "perusahaan" && $this->uri->segment(2) == "pesanan" && $this->uri->segment(3) == "" ? "active":"" ?>" href="<?= base_url('perusahaan/pesanan') ?>">
               <i class="ni ni-bullet-list-67 text-orange"></i> Pesanan Customer
             </a>
           </li>
