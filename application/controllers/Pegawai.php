@@ -37,6 +37,105 @@ class Pegawai extends CI_Controller {
 		$this->load->view('pegawai/footer', $data);
 	}
 
+	public function tugas() {
+		$pegawai      = $this->db->get_where('pegawai', ["user_id" => $this->session->userdata('id')])->row_array();
+		$perusahaan   = $this->db->get_where('perusahaan', ["id" => $pegawai['perusahaan_id']])->row_array();
+		$this->db
+			 ->select('
+			 ps.*,
+			 jpt.jasa_id,
+			 jpt.jasa_type_id,
+			 j.nama_jasa,
+			 j.harga,
+			 j.perusahaan_id,
+			 j.jasa_keyword_id,
+			 jt.type,
+			 p.nama,
+			 p.nomor_ponsel,
+			 p.logo_perusahaan,
+			 p.latlon,
+			 jk.keyword
+			 ')
+			 ->from('pesanan ps')
+			 ->join('jasa_pivot_type jpt', 'ps.jasa_id=jpt.jasa_id')
+			 ->join('jasa j', 'jpt.jasa_id=j.id')
+			 ->join('jasa_type jt', 'jpt.jasa_type_id=jt.id')
+			 ->join('perusahaan p', 'j.perusahaan_id=p.id')
+			 ->join('jasa_keyword jk', 'j.jasa_keyword_id=jk.id');
+		$pesanan      = $this->db->get()->result_array();
+		$real_pesanan = [];
+		foreach($pesanan as $i => $data) {
+			$id = $pegawai['id'];
+			if(preg_match("/$id/", $data['pegawai_id'])) {
+				array_push($real_pesanan, $data);	
+			}
+		}
+		$data = [
+			'title'             => 'Tugas',
+			'title_main_header' => 'Tugas',
+			'data_pegawai'      => $pegawai,
+			'data_perusahaan'   => $perusahaan,
+			'data_pegawai2'     => $this->session->userdata(),
+			'data_pesanan'      => $real_pesanan,
+		];
+
+		$this->load->view('pegawai/header', $data);
+		$this->load->view('pegawai/navigator', $data);
+		$this->load->view('pegawai/main_header', $data);
+		$this->load->view('pegawai/tugas', $data);
+		$this->load->view('pegawai/footer', $data);
+	}
+
+	public function tugas_detail($id) {
+		$pegawai = $this->db->get_where('pegawai', ["user_id" => $this->session->userdata('id')])->row_array();
+		$perusahaan = $this->db->get_where('perusahaan', ["id" => $pegawai['perusahaan_id']])->row_array();
+		$this->db
+			 ->select('
+				 ps.*,
+				 p.nama,
+				 p.nomor_ponsel,
+				 p.logo_perusahaan,
+				 p.alamat,
+				 p.latlon
+			 ')
+			 ->from('pesanan ps')
+			 ->join('perusahaan p', 'ps.perusahaan_id=p.id')
+			 ->where('ps.id', $id);
+		$pesanan = $this->db->get()->row_array();
+		$this->db
+			 ->select('*')
+			 ->from('jasa_pivot_type jpt')
+			 ->join('jasa j', 'jpt.jasa_id=j.id')
+			 ->join('jasa_type jt', 'jpt.jasa_type_id=jt.id')
+			 ->join('jasa_keyword jk', 'j.jasa_keyword_id=jk.id')
+			 ->where('jpt.jasa_id', $pesanan['jasa_id']);
+		$data_jasa = $this->db->get()->row_array();
+		$data_pegawai_to_surveying = [];
+		if(preg_match("/,/",$pesanan['pegawai_id'])) {
+			$pegawai_id = explode(",", $pesanan['pegawai_id']);
+			foreach($pegawai_id as $id) {
+				array_push($data_pegawai_to_surveying, $this->db->get_where('pegawai', ['id' => $id])->row_array());
+			}
+		}else{
+			array_push($data_pegawai_to_surveying, $this->db->get_where('pegawai', ['id' => $pesanan['pegawai_id']])->row_array());
+		}
+		$data = [
+			'title'                     => 'Detail tugas',
+			'title_main_header'         => 'Detail tugas',
+			'data_pegawai'              => $pegawai,
+			'data_perusahaan'           => $perusahaan,
+			'data_pegawai2'             => $this->session->userdata(),
+			'data_pesanan'              => $pesanan,
+			'data_jasa'                 => $data_jasa,
+			'data_pegawai_to_surveying' => $data_pegawai_to_surveying
+		];
+		$this->load->view('pegawai/header', $data);
+		$this->load->view('pegawai/navigator', $data);
+		$this->load->view('pegawai/main_header', $data);
+		$this->load->view('pegawai/tugas_before_survey', $data);
+		$this->load->view('pegawai/footer', $data);
+	}
+
 	public function setting()
 	{
 		$pegawai = $this->db->get_where('pegawai', ["user_id" => $this->session->userdata('id')])->row_array();

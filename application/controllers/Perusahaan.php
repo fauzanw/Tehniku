@@ -385,7 +385,7 @@ class Perusahaan extends CI_Controller {
 				 ->join('perusahaan p', 'j.perusahaan_id=p.id')
 				 ->join('jasa_keyword jk', 'j.jasa_keyword_id=jk.id')
 				 ->where('jpt.jasa_id', $data['jasa_id']);
-			$data_jasa = $this->db->get()->result_array();	
+			array_push($data_jasa, $this->db->get()->row_array());	
 		}
 		$data = [
 			'title'             => 'Setting Akun Perusahaan',
@@ -408,7 +408,8 @@ class Perusahaan extends CI_Controller {
 		$this->db
 			 ->select('*')
 			 ->from('pesanan ps')
-			 ->join('customer c', 'ps.customer_id=c.id');
+			 ->join('customer c', 'ps.customer_id=c.id')
+			 ->where('ps.id', $jasa_id);
 		$pesanan = $this->db->get()->row_array();
 		$this->db
 			 ->select('*')

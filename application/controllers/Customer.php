@@ -207,13 +207,14 @@ class Customer extends CI_Controller {
 				 ->join('perusahaan p', 'j.perusahaan_id=p.id')
 				 ->join('jasa_keyword jk', 'j.jasa_keyword_id=jk.id')
 				 ->where('jpt.jasa_id', $data['jasa_id']);
-			$data_jasa = $this->db->get()->result_array();	
+			array_push($data_jasa, $this->db->get()->row_array());	
 		}
 		foreach($data_jasa as $i => $data) {
 			$latlon_customer   = explode(", ", $customer['latlon']);
 			$latlon_perusahaan = explode(", ", $data['latlon']);
 			$data_jasa[$i]['jarak'] = hitungJarak($latlon_perusahaan[0], $latlon_perusahaan[1],$latlon_customer[0], $latlon_customer[1]);
 		}
+		// echo "<pre>";print_r([$data_jasa, $pesanan]); die;
 		$data = [
 			'title'             => 'Proses Pakejasa',
 			'title_main_header' => 'Proses Pakejasa',
@@ -236,7 +237,8 @@ class Customer extends CI_Controller {
 			 ->select('*')
 			 ->from('pesanan ps')
 			 ->join('customer c', 'ps.customer_id=c.id')
-			 ->join('perusahaan p', 'ps.perusahaan_id=p.id');
+			 ->join('perusahaan p', 'ps.perusahaan_id=p.id')
+			 ->where('ps.id', $id_pesanan);
 		$pesanan = $this->db->get()->row_array();
 		$this->db
 			 ->select('*')

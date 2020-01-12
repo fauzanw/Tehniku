@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: 12 Jan 2020 pada 00.48
+-- Generation Time: 12 Jan 2020 pada 13.46
 -- Versi Server: 5.7.28-0ubuntu0.18.04.4
 -- PHP Version: 7.2.24-0ubuntu0.18.04.1
 
@@ -221,7 +221,8 @@ CREATE TABLE `pegawai` (
 --
 
 INSERT INTO `pegawai` (`id`, `nama`, `umur`, `nomor_ponsel`, `nomor_ktp`, `gender`, `perusahaan_id`, `user_id`, `foto_pegawai`, `status`) VALUES
-('5e017625df559', 'Brilly4n', 23, '082-813-892-838', 2147483647, 'laki-laki', '8a345e15-9690-4a89-9b63-da230e170490', '5e017625c3951', 'd16a701df2df860c7d10189950211c16.png', 0);
+('5e017625df559', 'Brilly4n', 23, '082-813-892-838', 2147483647, 'laki-laki', '8a345e15-9690-4a89-9b63-da230e170490', '5e017625c3951', 'd16a701df2df860c7d10189950211c16.png', 0),
+('5e1a9e677c8cc', 'Rizsyad AR', 19, '085-816-872-942', 2147483647, 'laki-laki', '8a345e15-9690-4a89-9b63-da230e170490', '5e1a9e670f6f4', '7339a9f47e63f6d363813ff45cffdea2.png', 0);
 
 -- --------------------------------------------------------
 
@@ -272,7 +273,8 @@ CREATE TABLE `pesanan` (
 --
 
 INSERT INTO `pesanan` (`id`, `jasa_id`, `perusahaan_id`, `customer_id`, `waktu`, `description`, `pegawai_id`, `status`) VALUES
-('5e18a63423788', '5e08d1fb1df95', '8a345e15-9690-4a89-9b63-da230e170490', '5e024299723af', 'Sabtu, 11 Januari 2020 Jam 22:59', '', '5e017625df559', '2');
+('5e18a63423788', '5e08d1fb1df95', '8a345e15-9690-4a89-9b63-da230e170490', '5e024299723af', 'Sabtu, 11 Januari 2020 Jam 22:59', 'Survey ke alamat jalan bekasi timur raya rt04/05 13250', '5e017625df559', '2'),
+('5e1a9f197eb1a', '5e134ab006a1d', '8a345e15-9690-4a89-9b63-da230e170490', '5e024299723af', 'Kamis, 30 Januari 2020 Jam 11:59', 'instalasi ke rumah jl raya bekasi rt 05/09 1350', '5e1a9e677c8cc', '2');
 
 -- --------------------------------------------------------
 
@@ -298,6 +300,7 @@ INSERT INTO `users` (`id`, `email`, `password`, `role_id`, `is_verified`, `is_bl
 ('5dff4088205c5', 'fgaming386@gmail.com', '$2y$10$QDxp40NrVjFVVugJJdyxaeG2qY/eTo0XqjQ43nWPZHhqorLu74bm2', '2c282814-d165-4625-8ed3-492f82c57116', 1, 0, 'Minggu, 22 Desember 2019'),
 ('5e017625c3951', 'brilly4n@gmail.com', '$2y$10$NBn8gIePPLa5I1nTCfRABek904DqQ1SCKtFxxAmERNBF1AONVuhwS', 'adc5ce5d-0491-4d88-b9d4-8bc11b40415a', 1, 0, 'Selasa, 24 Desember 2019'),
 ('5e0242991fa89', 'pojan@gmail.com', '$2y$10$MQjY8s9iDxLPWC64vQDFT.qUttZUbsj1Z.E5hEduJ24JoaULkrgKO', 'ef40c680-03f0-45b9-ab98-290200f5ff13', 1, 0, 'Selasa, 24 Desember 2019'),
+('5e1a9e670f6f4', 'rizsyad@gmail.com', '$2y$10$lh5kvvjA1bMYLgiZa9F.I.95y06zSc1AVbH/bmN2vzmWRHHYUXdni', 'adc5ce5d-0491-4d88-b9d4-8bc11b40415a', 1, 0, 'Minggu, 12 Januari 2020'),
 ('7a0cee80-f48d-4fc2-af8f-f927aa67878e', 'lg_tech@gmail.com', '$2y$10$7feDHCG9QCMDt5kbN0i.a.wfR.R2LunxK2Syr0rF0stj2Sj2bQt2W', 'a3253f9d-0741-4838-8583-20816cd63e11', 1, 0, 'Senin, 16 Desember 2019');
 
 -- --------------------------------------------------------

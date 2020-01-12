@@ -82,3 +82,4 @@ $route["customer/pakejasa/process/(:any)"]        = "customer/process_pakejasa/$
 $route["customer/pakejasa/pesanan"]               = "customer/pesanan_pakejasa";
 $route["customer/pakejasa/pesanan/(:any)/detail"] = "customer/pesanan_detail_pakejasa/$1";
 $route["perusahaan/pesanan/(:any)/detail"]        = "perusahaan/pesanan_detail/$1";
+$route["pegawai/tugas/(:any)/detail"] = "pegawai/tugas_detail/$1";

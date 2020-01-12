@@ -73,7 +73,7 @@
             </a>
           </li>
           <li class="nav-item <?= ($this->uri->segment(1)) == "pegawai" && $this->uri->segment(2) == "tugas" && $this->uri->segment(3) == "" ? "active":"" ?>">
-            <a class="nav-link <?= ($this->uri->segment(1)) == "pegawai" && $this->uri->segment(2) == "tugas" && $this->uri->segment(3) == "" ? "active":"" ?>" href="<?= base_url('perusahaan/pegawai') ?>">
+            <a class="nav-link <?= ($this->uri->segment(1)) == "pegawai" && $this->uri->segment(2) == "tugas" && $this->uri->segment(3) == "" ? "active":"" ?>" href="<?= base_url('pegawai/tugas') ?>">
               <i class="fas fa-briefcase text-orange"></i> Tugas
             </a>
           </li>

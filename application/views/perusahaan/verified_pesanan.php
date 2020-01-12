@@ -4,7 +4,7 @@
         <div class="col-md-12 mb-5">
             <div class="card shadow-lg">
                 <div class="card-header">
-                    <a href="<?= base_url('customer/pakejasa/pesanan') ?>" class='badge badge-orange'><i class="fas fa-arrow-left"></i> &nbsp;Kembali ke pesanan</a>
+                    <a href="<?= base_url('perusahaan/pesanan') ?>" class='badge badge-orange'><i class="fas fa-arrow-left"></i> &nbsp;Kembali ke pesanan</a>
                     <button type="button" data-toggle="modal" data-target="#tambahPegawaiModal" class="badge badge-orange"><i class="fas fa-plus"></i> Tambah pegawai</button>
                 </div>
                 <div class="card-body">
