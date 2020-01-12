@@ -65,7 +65,7 @@
       $('#dataTable').DataTable();
       $('.dataTable').DataTable();
       $(document).ready( function () {
-        $('#datetimepicker').datetimepicker();
+        $('#datetimepicker').datetimepicker({ footer: true, modal: true });
         $.fn.select2.defaults.set( "theme", "bootstrap" );
         $(".select2" ).select2()
         $('#cari-perusahaan-terdekat').on('click', e => {

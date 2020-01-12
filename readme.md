@@ -28,7 +28,6 @@
 ### Pegawai
 ```json
 [
-
   {
     "email": "brilly4n@gmail.com",
     "password": "brillyan"

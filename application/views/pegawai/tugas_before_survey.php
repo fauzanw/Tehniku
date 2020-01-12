@@ -30,6 +30,9 @@
                     </table>
                 </div>
             </div>
+            <form method="post" class="mt-2">
+                <button type="submit" class="btn btn-orange btn-block">Survey rumah customer</button>
+            </form>
         </div>
         <div class="col-md-4 wow fadeInUp">
             <div class="card card-pakejasa shadow-lg">

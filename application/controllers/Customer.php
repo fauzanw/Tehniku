@@ -164,22 +164,27 @@ class Customer extends CI_Controller {
 			'jarak'             => base64_decode($_GET['coor'])
 		];
 		if(isset($_POST['set_jadwal'])) {
-			$split_jadwal = explode(" ", $_POST['jadwal']);
-			$pisah        = explode("/", $split_jadwal[1]);
-			$jadwal       = formatHariTanggal("$pisah[2]-$pisah[0]-$pisah[1]") . " Jam $split_jadwal[0]";
-			$data_pesanan = [
-				'id'            => uniqid(),
-				'jasa_id'       => $jasa_id,
-				'perusahaan_id' => $cekjasa['id'],
-				'customer_id'   => $data['data_customer']['id'],
-				'waktu'         => $jadwal,
-				'description'   => htmlspecialchars($_POST['description']),
-				'pegawai_id'    => '',
-				'status'        => 1
- 			];
-			$this->db->insert('pesanan', $data_pesanan);
-			$this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Berhasil</strong> pesan jasa.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-			redirect('customer/pakejasa/pesanan');
+			if(isset($_POST['jadwal']) && isset($_POST['description'])) {
+				$split_jadwal = explode(" ", $_POST['jadwal']);
+				$pisah        = explode("/", $split_jadwal[1]);
+				$jadwal       = formatHariTanggal("$pisah[2]-$pisah[0]-$pisah[1]") . " Jam $split_jadwal[0]";
+				$data_pesanan = [
+					'id'            => uniqid(),
+					'jasa_id'       => $jasa_id,
+					'perusahaan_id' => $cekjasa['id'],
+					'customer_id'   => $data['data_customer']['id'],
+					'waktu'         => $jadwal,
+					'description'   => htmlspecialchars($_POST['description']),
+					'pegawai_id'    => '',	
+					'status'        => 1
+				];
+				$this->db->insert('pesanan', $data_pesanan);
+				$this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Berhasil</strong> pesan jasa.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+				redirect('customer/pakejasa/pesanan');
+			}else{
+				$this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Gagal</strong> pesan jasa, ada input yang tidak boleh kosong.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+				redirect('customer/pakejasa/pesanan');
+			}
 		}else{
 			if(isset($_GET['type']) && isset($_GET['coor'])) {
 				$this->load->view('customer/header', $data);
@@ -196,7 +201,7 @@ class Customer extends CI_Controller {
 	public function pesanan_pakejasa()
 	{
 		$customer = $this->db->get_where('customer', ["user_id" => $this->session->userdata('id')])->row_array();
-		$pesanan = $this->db->get('pesanan')->result_array();
+		$pesanan = $this->db->get_where('pesanan', ['customer_id' => $customer['id']])->result_array();
 		$data_jasa = [];
 		foreach($pesanan as $data) {
 			$this->db
@@ -248,29 +253,44 @@ class Customer extends CI_Controller {
 			 ->join('jasa_keyword jk', 'j.jasa_keyword_id=jk.id')
 			 ->where('jpt.jasa_id', $pesanan['jasa_id']);
 		$data_jasa = $this->db->get()->row_array();
-		$latlon_customer   = explode(", ", $customer['latlon']);
-		$latlon_perusahaan = explode(", ", $pesanan['latlon']);
-		$data_jasa['jarak'] = hitungJarak($latlon_perusahaan[0], $latlon_perusahaan[1],$latlon_customer[0], $latlon_customer[1]);
-		$data = [
-			'title'             => 'Detail Pesanan Pakejasa',
-			'title_main_header' => 'Detail Pesanan Pakejasa',
-			'data_customer'     => $customer,
-			'data_customer2'    => $this->session->userdata(),
-			'data_pesanan'      => $pesanan,
-			'data_jasa'         => $data_jasa
-		];
-		if($pesanan['status'] == 1) {
-			$this->load->view('customer/header', $data);
-			$this->load->view('customer/navigator', $data);
-			$this->load->view('customer/main_header', $data);
-			$this->load->view('customer/wait_verified_pesanan', $data);
-			$this->load->view('customer/footer', $data);
-		}else if($pesanan['status'] == 2) {
-			$this->load->view('customer/header', $data);
-			$this->load->view('customer/navigator', $data);
-			$this->load->view('customer/main_header', $data);
-			$this->load->view('customer/verified_pesanan', $data);
-			$this->load->view('customer/footer', $data);
+		$data_pegawai_to_surveying = [];
+		if(preg_match("/,/",$pesanan['pegawai_id'])) {
+			$pegawai_id = explode(",", $pesanan['pegawai_id']);
+			foreach($pegawai_id as $id) {
+				array_push($data_pegawai_to_surveying, $this->db->get_where('pegawai', ['id' => $id])->row_array());
+			}
+		}else{
+			array_push($data_pegawai_to_surveying, $this->db->get_where('pegawai', ['id' => $pesanan['pegawai_id']])->row_array());
+		}
+
+		if($pesanan && $data_jasa) {
+			$latlon_customer   = explode(", ", $customer['latlon']);
+			$latlon_perusahaan = explode(", ", $pesanan['latlon']);
+			$data_jasa['jarak'] = hitungJarak($latlon_perusahaan[0], $latlon_perusahaan[1],$latlon_customer[0], $latlon_customer[1]);
+			$data = [
+				'title'                  => 'Detail Pesanan Pakejasa',
+				'title_main_header'      => 'Detail Pesanan Pakejasa',
+				'data_customer'          => $customer,
+				'data_customer2'         => $this->session->userdata(),
+				'data_pesanan'           => $pesanan,
+				'data_jasa'              => $data_jasa,
+				'data_pegawai_to_survey' => $data_pegawai_to_surveying
+			];
+			if($pesanan['status'] == 1) {
+				$this->load->view('customer/header', $data);
+				$this->load->view('customer/navigator', $data);
+				$this->load->view('customer/main_header', $data);
+				$this->load->view('customer/wait_verified_pesanan', $data);
+				$this->load->view('customer/footer', $data);
+			}else if($pesanan['status'] == 2) {
+				$this->load->view('customer/header', $data);
+				$this->load->view('customer/navigator', $data);
+				$this->load->view('customer/main_header', $data);
+				$this->load->view('customer/verified_pesanan', $data);
+				$this->load->view('customer/footer', $data);
+			}
+		}else{
+			show_error("Data pesanan tidak valid", 400);
 		}
 	}
 

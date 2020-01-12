@@ -17,6 +17,16 @@
                                 <th>Jenis Kelamin</th>
                             </tr>
                         </thead>
+                        <tbody>
+                        <?php $i = 1;foreach($data_pegawai_to_survey as $data) : ?>
+                            <tr>
+                                <td><?= $i++; ?></td>
+                                <td><?= $data['nama']; ?></td>
+                                <td><?= $data['nomor_ponsel']; ?></td>
+                                <td><?= $data['gender']; ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -45,56 +55,29 @@
                             </div>
                         </div>
                         <h1 class="mt-3 text-orange" style="font-weight: bold;"><?= $data_jasa['harga']; ?></h1>
-                        <!-- <a href="<?= base_url('customer/pakejasa/process/'.$data['id'].'?type='.$data['jasa_type_id'].'&coor='.base64_encode($data['jarak'])) ?>" class="btn btn-orange btn-block mt-4">Pilih jasa ini</a> -->
                     </div>
                 </div>
             </div>
           </div>
       </div>
-      <div class="row mt-2">
-        <div class="col-md-4">
-            <div class="card card-pakejasa shadow-lg">
-                <img src="<?= base_url('assets/argon/img/theme/wave.png') ?>" class="wave-pakejasa" alt="">
-                <center class="mt--13">
-                    <img src="<?= base_url('assets/argon/img/perusahaan/') . $data_pesanan['logo_perusahaan'] ?>" class="mt--1 card-img-top mt-3" style="width: 100px;height:100px;" alt="">
-                </center>
-                <div class="card-body mr-3 ml-3">
-                    <div class="mt-5 text-center">
-                        <h1 class="mt-5" style="font-weight: bold;"><?= $data_pesanan['nama']; ?></h1>
-                    </div>
-                    <div class="mt--4">
-                        <hr>
-                        <div class="mt--3">
-                            <div class="row">
-                                <i class="fas fa-phone-volume"></i>
-                                <p class="ml-2 mt--1"><?= $data_pesanan['nomor_ponsel']; ?></p>
-                            </div>
-                            <div class="row">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <p class="ml-2 mt--1"><?= $data_pesanan['alamat']; ?></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+      <?php if($data_jasa['type'] != 'instalasi') : ?>
+        <div class="card shadow-lg mb-5">
+            <div class="card-body">
+                <table class="table table-hover dataTable">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Nama Component</th>
+                            <th>Merek</th>
+                            <th>Harga</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                    </tbody>
+                </table>
             </div>
         </div>
-        <div class="col-md-8">
-            <div class="card shadow-lg">
-                <div class="card-body">
-                    <table class="table table-responsive-md table-hover dataTable">
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Nama Component</th>
-                                <th>Merek</th>
-                                <th>Harga</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-      </div>
+      <?php endif; ?>
     </div>
   </div>

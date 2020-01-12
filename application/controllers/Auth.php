@@ -242,14 +242,15 @@ class Auth extends CI_Controller {
 			);
 			$this->db->insert('users', $data_user);
 			$data_customer = array(
-				'id'           => uniqid(),
-				'nama'         => htmlspecialchars($this->input->post('nama_lengkap')),
-				'alamat'       => htmlspecialchars($this->input->post('alamat')),
-				'nomor_ponsel' => $this->input->post('nomor_ponsel'),
-				'foto_ktp'     => $foto_ktp,
-				'nomor_ktp'    => $this->input->post('nomor_ktp'),
-				'user_id'      => $data_user['id'],
-				'latlon'       => $this->input->post('latlon')
+				'id'            => uniqid(),
+				'nama'          => htmlspecialchars($this->input->post('nama_lengkap')),
+				'alamat'        => htmlspecialchars($this->input->post('alamat')),
+				'nomor_ponsel'  => $this->input->post('nomor_ponsel'),
+				'foto_ktp'      => $foto_ktp,
+				'nomor_ktp'     => $this->input->post('nomor_ktp'),
+				'user_id'       => $data_user['id'],
+				'foto_customer' => 'default.png',
+				'latlon'        => $this->input->post('latlon')
 			);
 
 			// var_dump($data_customer); die;

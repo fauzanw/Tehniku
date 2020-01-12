@@ -110,30 +110,34 @@ class Pegawai extends CI_Controller {
 			 ->join('jasa_keyword jk', 'j.jasa_keyword_id=jk.id')
 			 ->where('jpt.jasa_id', $pesanan['jasa_id']);
 		$data_jasa = $this->db->get()->row_array();
-		$data_pegawai_to_surveying = [];
-		if(preg_match("/,/",$pesanan['pegawai_id'])) {
-			$pegawai_id = explode(",", $pesanan['pegawai_id']);
-			foreach($pegawai_id as $id) {
-				array_push($data_pegawai_to_surveying, $this->db->get_where('pegawai', ['id' => $id])->row_array());
+		if($pesanan && $data_jasa) {
+			$data_pegawai_to_surveying = [];
+			if(preg_match("/,/",$pesanan['pegawai_id'])) {
+				$pegawai_id = explode(",", $pesanan['pegawai_id']);
+				foreach($pegawai_id as $id) {
+					array_push($data_pegawai_to_surveying, $this->db->get_where('pegawai', ['id' => $id])->row_array());
+				}
+			}else{
+				array_push($data_pegawai_to_surveying, $this->db->get_where('pegawai', ['id' => $pesanan['pegawai_id']])->row_array());
 			}
+			$data = [
+				'title'                     => 'Detail tugas',
+				'title_main_header'         => 'Detail tugas',
+				'data_pegawai'              => $pegawai,
+				'data_perusahaan'           => $perusahaan,
+				'data_pegawai2'             => $this->session->userdata(),
+				'data_pesanan'              => $pesanan,
+				'data_jasa'                 => $data_jasa,
+				'data_pegawai_to_surveying' => $data_pegawai_to_surveying
+			];
+			$this->load->view('pegawai/header', $data);
+			$this->load->view('pegawai/navigator', $data);
+			$this->load->view('pegawai/main_header', $data);
+			$this->load->view('pegawai/tugas_before_survey', $data);
+			$this->load->view('pegawai/footer', $data);
 		}else{
-			array_push($data_pegawai_to_surveying, $this->db->get_where('pegawai', ['id' => $pesanan['pegawai_id']])->row_array());
+			show_error("Data tugas tidak valid", 400);
 		}
-		$data = [
-			'title'                     => 'Detail tugas',
-			'title_main_header'         => 'Detail tugas',
-			'data_pegawai'              => $pegawai,
-			'data_perusahaan'           => $perusahaan,
-			'data_pegawai2'             => $this->session->userdata(),
-			'data_pesanan'              => $pesanan,
-			'data_jasa'                 => $data_jasa,
-			'data_pegawai_to_surveying' => $data_pegawai_to_surveying
-		];
-		$this->load->view('pegawai/header', $data);
-		$this->load->view('pegawai/navigator', $data);
-		$this->load->view('pegawai/main_header', $data);
-		$this->load->view('pegawai/tugas_before_survey', $data);
-		$this->load->view('pegawai/footer', $data);
 	}
 
 	public function setting()

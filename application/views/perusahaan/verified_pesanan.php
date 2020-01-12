@@ -1,41 +1,44 @@
     <div class="container-fluid mt--7">
       <?= $this->session->flashdata('message'); ?>
       <div class="row">
-        <div class="col-md-12 mb-5">
-            <div class="card shadow-lg">
-                <div class="card-header">
-                    <a href="<?= base_url('perusahaan/pesanan') ?>" class='badge badge-orange'><i class="fas fa-arrow-left"></i> &nbsp;Kembali ke pesanan</a>
-                    <button type="button" data-toggle="modal" data-target="#tambahPegawaiModal" class="badge badge-orange"><i class="fas fa-plus"></i> Tambah pegawai</button>
-                </div>
-                <div class="card-body">
-                    <h5>Data pegawai yang akan survey kerumah customer:</h5>
-                    <table class="table table-orange table-responsive-md" id="dataTable">
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Nama Pegawai</th>
-                                <th>Nomor Ponsel</th>
-                                <th>Jenis Kelamin</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php $i = 1;foreach($data_pegawai as $data) : ?>
+        <?php if($data_jasa['type'] == "instalasi") : ?>
+            <div class="col-md-12 mb-5">
+                <div class="card shadow-lg">
+                    <div class="card-header">
+                        <a href="<?= base_url('perusahaan/pesanan') ?>" class='badge badge-orange'><i class="fas fa-arrow-left"></i> &nbsp;Kembali ke pesanan</a>
+                        <button type="button" data-toggle="modal" data-target="#tambahPegawaiModal" class="badge badge-orange"><i class="fas fa-plus"></i> Tambah pegawai</button>
+                    </div>
+                    <div class="card-body">
+                        <h5>Data pegawai yang akan survey kerumah customer:</h5>
+                        <table class="table table-orange table-responsive-md" id="dataTable">
+                            <thead>
                                 <tr>
-                                    <td><?= $i++; ?></td>
-                                    <td><?= $data['nama']; ?></td>
-                                    <td><?= $data['nomor_ponsel']; ?></td>
-                                    <td><?= $data['gender']; ?></td>
+                                    <th>No</th>
+                                    <th>Nama Pegawai</th>
+                                    <th>Nomor Ponsel</th>
+                                    <th>Jenis Kelamin</th>
                                 </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                <?php $i = 1;foreach($data_pegawai as $data) : ?>
+                                    <tr>
+                                        <td><?= $i++; ?></td>
+                                        <td><?= $data['nama']; ?></td>
+                                        <td><?= $data['nomor_ponsel']; ?></td>
+                                        <td><?= $data['gender']; ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
+                <center>
+                    <img src="<?= base_url('assets/argon/img/theme/selecting_team.svg') ?>" width="300" height="300" alt="">
+                    <h3>Pilih pegawaimu untuk menyurvei rumah customer!</h3>
+                </center>
             </div>
-            <center>
-                <img src="<?= base_url('assets/argon/img/theme/selecting_team.svg') ?>" width="300" height="300" alt="">
-                <h3>Pilih pegawaimu untuk menyurvei rumah customer!</h3>
-            </center>
-        </div>
+        <?php else: ?>
+        <?php endif; ?>
       </div>
 
       <div class="modal fade" id="tambahPegawaiModal" tabindex="-1" role="dialog" aria-labelledby="tambahPegawaiLabel" aria-hidden="true">
