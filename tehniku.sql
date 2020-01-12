@@ -39,7 +39,7 @@ CREATE TABLE `admin` (
 --
 
 INSERT INTO `admin` (`id`, `nama`, `nomor_ponsel`, `user_id`, `foto_admin`) VALUES
-('5dff41bf96258', 'Fathiah Hana Nur Aisyah', '082-112-848-887', '5dff4088205c5', 'default.png');
+('5dff41bf96258', 'Muhammad Fauzan Wibowo', '082-112-848-887', '5dff4088205c5', 'default.png');
 
 -- --------------------------------------------------------
 
