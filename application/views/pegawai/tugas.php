@@ -33,6 +33,10 @@
                                     <p class="ml-2 mt--1 text-orange" style='font-weight: bold;'><?= $data['harga']; ?></p>
                                 </div>
                             </div>
+                            <div class="row mr-4 ml-4">
+                                    <i class="fas fa-street-view" style="font-size: 20px;color: #939393;"></i>
+                                    <p class="ml-2 mt--1"><?= $data['alamat']; ?></p>
+                            </div>
                         </div>
                         <p class="mt-3 mr-5 ml-5"><i class="fas fa-quote-left"></i> <?= $data['description']; ?> <i class="fas fa-quote-right"></i></p>
                     </div>

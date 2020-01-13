@@ -54,9 +54,11 @@ class Pegawai extends CI_Controller {
 			 p.nomor_ponsel,
 			 p.logo_perusahaan,
 			 p.latlon,
+			 c.*,
 			 jk.keyword
 			 ')
 			 ->from('pesanan ps')
+			 ->join('customer c', 'ps.customer_id=c.id')
 			 ->join('jasa_pivot_type jpt', 'ps.jasa_id=jpt.jasa_id')
 			 ->join('jasa j', 'jpt.jasa_id=j.id')
 			 ->join('jasa_type jt', 'jpt.jasa_type_id=jt.id')

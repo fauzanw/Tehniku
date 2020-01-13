@@ -20,7 +20,7 @@
                     </div>
                     <div class="form-group mt-2">
                         <label for="description">Deskripsi customer</label>
-                        <textarea name="description" id="description" disabled class="form-control"><?= $data_pesanan['description']; ?></textarea>
+                        <textarea name="description" id="description" readonly class="form-control"><?= $data_pesanan['description']; ?></textarea>
                     </div>
                 </div>
             </div>

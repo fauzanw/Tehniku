@@ -420,68 +420,80 @@ class Perusahaan extends CI_Controller {
 			 ->join('perusahaan p', 'j.perusahaan_id=p.id')
 			 ->where('jpt.jasa_id', $pesanan['jasa_id']);
 		$data_jasa = $this->db->get()->row_array();
-		$latlon_customer   = explode(", ", $pesanan['latlon']);
-		$latlon_perusahaan = explode(", ", $perusahaan['latlon']);
-		$data_jasa['jarak'] = hitungJarak($latlon_perusahaan[0], $latlon_perusahaan[1],$latlon_customer[0], $latlon_customer[1]);
-		$data_pegawai = [];
-		if($pesanan['pegawai_id'] != "") {
-			$id_pegawai = explode(",", $pesanan['pegawai_id']);
-			foreach($id_pegawai as $id) {
-				array_push($data_pegawai, $this->db->get_where('pegawai', ['id' => $id])->row_array());
-			}
-		}
-		$data = [
-			'title'               => 'Detail Pesanan Pakejasa',
-			'title_main_header'   => 'Detail Pesanan Pakejasa',
-			'data_perusahaan'     => $perusahaan,
-			'data_perusahaan2'    => $this->session->userdata(),
-			'data_pesanan'        => $pesanan,
-			'data_jasa'           => $data_jasa,
-			'data_pegawai'        => $data_pegawai,
-			'data_tambah_pegawai' => $this->db->get_where('pegawai', ['perusahaan_id' => $perusahaan['id'], 'status !=' => 0])->result_array() // status pegawai 1 = ready dan 0 = sedang bekerja
-		];
-		if($pesanan['status'] == 1) {
-			if(!isset($_POST['verif'])) {
-				$this->load->view('perusahaan/header', $data);
-				$this->load->view('perusahaan/navigator', $data);
-				$this->load->view('perusahaan/main_header', $data);
-				$this->load->view('perusahaan/wait_verified_pesanan', $data);
-				$this->load->view('perusahaan/footer', $data);
-			}else{
-				$this->db->set('status', 2);
-				$this->db->where('id', $jasa_id);
-				$this->db->update('pesanan');
-				$this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Berhasil</strong> verifikasi pesanan.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-				redirect("perusahaan/pesanan/$jasa_id/detail");
-			}
-		}else if($pesanan['status'] == 2) {
-			if(!isset($_POST['tambah_pegawai'])) {
-				$this->load->view('perusahaan/header', $data);
-				$this->load->view('perusahaan/navigator', $data);
-				$this->load->view('perusahaan/main_header', $data);
-				$this->load->view('perusahaan/verified_pesanan', $data);
-				$this->load->view('perusahaan/footer', $data);
-			}else{
-				if(isset($_POST['id_pegawai'])) {
-					list('id_pegawai' => $id_pegawai) = $_POST;
-					$pegawai_id = "";
-					foreach($id_pegawai as $id) {
-						$pegawai_id .= "$id,";
-						$this->db->set('status', 0);
-						$this->db->where('id', $id);
-					}
-					$this->db->update('pegawai');
-					$pegawai_id = substr($pegawai_id, 0, -1);
-
-					$this->db->set('pegawai_id', $pegawai_id);
-					$this->db->where('id', $jasa_id);
-					$this->db->update('pesanan');
-					$this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Berhasil</strong> menambahkan pegawai.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-					redirect("perusahaan/pesanan/$jasa_id/detail");
-				}else{
-					redirect("perusahaan/pesanan/$jasa_id/detail");
+		if($pesanan && $data_jasa) {
+			$this->db
+				 ->select('*')
+				 ->from('material m')
+				 ->join('merek mr', 'm.merek_id=mr.id')
+				 ->where('m.jasa_keyword_id', $data_jasa['jasa_keyword_id']);
+			$data_material = $this->db->get()->result_array();
+			// echo '<pre>';print_r([$data_jasa, $pesanan, $data_material]); die;
+			$latlon_customer   = explode(", ", $pesanan['latlon']);
+			$latlon_perusahaan = explode(", ", $perusahaan['latlon']);
+			$data_jasa['jarak'] = hitungJarak($latlon_perusahaan[0], $latlon_perusahaan[1],$latlon_customer[0], $latlon_customer[1]);
+			$data_pegawai = [];
+			if($pesanan['pegawai_id'] != "") {
+				$id_pegawai = explode(",", $pesanan['pegawai_id']);
+				foreach($id_pegawai as $id) {
+					array_push($data_pegawai, $this->db->get_where('pegawai', ['id' => $id])->row_array());
 				}
 			}
+			$data = [
+				'title'               => 'Detail Pesanan Pakejasa',
+				'title_main_header'   => 'Detail Pesanan Pakejasa',
+				'data_perusahaan'     => $perusahaan,
+				'data_perusahaan2'    => $this->session->userdata(),
+				'data_pesanan'        => $pesanan,
+				'data_jasa'           => $data_jasa,
+				'data_pegawai'        => $data_pegawai,
+				'data_tambah_pegawai' => $this->db->get_where('pegawai', ['perusahaan_id' => $perusahaan['id'], 'status !=' => 0])->result_array(), // status pegawai 1 = ready dan 0 = sedang bekerja
+				'data_material'       => $data_material
+			];
+			if($pesanan['status'] == 1) {
+				if(!isset($_POST['verif'])) {
+					$this->load->view('perusahaan/header', $data);
+					$this->load->view('perusahaan/navigator', $data);
+					$this->load->view('perusahaan/main_header', $data);
+					$this->load->view('perusahaan/wait_verified_pesanan', $data);
+					$this->load->view('perusahaan/footer', $data);
+				}else{
+					$this->db->set('status', 2);
+					$this->db->where('id', $jasa_id);
+					$this->db->update('pesanan');
+					$this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Berhasil</strong> verifikasi pesanan.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+					redirect("perusahaan/pesanan/$jasa_id/detail");
+				}
+			}else if($pesanan['status'] == 2) {
+				if(!isset($_POST['tambah_pegawai'])) {
+					$this->load->view('perusahaan/header', $data);
+					$this->load->view('perusahaan/navigator', $data);
+					$this->load->view('perusahaan/main_header', $data);
+					$this->load->view('perusahaan/verified_pesanan', $data);
+					$this->load->view('perusahaan/footer', $data);
+				}else{
+					if(isset($_POST['id_pegawai'])) {
+						list('id_pegawai' => $id_pegawai) = $_POST;
+						$pegawai_id = "";
+						foreach($id_pegawai as $id) {
+							$pegawai_id .= "$id,";
+							$this->db->set('status', 0);
+							$this->db->where('id', $id);
+						}
+						$this->db->update('pegawai');
+						$pegawai_id = substr($pegawai_id, 0, -1);
+
+						$this->db->set('pegawai_id', $pegawai_id);
+						$this->db->where('id', $jasa_id);
+						$this->db->update('pesanan');
+						$this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Berhasil</strong> menambahkan pegawai.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+						redirect("perusahaan/pesanan/$jasa_id/detail");
+					}else{
+						redirect("perusahaan/pesanan/$jasa_id/detail");
+					}
+				}
+			}
+		}else{
+			show_error('Data pesanan tidak valid', 400);
 		}
 		
 	}
