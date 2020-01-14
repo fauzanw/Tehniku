@@ -53,8 +53,8 @@ class Pegawai extends CI_Controller {
 			 p.nama,
 			 p.nomor_ponsel,
 			 p.logo_perusahaan,
-			 p.latlon,
-			 c.*,
+			 c.nomor_ponsel,
+			 c.alamat,
 			 jk.keyword
 			 ')
 			 ->from('pesanan ps')

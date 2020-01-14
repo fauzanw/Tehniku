@@ -44,6 +44,7 @@ class Perusahaan extends CI_Controller {
 			 ->join('perusahaan p', 'j.perusahaan_id=p.id')
 			 ->where('p.user_id', $this->session->userdata('id'));
 		$jasa = $this->db->get()->result_array();
+		rsort($jasa);
 		$data = [
 			'data_jasa'         => $jasa,
 			'data_jasa_type'    => $this->db->get('jasa_type')->result_array(),
@@ -221,6 +222,7 @@ class Perusahaan extends CI_Controller {
 	public function pegawai() {
 		$perusahaan = $this->db->get_where('perusahaan', ["user_id" => $this->session->userdata('id')])->row_array();
 		$pegawai    = $this->db->select('*')->from('pegawai p')->join('users u', 'p.user_id=u.id')->get()->result_array();
+		rsort($pegawai);
 		$data = [
 			'title'             => 'Pegawai',
 			'title_main_header' => 'Pegawai '.$perusahaan['nama'],
@@ -375,6 +377,12 @@ class Perusahaan extends CI_Controller {
 	{
 		$perusahaan = $this->db->get_where('perusahaan', ["user_id" => $this->session->userdata('id')])->row_array();
 		$pesanan = $this->db->get('pesanan')->result_array();
+		rsort($pesanan);
+		echo '<pre>';print_r($pesanan); die;
+		$latlon_customer   = explode(", ", $perusahaan['latlon']);
+		$latlon_perusahaan = explode(", ", $pesanan['latlon']);
+		$data_jasa['jarak'] = hitungJarak($latlon_perusahaan[0], $latlon_perusahaan[1],$latlon_customer[0], $latlon_customer[1]);
+		echo '<pre>';print_r($pesanan); die;
 		$data_jasa = [];
 		foreach($pesanan as $data) {
 			$this->db
@@ -387,6 +395,8 @@ class Perusahaan extends CI_Controller {
 				 ->where('jpt.jasa_id', $data['jasa_id']);
 			array_push($data_jasa, $this->db->get()->row_array());	
 		}
+		rsort($data_jasa);
+		rsort($pesanan);
 		$data = [
 			'title'             => 'Setting Akun Perusahaan',
 			'title_main_header' => 'Setting Akun Perusahaan',
