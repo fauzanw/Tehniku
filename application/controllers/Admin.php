@@ -62,9 +62,11 @@ class Admin extends CI_Controller {
 			 ->join('users u', 'a.user_id=u.id')
 			 ->where('u.email', $this->session->userdata('email'));
 		$data = [
-			'title'       => 'Dashboard',
-			'data_admin'  => $this->db->get()->row_array()
+			'title'            => 'Dashboard',
+			'data_admin'       => $this->db->get()->row_array(),
+			'data_verifikasi'  => $this->db->get_where('users', ['is_verified' => 0])->result_array()
 		];
+
 		$this->load->view('admin/header', $data);
 		$this->load->view('admin/navigator');
 		$this->load->view('admin/main_header');
@@ -86,7 +88,8 @@ class Admin extends CI_Controller {
 		$data = [
 			'title'           => 'Data Perusahaan',
 			'data_admin'      => $this->db->get()->row_array(),
-			'data_perusahaan' => $this->db->select('p.*, u.is_verified, u.is_blocked')->from('perusahaan p')->join('users u', 'p.user_id=u.id')->get()->result_array()
+			'data_perusahaan' => $this->db->select('p.*, u.is_verified, u.is_blocked')->from('perusahaan p')->join('users u', 'p.user_id=u.id')->get()->result_array(),
+			'data_verifikasi'  => $this->db->get_where('users', ['is_verified' => 0])->result_array()
 		];
 		$this->load->view('admin/header', $data);
 		$this->load->view('admin/navigator');
@@ -105,7 +108,8 @@ class Admin extends CI_Controller {
 		$data = [
 			'title'           => 'Detail Perusahaan',
 			'data_admin'      => $this->db->get()->row_array(),
-			'data_perusahaan' => $this->db->get_where('perusahaan', ['id' => $id])->row_array()
+			'data_perusahaan' => $this->db->get_where('perusahaan', ['id' => $id])->row_array(),
+			'data_verifikasi'  => $this->db->get_where('users', ['is_verified' => 0])->result_array()
 		];
 		$this->load->view('admin/header', $data);
 		$this->load->view('admin/navigator');
@@ -128,7 +132,8 @@ class Admin extends CI_Controller {
 				'data_admin'        => $this->db->get()->row_array(),
 				'data_material'     => $this->db->select('*')->from('material ml')->join('merek mk', 'ml.merek_id=mk.id')->join('jasa_keyword jk', 'ml.jasa_keyword_id=jk.id')->get()->result_array(),
 				'data_keyword_jasa' => $this->db->get('jasa_keyword')->result_array(),
-				'data_merek'        => $this->db->get('merek')->result_array()
+				'data_merek'        => $this->db->get('merek')->result_array(),
+				'data_verifikasi'  => $this->db->get_where('users', ['is_verified' => 0])->result_array()
 			];
 			if($_POST['jasa'] != 'semua_jasa' && $_POST['merek'] == 'semua_merek') {
 				$data['data_material'] = $this->db->select('*')->from('material ml')->join('merek mk', 'ml.merek_id=mk.id')->join('jasa_keyword jk', 'ml.jasa_keyword_id=jk.id')->where('jk.id', $_POST['jasa'])->get()->result_array();
@@ -156,7 +161,8 @@ class Admin extends CI_Controller {
 				'data_admin'        => $this->db->get()->row_array(),
 				'data_material'     => $this->db->select('ml.*, mk.nama_merek, jk.keyword')->from('material ml')->join('merek mk', 'ml.merek_id=mk.id')->join('jasa_keyword jk', 'ml.jasa_keyword_id=jk.id')->get()->result_array(),
 				'data_keyword_jasa' => $this->db->get('jasa_keyword')->result_array(),
-				'data_merek'        => $this->db->get('merek')->result_array()
+				'data_merek'        => $this->db->get('merek')->result_array(),
+				'data_verifikasi'  => $this->db->get_where('users', ['is_verified' => 0])->result_array(),
 			];
 			$this->load->view('admin/header', $data);
 			$this->load->view('admin/navigator');
@@ -175,7 +181,8 @@ class Admin extends CI_Controller {
 				"description"     => htmlspecialchars($this->input->post('description')),
 				"merek_id"        => $this->input->post('merek'),
 				"harga"           => $this->input->post('harga'),
-				"jasa_keyword_id" => $this->input->post('jasa_keyword')
+				"jasa_keyword_id" => $this->input->post('jasa_keyword'),
+				'data_verifikasi'  => $this->db->get_where('users', ['is_verified' => 0])->result_array()
 			];
 			$this->db->insert("material", $data_material);
 			$this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Berhasil</strong> tambah material.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
@@ -190,7 +197,8 @@ class Admin extends CI_Controller {
 				'title'             => 'Data Material',
 				'data_admin'        => $this->db->get()->row_array(),
 				'data_merek'        => $this->db->get('merek')->result_array(),
-				'data_jasa_keyword' => $this->db->get('jasa_keyword')->result_array()
+				'data_jasa_keyword' => $this->db->get('jasa_keyword')->result_array(),
+				'data_verifikasi'  => $this->db->get_where('users', ['is_verified' => 0])->result_array()
 			];
 			$this->load->view('admin/header', $data);
 			$this->load->view('admin/navigator');
@@ -295,7 +303,8 @@ class Admin extends CI_Controller {
 				'title'             => 'Data Material',
 				'data_admin'        => $this->db->get()->row_array(),
 				'data_merek'        => $this->db->get('merek')->result_array(),
-				'data_jasa_keyword' => $this->db->get('jasa_keyword')->result_array()
+				'data_jasa_keyword' => $this->db->get('jasa_keyword')->result_array(),
+				'data_verifikasi'  => $this->db->get_where('users', ['is_verified' => 0])->result_array()
 			];
 			$this->load->view('admin/header', $data);
 			$this->load->view('admin/navigator');
@@ -368,7 +377,8 @@ class Admin extends CI_Controller {
 			$data = [
 				'title'             => 'Data Merek',
 				'data_admin'        => $this->db->get()->row_array(),
-				'data_merek'        => $this->db->get('merek')->result_array()
+				'data_merek'        => $this->db->get('merek')->result_array(),
+				'data_verifikasi'  => $this->db->get_where('users', ['is_verified' => 0])->result_array()
 			];
 			$this->load->view('admin/header', $data);
 			$this->load->view('admin/navigator');
@@ -417,21 +427,49 @@ class Admin extends CI_Controller {
 
 	public function jasa()
 	{
+		$data_jasa = $this->db->get('jasa_keyword')->result_array();
+		rsort($data_jasa);
 		$this->db
-				 ->select('*')
-				 ->from('admin a')
-				 ->join('users u', 'a.user_id=u.id')
-				 ->where('u.email', $this->session->userdata('email'));
-			$data = [
-				'title'             => 'Data Merek',
-				'data_admin'        => $this->db->get()->row_array(),
-				'data_jasa'         => $this->db->get('jasa_keyword')->result_array()
-			];
+			 ->select('*')
+			 ->from('admin a')
+			 ->join('users u', 'a.user_id=u.id')
+			 ->where('u.email', $this->session->userdata('email'));
+		$data = [
+			'title'             => 'Data Merek',
+			'data_admin'        => $this->db->get()->row_array(),
+			'data_jasa'         => $data_jasa,
+			'data_verifikasi'  => $this->db->get_where('users', ['is_verified' => 0])->result_array()
+		];
+		if(!isset($_POST['tambah_jasa'])) {
 			$this->load->view('admin/header', $data);
 			$this->load->view('admin/navigator');
 			$this->load->view('admin/main_header');
 			$this->load->view('admin/data_jasa', $data);
 			$this->load->view('admin/footer');
+		}else {
+			list('nama_jasa' => $nama_jasa) = $_POST;
+			foreach($nama_jasa as $nama) {
+				$this->db->insert('jasa_keyword', [
+					'id'       => uniqid(),
+					'keyword'  => $nama
+				]);
+			}
+			$this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Berhasil</strong> menambahkan jasa baru.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+			redirect('admin/jasa');
+		}
+	}
+
+	public function hapus_jasa($id) {
+		$jasa = $this->db->get_where('jasa_keyword', ['id' => $id])->row_array();
+
+		if($jasa) {
+			$this->db->delete('jasa_keyword', ['id' => $id]);
+			$this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Berhasil</strong> hapus jasa.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+			redirect('admin/jasa');
+		}else{
+			$this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Gagal</strong> hapus jasa, id tidak valid.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+			redirect('admin/jasa');
+		}
 	}
 
 	/**
@@ -481,7 +519,8 @@ class Admin extends CI_Controller {
 		$data = [
 			'title'           => 'Data Customer',
 			'data_admin'      => $this->db->get()->row_array(),
-			'data_customer'   => $this->db->select('*')->from('customer p')->join('users u', 'p.user_id=u.id')->get()->result_array()
+			'data_customer'   => $this->db->select('*')->from('customer p')->join('users u', 'p.user_id=u.id')->get()->result_array(),
+			'data_verifikasi'  => $this->db->get_where('users', ['is_verified' => 0])->result_array()
 		];
 		$this->load->view('admin/header', $data);
 		$this->load->view('admin/navigator');

@@ -132,11 +132,31 @@ class Pegawai extends CI_Controller {
 				'data_jasa'                 => $data_jasa,
 				'data_pegawai_to_surveying' => $data_pegawai_to_surveying
 			];
-			$this->load->view('pegawai/header', $data);
-			$this->load->view('pegawai/navigator', $data);
-			$this->load->view('pegawai/main_header', $data);
-			$this->load->view('pegawai/tugas_before_survey', $data);
-			$this->load->view('pegawai/footer', $data);
+			if($pesanan['status'] == 2) {
+				if(!isset($_POST['survey'])) {
+					$this->load->view('pegawai/header', $data);
+					$this->load->view('pegawai/navigator', $data);
+					$this->load->view('pegawai/main_header', $data);
+					$this->load->view('pegawai/tugas_before_survey', $data);
+					$this->load->view('pegawai/footer', $data);
+				}else{
+					$this->db->set('status', 3);
+					$this->db->where('id', $id);
+					$this->db->update('pesanan');
+					$this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Berhasil</strong> mengubah status menjadi sedang survey.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+					redirect("pegawai/tugas/$id/detail");
+				}
+			}else if($pesanan['status'] == 3) {
+				if(!isset($_POST['selesai'])) {
+					$this->load->view('pegawai/header', $data);
+					$this->load->view('pegawai/navigator', $data);
+					$this->load->view('pegawai/main_header', $data);
+					$this->load->view('pegawai/tugas_survey', $data);
+					$this->load->view('pegawai/footer', $data);
+				}else{
+					
+				}
+			}
 		}else{
 			show_error("Data tugas tidak valid", 400);
 		}

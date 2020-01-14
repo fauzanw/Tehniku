@@ -83,3 +83,5 @@ $route["customer/pakejasa/pesanan"]               = "customer/pesanan_pakejasa";
 $route["customer/pakejasa/pesanan/(:any)/detail"] = "customer/pesanan_detail_pakejasa/$1";
 $route["perusahaan/pesanan/(:any)/detail"]        = "perusahaan/pesanan_detail/$1";
 $route["pegawai/tugas/(:any)/detail"] = "pegawai/tugas_detail/$1";
+$route["admin/jasa/(:any)/hapus"] = "admin/hapus_jasa/$1";
+$route["auth/forgot-password"] = "auth/forgot_password";

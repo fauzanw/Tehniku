@@ -99,7 +99,7 @@
           </li>
           <li class="nav-item <?= ($this->uri->segment(1)) == "admin" && $this->uri->segment(2) == "verifikasi" && $this->uri->segment(3) == "" ? "active":"" ?>">
             <a class="nav-link <?= ($this->uri->segment(1)) == "admin" && $this->uri->segment(2) == "verifikasi" && $this->uri->segment(3) == "" ? "active":"" ?>" href="<?= base_url('admin/verifikasi') ?>">
-              <i class="fas fa-clipboard-list text-orange"></i> Data Verifikasi
+              <i class="fas fa-clipboard-list text-orange"></i> Data Verifikasi &nbsp;<?= (sizeof($data_verifikasi) > 0) ? '<p class="badge badge-danger">'.sizeof($data_verifikasi).'</p>':null; ?>
             </a>
           </li>
           <li class="nav-item <?= ($this->uri->segment(1)) == "admin" && $this->uri->segment(2) == "setting" && $this->uri->segment(3) == "" ? "active":"" ?>">

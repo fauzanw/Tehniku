@@ -9,8 +9,17 @@
                         <button type="button" data-toggle="modal" data-target="#tambahPegawaiModal" class="badge badge-orange"><i class="fas fa-plus"></i> Tambah pegawai</button>
                     </div>
                     <div class="card-body">
+                        <?php if($data_pesanan['status'] == 1) : ?>
+                            <p><b>Status: </b> <span class="badge badge-dot mr-4"><i class="bg-warning"></i> Menunggu diverifikasi</span></p>
+                        <?php elseif($data_pesanan['status'] == 2) : ?>
+                            <p><b>Status: </b> <span class="badge badge-dot mr-4"><i class="bg-success"></i> Diverifikasi</span></p>
+                        <?php elseif($data_pesanan['status'] == 3) : ?>
+                            <p><b>Status: </b> <span class="badge badge-dot mr-4"><i class="bg-warning"></i> Sedang survey</span></p>
+                        <?php elseif($data_pesanan['status'] == 4) : ?>
+                            <p><b>Status: </b> <span class="badge badge-dot mr-4"><i class="bg-success"></i> Selesai</span></p>
+                        <?php endif; ?>
                         <h5>Data pegawai yang akan survey kerumah customer:</h5>
-                        <table class="table table-responsive-md" id="dataTable">
+                        <table class="table table-responsive" id="dataTable">
                             <thead>
                                 <tr>
                                     <th>No</th>
@@ -35,19 +44,15 @@
             </div>
             <div class="col-md-5 mb-5">
                 <div class="card shadow-lg">
-                    <div class="card-header">
-                        <h5>Data customer pemesan</h5>
-                    </div>
-                    <div class="card-body">
+                    <div class="card-body mt--3">
+                    <center>
+                        <img src="<?= base_url('assets/argon/img/customer/') . $data_pesanan['foto_customer'] ?>" alt="" style="width: 30%;height: 6vw;" class="img-thumbnail card-img-top mt-2">
+                    </center>
                         <div class="row">
-                            <div class="col-md-4">
-                                <img src="<?= base_url('assets/argon/img/customer/') . $data_pesanan['foto_customer'] ?>" alt="" style="width: 160px;height: 160px;" class="img-thumbnail">
-                            </div>
                             <div class="col-md-8">
                                 <h1><?= $data_pesanan['nama']; ?></h1>
                                 <p><i class="fas fa-phone-volume"></i> &nbsp;<?= $data_pesanan['nomor_ponsel']; ?></p>
-                                <p><i class="fas fa-street-view"></i> &nbsp;<?= $data_pesanan['alamat']; ?></p>
-                                <p><i class="fas fa-map-marker-alt"></i> &nbsp;Jarak customer : <?= $data_jasa['jarak']; ?> Km</p>
+                                <p class="expander"><i class="fas fa-street-view"></i> &nbsp;<?= $data_pesanan['alamat']; ?></p>
                             </div>
                         </div>
                         <div class="form-group mt-2">
@@ -63,7 +68,7 @@
     
     <div class="card shadow-lg">
         <div class="card-header" style="border: none;">
-            Material yang digunakan pada jasa ini :
+            <?= ($data_jasa['type'] == 'instalasi' ? 'Material yang digunakan pada jasa ini :':'Material yang bersakutan dengan jasa ini : ') ?>
         </div>
         <div class="card-body">
             <table class="table table-responsive-md dataTable">
@@ -84,7 +89,7 @@
                             <td><?= $data['nama_merek']; ?></td>
                             <td>Rp. <?= $data['harga']; ?></td>
                             <td>
-                                <input type="checkbox" name="material[]" id="material[]" disabled checked>
+                                <input type="checkbox" name="material[]" id="material[]" disabled <?= ($data_jasa["type"] == "instalasi" ? "checked":null) ?>>
                             </td>
                         </tr>
                     <?php endforeach; ?>

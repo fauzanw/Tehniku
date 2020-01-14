@@ -31,7 +31,7 @@
                 </div>
             </div>
             <form method="post" class="mt-2">
-                <button onclick="return confirm('Apakah kamu yakin?')" name="survey" type="submit" class="btn btn-orange btn-block">Survey rumah customer</button>
+                <button onclick="return confirm('Apakah kamu yakin?')" name="selesai" type="submit" class="btn btn-orange btn-block">Selesaikan tugas</button>
             </form>
         </div>
         <div class="col-md-4 wow fadeInUp">

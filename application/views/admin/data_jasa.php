@@ -28,7 +28,7 @@
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
                                         <a class="dropdown-item" data-toggle="modal" data-target="#editJasa-<?= $data['id'] ?>" href="#">Edit</a>
-                                        <a class="dropdown-item" href="<?= base_url('admin/merek/').$data['id']."/hapus" ?>">Hapus</a>
+                                        <a class="dropdown-item" href="<?= base_url('admin/jasa/').$data['id']."/hapus" ?>">Hapus</a>
                                     </div>
                                 </div>
                             </td>
@@ -72,7 +72,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" action='<?= base_url("admin/merek/tambah") ?>' novalidate class='needs-validation' enctype="multipart/form-data">
+                    <form method="post" action='<?= base_url("admin/jasa") ?>' novalidate class='needs-validation' enctype="multipart/form-data">
                     <div class='input-group form-group'>
                         <input type='text' class='form-control' name='nama_jasa[]' placeholder='Nama Jasa...' required>
                         <div class='input-group-prepend'>

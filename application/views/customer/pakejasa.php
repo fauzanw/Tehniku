@@ -74,7 +74,7 @@
       <div class="row mb-5" id="result_cari_jasa">
           <?php if($data_jasa) : ?>
             <?php foreach($data_jasa as $data) : ?>
-            <div class="col-md-4 wow fadeInUp">
+            <div class="col-xl-4 col-md-6 mb-2 wow fadeInUp">
             <div class="card card-pakejasa shadow-lg">
                 <img src="<?= base_url('assets/argon/img/theme/wave.png') ?>" class="wave-pakejasa" alt="">
                 <center class="mt--15">

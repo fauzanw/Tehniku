@@ -25,7 +25,8 @@ class Perusahaan extends CI_Controller {
 			'title'             => 'Dashboard',
 			'title_main_header' => 'Dashboard',
 			'data_perusahaan'   => $perusahaan,
-			'data_perusahaan2'  => $this->session->userdata()
+			'data_perusahaan2'  => $this->session->userdata(),
+			'count_pesanan'     => $this->db->get_where('pesanan', ['perusahaan_id' => $perusahaan['id']])->result_array()
 		];
 		$this->load->view('perusahaan/header', $data);
 		$this->load->view('perusahaan/navigator', $data);
@@ -52,6 +53,7 @@ class Perusahaan extends CI_Controller {
 			'title_main_header' => 'Manage Perusahaan',
 			'data_perusahaan'   => $perusahaan,
 			'data_perusahaan2'  => $this->session->userdata(),
+			'count_pesanan'     => $this->db->get_where('pesanan', ['perusahaan_id' => $perusahaan['id']])->result_array()
 		];
 		if(isset($_POST['type_jasa'])) {
 			if($_POST['type_jasa'] == 'semua_jasa') {
@@ -190,7 +192,8 @@ class Perusahaan extends CI_Controller {
 				'data_perusahaan'   => $perusahaan,
 				'data_perusahaan2'  => $this->session->userdata(),
 				'data_keyword'      => $this->db->get('jasa_keyword')->result_array(),
-				'data_type_jasa'    => $this->db->get('jasa_type')->result_array()
+				'data_type_jasa'    => $this->db->get('jasa_type')->result_array(),
+				'count_pesanan'     => $this->db->get_where('pesanan', ['perusahaan_id' => $perusahaan['id']])->result_array()
 			];
 			$this->load->view('perusahaan/header', $data);
 			$this->load->view('perusahaan/navigator', $data);
@@ -228,7 +231,8 @@ class Perusahaan extends CI_Controller {
 			'title_main_header' => 'Pegawai '.$perusahaan['nama'],
 			'data_perusahaan'   => $perusahaan,
 			'data_perusahaan2'  => $this->session->userdata(),
-			"data_pegawai"      => $pegawai
+			"data_pegawai"      => $pegawai,
+			'count_pesanan'     => $this->db->get_where('pesanan', ['perusahaan_id' => $perusahaan['id']])->result_array()
 		];
 		$this->load->view('perusahaan/header', $data);
 		$this->load->view('perusahaan/navigator', $data);
@@ -246,7 +250,8 @@ class Perusahaan extends CI_Controller {
 				'title_main_header' => 'Pegawai '.$perusahaan['nama'],
 				'data_perusahaan'   => $perusahaan,
 				'data_perusahaan2'  => $this->session->userdata(),
-				"data_pegawai"      => $pegawai
+				"data_pegawai"      => $pegawai,
+				'count_pesanan'     => $this->db->get_where('pesanan', ['perusahaan_id' => $perusahaan['id']])->result_array()
 			];
 			$this->load->view('perusahaan/header', $data);
 			$this->load->view('perusahaan/navigator', $data);
@@ -376,15 +381,28 @@ class Perusahaan extends CI_Controller {
 	public function pesanan()
 	{
 		$perusahaan = $this->db->get_where('perusahaan', ["user_id" => $this->session->userdata('id')])->row_array();
-		$pesanan = $this->db->get('pesanan')->result_array();
+		$this->db
+			 ->select('
+				 ps.*,
+				 j.nama_jasa,
+				 j.description,
+				 j.harga,
+				 c.nama,
+				 c.alamat,
+				 c.nomor_ponsel,
+				 c.foto_customer,
+				 c.latlon
+			')
+			 ->from('pesanan ps')
+			 ->join('jasa j', 'ps.jasa_id=j.id')
+			 ->join('customer c', 'ps.customer_id=c.id')
+			 ->where('ps.status !=', 4);
+		$pesanan = $this->db->get()->result_array();
+		// echo '<pre>';print_r($pesanan); die;
 		rsort($pesanan);
-		echo '<pre>';print_r($pesanan); die;
-		$latlon_customer   = explode(", ", $perusahaan['latlon']);
-		$latlon_perusahaan = explode(", ", $pesanan['latlon']);
-		$data_jasa['jarak'] = hitungJarak($latlon_perusahaan[0], $latlon_perusahaan[1],$latlon_customer[0], $latlon_customer[1]);
-		echo '<pre>';print_r($pesanan); die;
+		// echo '<pre>';print_r($pesanan); die;
 		$data_jasa = [];
-		foreach($pesanan as $data) {
+		foreach($pesanan as $i => $data) {
 			$this->db
 				 ->select('*')
 				 ->from('jasa_pivot_type jpt')
@@ -394,16 +412,20 @@ class Perusahaan extends CI_Controller {
 				 ->join('jasa_keyword jk', 'j.jasa_keyword_id=jk.id')
 				 ->where('jpt.jasa_id', $data['jasa_id']);
 			array_push($data_jasa, $this->db->get()->row_array());	
+			$latlon_customer   = explode(", ", $data['latlon']);
+			$latlon_perusahaan = explode(", ", $perusahaan['latlon']);
+			$data_jasa[$i]['jarak'] = hitungJarak($latlon_perusahaan[0], $latlon_perusahaan[1],$latlon_customer[0], $latlon_customer[1]);
 		}
 		rsort($data_jasa);
 		rsort($pesanan);
 		$data = [
-			'title'             => 'Setting Akun Perusahaan',
-			'title_main_header' => 'Setting Akun Perusahaan',
+			'title'             => 'Pesanan Customer Perusahaan',
+			'title_main_header' => 'Pesanan Customer Perusahaan',
 			'data_perusahaan'   => $perusahaan,
 			'data_perusahaan2'  => $this->session->userdata(),
 			'data_pesanan'      => $pesanan,
-			'data_jasa'         => $data_jasa
+			'data_jasa'         => $data_jasa,
+			'count_pesanan'     => $this->db->get_where('pesanan', ['perusahaan_id' => $perusahaan['id']])->result_array()
 		];
 		$this->load->view('perusahaan/header', $data);
 		$this->load->view('perusahaan/navigator', $data);
@@ -422,8 +444,8 @@ class Perusahaan extends CI_Controller {
 			 ->where('ps.id', $jasa_id);
 		$pesanan = $this->db->get()->row_array();
 		$this->db
-			 ->select('*')
-			 ->from('jasa_pivot_type jpt')
+		->select('*')
+		->from('jasa_pivot_type jpt')
 			 ->join('jasa j', 'jpt.jasa_id=j.id')
 			 ->join('jasa_type jt', 'jpt.jasa_type_id=jt.id')
 			 ->join('jasa_keyword jk', 'j.jasa_keyword_id=jk.id')
@@ -457,7 +479,8 @@ class Perusahaan extends CI_Controller {
 				'data_jasa'           => $data_jasa,
 				'data_pegawai'        => $data_pegawai,
 				'data_tambah_pegawai' => $this->db->get_where('pegawai', ['perusahaan_id' => $perusahaan['id'], 'status !=' => 0])->result_array(), // status pegawai 1 = ready dan 0 = sedang bekerja
-				'data_material'       => $data_material
+				'data_material'       => $data_material,
+				'count_pesanan'       => $this->db->get_where('pesanan', ['perusahaan_id' => $perusahaan['id']])->result_array()
 			];
 			if($pesanan['status'] == 1) {
 				if(!isset($_POST['verif'])) {
@@ -516,6 +539,7 @@ class Perusahaan extends CI_Controller {
 			'title_main_header' => 'Setting Akun Perusahaan',
 			'data_perusahaan'   => $perusahaan,
 			'data_perusahaan2'  => $this->session->userdata(),
+			'count_pesanan'     => $this->db->get_where('pesanan', ['perusahaan_id' => $perusahaan['id']])->result_array()
 		];
 		if(!isset($_POST['edit_data'])) {
 			$this->load->view('perusahaan/header', $data);

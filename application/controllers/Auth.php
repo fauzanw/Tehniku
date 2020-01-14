@@ -261,6 +261,11 @@ class Auth extends CI_Controller {
 		}
 	}
 
+	public function forgot_password()
+	{
+		$this->load->view('auth/forgot-password');
+	}
+
 }
 
 ?>

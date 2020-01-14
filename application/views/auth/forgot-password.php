@@ -20,7 +20,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>
-    <?= $title; ?> Login | Tehniku
+    Forgot Password | Tehniku
   </title>
   <!-- Favicon -->
   <link href="<?= base_url('assets/argon') ?>/img/brand/favicon.png" rel="icon" type="image/png">
@@ -92,23 +92,15 @@
                     <input class="form-control" name="email" placeholder="Email" type="email" required>
                   </div>
                 </div>
-                <div class="form-group">
-                  <div class="input-group input-group-alternative">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
-                    </div>
-                    <input class="form-control" name="password" placeholder="Password" type="password" required>
-                  </div>
-                </div>
                 <div class="text-center">
-                  <button type="submit" name="login" class="btn btn-orange btn-block my-4">Login</button>
+                  <button type="submit" name="reset" class="btn btn-orange btn-block my-4">Reset sekarang!</button>
                 </div>
               </form>
             </div>
           </div>
           <div class="row mt-3">
             <div class="col-12 text-center">
-              <a href="<?= base_url('auth/forgot-password') ?>" class="text-light"><small>Forgot password? Reset now!</small></a>
+              <a href="<?= base_url('auth/login') ?>" class="text-light"><small>Sudah memiliki akun? silahkan login!</small></a>
             </div>
           </div>
         </div>
