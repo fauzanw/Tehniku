@@ -15,7 +15,10 @@
                                 <div class="form-group">
                                     <label for="nomor_ponsel">Nomor Ponsel : </label>
                                     <input type="text" name="nomor_ponsel" id="nomor_ponsel" class="form-control" value="<?= $data_customer['nomor_ponsel'] ?>" required>
-                                    
+                                </div>
+                                <div class="form-group">
+                                    <label for="alamat">Alamat Rumah : </label>
+                                    <textarea name="alamat" id="alamat" class="form-control"></textarea>
                                 </div>
                                 <div class="form-group">
                                     <label for="foto_customer">Profile Customer : </label>
@@ -53,11 +56,8 @@
                                     <input type="password" name="old_password" id="old_password" class="form-control">
                                     <p>(Isi field password jika password ingin diubah)</p>
                                 </div>
-                            </div>
-
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                <button type="submit" name="edit_data" class="btn btn-orange btn-block">Setting Akun Customer</button>
+                                <div class="form-group mt-5 pt-2">
+                                    <button type="submit" name="edit_data" class="btn btn-orange btn-block">Setting Akun Customer</button>
                                 </div>
                             </div>
                         </div>

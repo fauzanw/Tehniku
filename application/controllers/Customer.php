@@ -221,8 +221,8 @@ class Customer extends CI_Controller {
 		}
 		// echo "<pre>";print_r([$data_jasa, $pesanan]); die;
 		$data = [
-			'title'             => 'Proses Pakejasa',
-			'title_main_header' => 'Proses Pakejasa',
+			'title'             => 'Pesanan',
+			'title_main_header' => 'Pesanan',
 			'data_customer'     => $customer,
 			'data_customer2'    => $this->session->userdata(),
 			'data_pesanan'      => $pesanan,
@@ -288,6 +288,8 @@ class Customer extends CI_Controller {
 				$this->load->view('customer/main_header', $data);
 				$this->load->view('customer/verified_pesanan', $data);
 				$this->load->view('customer/footer', $data);
+			}else{
+				echo 'Y';
 			}
 		}else{
 			show_error("Data pesanan tidak valid", 400);
@@ -310,7 +312,7 @@ class Customer extends CI_Controller {
 			$this->load->view('customer/setting', $data);
 			$this->load->view('customer/footer', $data);
 		}else{
-			list('nama' => $nama, 'email' => $email, 'new_password' => $edited_password, 'old_password' => $old_password, 'nomor_ponsel' => $nomor_ponsel) = $_POST;
+			list('nama' => $nama, 'email' => $email, 'new_password' => $edited_password, 'old_password' => $old_password, 'nomor_ponsel' => $nomor_ponsel, 'alamat' => $alamat) = $_POST;
 			$new_password    = password_hash($edited_password, PASSWORD_DEFAULT);
 			$data_customer   = $this->db->get_where('users', ['id' => $this->session->userdata('id')])->row_array();
 			$cek_email       = $this->db->select('*')->from('users')->where_not_in('email', $data['data_customer2']['email'])->where('email', $email)->get()->row_array();
@@ -370,6 +372,7 @@ class Customer extends CI_Controller {
 			} 
 			$this->db->set('nama', $nama);
 			$this->db->set('nomor_ponsel', $nomor_ponsel);
+			$this->db->set('alamat', $alamat);
 			$this->db->update('customer');
 
 			$this->session->set_userdata('email', $email);

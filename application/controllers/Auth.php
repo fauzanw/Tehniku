@@ -263,7 +263,115 @@ class Auth extends CI_Controller {
 
 	public function forgot_password()
 	{
-		$this->load->view('auth/forgot-password');
+		if(!isset($_POST['reset'])) {
+			$this->load->view('auth/forgot-password');
+		}else{
+			list('email' => $email) = $_POST;
+			$user = $this->db->get_where('users', ['email' => $email])->row_array();
+			if($user) {
+				$token      = md5(random_bytes(50));
+				$user_token = [
+					"email"        => $email,
+					"token"        => $token,
+					"date_created" => time()
+				];
+				$this->db->insert('users_token', $user_token);
+				$this->_sendEmail($token, 'forgot-password');
+				$this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert">Silahkan cek email anda untuk <strong>Reset Password</strong> .<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+				redirect('auth/forgot-password');
+			}else{
+				$this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Akun Anda</strong> tidak ditemukan, email tidak terdaftar.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+				redirect('auth/forgot-password');
+			}
+		}
+	}
+
+	public function reset_password()
+	{
+		$email = $this->input->get('verify');
+		$token = $this->input->get('token');
+
+		$user  = $this->db->get_where('users', ['email' => $email])->row_array();
+
+		if($user) {
+			$user_token = $this->db->get_where('users_token', ['token' => $token])->row_array();
+
+			if($user_token) {
+				if(time() - $user_token['date_created'] < (60*60*24)) {
+					$this->session->set_userdata('reset_email', $email);
+					$this->changePassword();
+				}else{
+					$this->db->delete('users', ['email' => $email]);
+					$this->db->delete('users_token', ['email' => $email]);
+					$this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Reset password gagal</strong> token sudah kedaluwarsa.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+					redirect('auth/login');
+				}
+			}else{
+				$this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Reset password gagal</strong> token tidak valid.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+				redirect('auth/login');
+			}
+		}else{
+			$this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Reset password gagal</strong> email tidak terdaftar.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+			redirect('auth/login');
+		}
+	}
+
+	public function changePassword()
+	{
+		if(!$this->session->userdata('reset_email')) {
+			redirect('auth/login');
+		}
+		$this->form_validation->set_rules('password', 'Password', 'required|trim|min_length[5]|matches[password2]', [
+			'required'   => '%s tidak boleh kosong',
+			'min_length' => '%s panjang minimal 5 karakter',
+			'matches'    => '%s tidak sama dengan Ulangi Password field'
+		]);
+		$this->form_validation->set_rules('password2', 'Ulangi Password', 'required|trim|min_length[5]|matches[password]', [
+			'required'   => '%s tidak boleh kosong',
+			'min_length' => '%s panjang minimal 5 karakter',
+			'matches'    => '%s tidak sama dengan Password field'
+		]);
+		if($this->form_validation->run() == false) {
+			$this->load->view('auth/reset-password');
+		}else{
+			$password = password_hash($this->input->post('password'), PASSWORD_DEFAULT);
+			$email    = $this->session->userdata('reset_email');
+			$this->session->unset_userdata('reset_email');
+			$this->db->delete('users_token', ['email' => $this->input->get('verify')]);
+			$this->db->set('password', $password);
+			$this->db->where('email', $email);
+			$this->db->update('users');
+			$this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Reset password berhasil</strong> silahkan login.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+			redirect('auth/login');
+		}
+	}
+
+	private function _sendEmail($token, $type)
+	{
+		$config = [
+			'protocol'    => 'smtp',
+			'smtp_host'   => 'ssl://smtp.googlemail.com',
+			'smtp_user'   => 'fgaming386@gmail.com',
+			'smtp_pass'   => 'ozan09012005',
+			'smtp_port'   => 465,
+			'mailtype'    => 'html',
+			'charset'     => 'utf-8',
+			'newline'     => "\r\n"
+		];
+
+		$this->load->library('email', $config);
+		$this->email->from('fgaming386@gmail.com', 'Muhammad Fauzan W');
+		$this->email->to($this->input->post('email'));
+		if($type == 'forgot-password') {
+			$this->email->subject('Reset Password | Tehniku');
+			$this->email->message('Klik link ini untuk merubah password anda : <a href="'. base_url("auth/reset-password?verify=".$this->input->post('email')."&token=".urlencode($token)) .'">Reset</a>');
+		}
+
+		if($this->email->send()) {
+			return true;
+		}else{
+			echo $this->email->print_debugger(); die;
+		}
 	}
 
 }

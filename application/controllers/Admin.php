@@ -492,7 +492,8 @@ class Admin extends CI_Controller {
 		$data = [
 			'title'           => 'Data Pegawai',
 			'data_admin'      => $this->db->get()->row_array(),
-			'data_pegawai'    => $this->db->select('*')->from('pegawai p')->join('users u', 'p.user_id=u.id')->join('perusahaan pr', 'p.perusahaan_id=pr.id')->get()->result_array()
+			'data_pegawai'    => $this->db->select('*')->from('pegawai p')->join('users u', 'p.user_id=u.id')->join('perusahaan pr', 'p.perusahaan_id=pr.id')->get()->result_array(),
+			'data_verifikasi' => $this->db->get_where('users', ['is_verified' => 0])->result_array()
 		];
 		$this->load->view('admin/header', $data);
 		$this->load->view('admin/navigator');
@@ -606,7 +607,8 @@ class Admin extends CI_Controller {
 		$data = [
 			'title'                => 'Setting Akun',
 			'data_admin'           => $this->db->get()->row_array(),
-			'data_user_admin'      => $this->db->get('admin', ['user_id' => $this->session->userdata('id')])->row_array()
+			'data_user_admin'      => $this->db->get('admin', ['user_id' => $this->session->userdata('id')])->row_array(),
+			'data_verifikasi'      => $this->db->get_where('users', ['is_verified' => 0])->result_array()
 		];	
 		if(isset($_POST['setting'])) {
 
@@ -619,13 +621,13 @@ class Admin extends CI_Controller {
 				if(!$old_password) {
 					$this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Gagal</strong> ganti password, password lama tidak boleh kosong.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
 					redirect('admin/setting');
-				}else if(password_verify($old_password, $data['data_perusahaan2']['password'])) {
+				}else if(password_verify($old_password, $data['data_admin']['password'])) {
 					$this->db->set('password', $new_password);
 				}
 			}
 
 			$this->db->set('email', $this->input->post('email'));
-			$this->db->where('id', $this->session->userdata('id'));
+			$this->db->where('id', $data['data_admin']['id']);
 			$this->db->update('users');
 
 

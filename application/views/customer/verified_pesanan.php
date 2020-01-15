@@ -18,14 +18,16 @@
                             </tr>
                         </thead>
                         <tbody>
-                        <?php $i = 1;foreach($data_pegawai_to_survey as $data) : ?>
-                            <tr>
-                                <td><?= $i++; ?></td>
-                                <td><?= $data['nama']; ?></td>
-                                <td><?= $data['nomor_ponsel']; ?></td>
-                                <td><?= $data['gender']; ?></td>
-                            </tr>
-                        <?php endforeach; ?>
+                        <?php if($data_pegawai_to_survey[0]) : ?>
+                            <?php $i = 1;foreach($data_pegawai_to_survey as $data) : ?>
+                                <tr>
+                                    <td><?= $i++; ?></td>
+                                    <td><?= $data['nama']; ?></td>
+                                    <td><?= $data['nomor_ponsel']; ?></td>
+                                    <td><?= $data['gender']; ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
                         </tbody>
                     </table>
                 </div>
