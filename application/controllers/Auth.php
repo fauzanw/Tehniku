@@ -384,8 +384,13 @@ class Auth extends CI_Controller {
 		$config = [
 			'protocol'    => 'smtp',
 			'smtp_host'   => 'ssl://smtp.googlemail.com',
+<<<<<<< HEAD
 			'smtp_user'   => 'fgaming386@gmail.com' ,
 			'smtp_pass'   => 'ozan09012005',
+=======
+			'smtp_user'   => '' /* Your Email */,
+			'smtp_pass'   => '' /* Your email password */,
+>>>>>>> 8b63e4a5630ed4c85513a53c4217c800225d63c6
 			'smtp_port'   => 465,
 			'mailtype'    => 'html',
 			'charset'     => 'utf-8',
