@@ -570,6 +570,9 @@ class Admin extends CI_Controller {
 			'data_verifikasi'      => $this->db->select('u.*, ur.role')->from('users u')->join('user_role ur', 'u.role_id=ur.id')->where('u.is_verified', 0)->get()->result_array(),
 			'data_verifikasi_user' => []
 		];	
+
+		// echo '<pre>';print_r($data['data_verifikasi']); die;
+
 		foreach($data['data_verifikasi'] as $data_verif) {
 			if($data_verif['role'] == 'Perusahaan') {
 				array_push($data['data_verifikasi_user'], $this->db->get_where('perusahaan', ['user_id'  => $data_verif['id']])->row_array());
@@ -580,7 +583,7 @@ class Admin extends CI_Controller {
 		$this->load->view('admin/header', $data);
 		$this->load->view('admin/navigator');
 		$this->load->view('admin/main_header');
-		$this->load->view('admin/data_verifikasi');
+		$this->load->view('admin/data_verifikasi', $data);
 		$this->load->view('admin/footer');
 	}
 

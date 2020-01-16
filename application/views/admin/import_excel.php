@@ -12,6 +12,11 @@
                             <div class="col-md-6">
                                 <a href="<?= base_url('admin/material') ?>" class="badge badge-orange"><i class="fas fa-arrow-left"></i> &nbsp;Kembali</a>
                             </div>
+                            <div class="col-md-6 text-right">
+                                <a href="<?= base_url('assets/argon/Template Material.xls') ?>" class="btn btn-sm btn-orange text-white shadow-sm">
+                                    <i class="fas fa-download"></i> Download template
+                                </a>
+                            </div>
                         </div>
                         <form method="post" novalidate class="needs-validation" enctype="multipart/form-data">
                             <div class="dropload dropload__ready">

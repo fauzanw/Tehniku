@@ -16,7 +16,6 @@
                         <th>Status</th>
                         <th>Diverifikasi</th>
                         <th>Diblokir</th>
-                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -36,17 +35,6 @@
                             <td>
                                 <div class="form-check">
                                     <input type="checkbox" name="is_blocked"  class="form-check-input" name="is_blocked" id="is_blocked" disabled class="custom-control-input"  <?= ($data['is_blocked']) == 1 ? "checked":null; ?> data-id="<?= $data['user_id'] ?>">
-                                </div>
-                            </td>
-                            <td class='text-right'> 
-                                <div class="dropdown">
-                                    <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fas fa-ellipsis-v"></i>
-                                    </a>
-                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                        <a class="dropdown-item" data-toggle="modal" data-target="#editDataPegawai-<?= $data['id'] ?>" href="#">Edit</a>
-                                        <a class="dropdown-item" href="<?= base_url('perusahaan/pegawai/').$data['id']."/hapus" ?>">Hapus</a>
-                                    </div>
                                 </div>
                             </td>
                         </tr>

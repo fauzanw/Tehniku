@@ -100,72 +100,105 @@ class Auth extends CI_Controller {
 			$foto_npwp       = '';
 			$foto_ktp        = '';
 			$logo_perusahaan = '';
+			// $upload_logo      = upload("logo_perusahaan","./assets/argon/img/perusahaan/", 'jpg|png|jpeg', 2048, true, base_url().'auth/perusahaan/register');
+			// $upload_foto_ktp  = upload("foto_ktp","./assets/argon/img/ktp/", 'jpg|png|jpeg', 2048, true, base_url().'auth/perusahaan/register');
+			// $upload_foto_npwp = upload("foto_npwp","./assets/argon/img/npwp/", 'jpg|png|jpeg', 2048, true, base_url().'auth/perusahaan/register');
+			
+			// if($upload_foto_npwp) {
+			// 	$foto_npwp       = $upload_foto_npwp;
+			// }
 
-			$upload_image = $_FILES['foto_npwp']['name'];
-			$config['upload_path']   = './assets/argon/img/npwp/';
-			$config['allowed_types'] = 'jpg|png|jpeg';
-			$config['max_size']      = '2048';
-			$config['encrypt_name']  = TRUE;
+			// if($upload_foto_ktp) {
+			// 	$foto_ktp        = $upload_foto_ktp;
+			// }
 
-			$this->load->library('upload', $config);
+			// if($upload_logo) {
+			// 	$logo_perusahaan = $upload_logo;
+			// }
 
-			if($this->upload->do_upload('foto_npwp')) {
-				$foto_npwp .= $this->upload->data('file_name');
-			}else{
-				if($this->upload->display_errors() == "<p>The filetype you are attempting to upload is not allowed.</p>") {
-					$this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Gagal</strong> upload foto pegawai, format foto harus jpg / png /jpeg.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-					redirect('auth/perusahaan/register');
-				} else if($this->upload->display_errors() == "<p>The file you are attempting to upload is larger than the permitted size.</p>") {
-					$this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Gagal</strong> upload foto pegawai, size foto tidak boleh lebih dari 2mb.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-					redirect('auth/perusahaan/register');
-				} else {
-					echo $this->upload->display_errors();die;	
+			// echo $foto_ktp, $foto_npwp, $logo_perusahaan;
+
+			$edited_perusahaan_logo = $_FILES['logo_perusahaan']['name'];
+			if($edited_perusahaan_logo) {
+				$config = array(
+					'allowed_types' => 'jpeg|jpg|png',
+					'max_size'      => '2048',
+					'upload_path'   => './assets/argon/img/perusahaan/',
+					'encrypt_name'  => TRUE
+				);
+				$this->load->library('upload', $config);
+
+				if($this->upload->do_upload('logo_perusahaan')) {
+					$new_logo = $this->upload->data('file_name');
+					$logo_perusahaan = $new_logo;
+				}else{
+					if($this->upload->display_errors() == "<p>The filetype you are attempting to upload is not allowed.</p>") {
+						$this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Gagal</strong> edit logo perusahaan, format foto harus jpg / png /jpeg.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+						redirect('auth/perusahaan/register');
+					} else if($this->upload->display_errors() == "<p>The file you are attempting to upload is larger than the permitted size.</p>") {
+						$this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Gagal</strong> edit logo perusahaan, size foto tidak boleh lebih dari 2mb.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+						redirect('auth/perusahaan/register');
+					} else {
+						echo $this->upload->display_errors();die;	
+					}
 				}
 			}
 
-			$upload_image = $_FILES['foto_ktp']['name'];
-			$config['upload_path']   = './assets/argon/img/ktp/';
-			$config['allowed_types'] = 'jpg|png|jpeg';
-			$config['max_size']      = '2048';
-			$config['encrypt_name']  = TRUE;
+			// jika foto npwp diubah
+			$edited_foto_npwp = $_FILES['foto_npwp']['name'];
+			if($edited_foto_npwp) {
+				$config = array(
+					'allowed_types' => 'jpeg|jpg|png',
+					'max_size'      => '2048',
+					'upload_path'   => './assets/argon/img/npwp/',
+					'encrypt_name'  => TRUE
+				);
+				$this->load->library('upload', $config);
 
-			$this->load->library('upload', $config);
-
-			if($this->upload->do_upload('foto_ktp')) {
-				$foto_ktp .= $this->upload->data('file_name');
-			}else{
-				if($this->upload->display_errors() == "<p>The filetype you are attempting to upload is not allowed.</p>") {
-					$this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Gagal</strong> upload foto pegawai, format foto harus jpg / png /jpeg.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-					redirect('auth/perusahaan/register');
-				} else if($this->upload->display_errors() == "<p>The file you are attempting to upload is larger than the permitted size.</p>") {
-					$this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Gagal</strong> upload foto pegawai, size foto tidak boleh lebih dari 2mb.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-					redirect('auth/perusahaan/register');
-				} else {
-					echo $this->upload->display_errors();die;	
+				if($this->upload->do_upload('foto_npwp')) {
+					$new_logo  = $this->upload->data('file_name');
+					$foto_npwp = $new_logo;
+				}else{
+					if($this->upload->display_errors() == "<p>The filetype you are attempting to upload is not allowed.</p>") {
+						$this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Gagal</strong> edit logo perusahaan, format foto harus jpg / png /jpeg.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+						redirect('auth/perusahaan/register');
+					} else if($this->upload->display_errors() == "<p>The file you are attempting to upload is larger than the permitted size.</p>") {
+						$this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Gagal</strong> edit logo perusahaan, size foto tidak boleh lebih dari 2mb.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+						redirect('auth/perusahaan/register');
+					} else {
+						echo $this->upload->display_errors();die;	
+					}
 				}
 			}
 
-			$upload_image = $_FILES['logo_perusahaan']['name'];
-			$config['upload_path']   = './assets/argon/img/perusahaan/';
-			$config['allowed_types'] = 'jpg|png|jpeg';
-			$config['max_size']      = '2048';
-			$config['encrypt_name']  = TRUE;
+			// jika foto ktp diubah
+			$edited_foto_ktp = $_FILES['foto_ktp']['name'];
+			if($edited_foto_ktp) {
+				$config = array(
+					'allowed_types' => 'jpeg|jpg|png',
+					'max_size'      => '2048',
+					'upload_path'   => './assets/argon/img/ktp/',
+					'encrypt_name'  => TRUE
+				);
+				$this->load->library('upload', $config);
 
-			$this->load->library('upload', $config);
-
-			if($this->upload->do_upload('logo_perusahaan')) {
-				$logo_perusahaan .= $this->upload->data('file_name');
-			}else{
-				if($this->upload->display_errors() == "<p>The filetype you are attempting to upload is not allowed.</p>") {
-					$this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Gagal</strong> upload foto pegawai, format foto harus jpg / png /jpeg.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-					redirect('perusahaan/pegawai');
-				} else if($this->upload->display_errors() == "<p>The file you are attempting to upload is larger than the permitted size.</p>") {
-					$this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Gagal</strong> upload foto pegawai, size foto tidak boleh lebih dari 2mb.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-					redirect('perusahaan/pegawai');
-				} else {
-					echo $this->upload->display_errors();die;	
+				if($this->upload->do_upload('foto_ktp')) {
+					$new_logo = $this->upload->data('file_name');
+					$foto_ktp = $new_logo;
+				}else{
+					if($this->upload->display_errors() == "<p>The filetype you are attempting to upload is not allowed.</p>") {
+						$this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Gagal</strong> edit logo perusahaan, format foto harus jpg / png /jpeg.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+						redirect('auth/perusahaan/register');
+					} else if($this->upload->display_errors() == "<p>The file you are attempting to upload is larger than the permitted size.</p>") {
+						$this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Gagal</strong> edit logo perusahaan, size foto tidak boleh lebih dari 2mb.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+						redirect('auth/perusahaan/register');
+					} else {
+						echo $this->upload->display_errors();die;	
+					}
 				}
 			}
+
+			die;
 
 			$id_user   = uniqid();
 			$data_user = array(
@@ -178,7 +211,7 @@ class Auth extends CI_Controller {
 			);
 			$data_perusahaan = array(
 				'id'               => uniqid(),
-				'nama_perusahaan'  => htmlspecialchars($this->input->post('nama_perusahaan')),
+				'nama'  => htmlspecialchars($this->input->post('nama_perusahaan')),
 				'nomor_ponsel'     => $this->input->post('nomor_ponsel'),
 				'nomor_npwp'       => $this->input->post('nomor_npwp'),
 				'foto_npwp'        => $foto_npwp,
@@ -351,7 +384,7 @@ class Auth extends CI_Controller {
 		$config = [
 			'protocol'    => 'smtp',
 			'smtp_host'   => 'ssl://smtp.googlemail.com',
-			'smtp_user'   => 'fgaming386@gmail.com',
+			'smtp_user'   => 'fgaming386@gmail.com' ,
 			'smtp_pass'   => 'ozan09012005',
 			'smtp_port'   => 465,
 			'mailtype'    => 'html',

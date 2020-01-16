@@ -9,9 +9,6 @@
             <a href="<?= base_url('admin/material/impor_excel') ?>" class="btn btn-sm btn-orange text-white shadow-sm">
                 <i class="fas fa-file-excel"></i> Impor dari excel
             </a>
-            <a href="<?= base_url('assets/argon/Template Material.xls') ?>" class="btn btn-sm btn-orange text-white shadow-sm">
-                <i class="fas fa-download"></i> Download template
-            </a>
         </div>
         <div class="card-body">
             <form method='post'>
