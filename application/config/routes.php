@@ -86,3 +86,6 @@ $route["pegawai/tugas/(:any)/detail"] = "pegawai/tugas_detail/$1";
 $route["admin/jasa/(:any)/hapus"] = "admin/hapus_jasa/$1";
 $route["auth/forgot-password"] = "auth/forgot_password";
 $route["auth/reset-password"] = "auth/reset_password";
+$route["perusahaan/jasa/(:any)/edit"] = "perusahaan/edit_jasa/$1";
+$route["perusahaan/jasa/(:any)/hapus"] = "perusahaan/hapus_jasa/$1";
+$route["pegawai/tugas/(:any)/material/tambah"] = "pegawai/tugas_tambah_material/$1";

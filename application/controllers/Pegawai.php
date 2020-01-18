@@ -67,11 +67,12 @@ class Pegawai extends CI_Controller {
 		$pesanan      = $this->db->get()->result_array();
 		$real_pesanan = [];
 		foreach($pesanan as $i => $data) {
-			$id = $pegawai['id'];
+			$pegawai_id = $pegawai['pegawai_id'];
 			if(preg_match("/$id/", $data['pegawai_id'])) {
 				array_push($real_pesanan, $data);	
 			}
 		}
+		rsort($real_pesanan);
 		$data = [
 			'title'             => 'Tugas',
 			'title_main_header' => 'Tugas',
@@ -94,26 +95,55 @@ class Pegawai extends CI_Controller {
 		$this->db
 			 ->select('
 				 ps.*,
-				 p.nama,
-				 p.nomor_ponsel,
-				 p.logo_perusahaan,
-				 p.alamat,
-				 p.latlon
+				 c.nama,
+				 c.nomor_ponsel,
+				 c.foto_customer,
+				 c.alamat,
+				 c.latlon
 			 ')
 			 ->from('pesanan ps')
-			 ->join('perusahaan p', 'ps.perusahaan_id=p.id')
+			 ->join('customer c', 'ps.customer_id=c.id')
 			 ->where('ps.id', $id);
 		$pesanan = $this->db->get()->row_array();
 		$this->db
 			 ->select('*')
 			 ->from('jasa_pivot_type jpt')
 			 ->join('jasa j', 'jpt.jasa_id=j.id')
+			 ->join('perusahaan p', 'j.perusahaan_id=p.id')
 			 ->join('jasa_type jt', 'jpt.jasa_type_id=jt.id')
 			 ->join('jasa_keyword jk', 'j.jasa_keyword_id=jk.id')
 			 ->where('jpt.jasa_id', $pesanan['jasa_id']);
 		$data_jasa = $this->db->get()->row_array();
 		if($pesanan && $data_jasa) {
 			$data_pegawai_to_surveying = [];
+			$data_material_used = [];
+			$data_material = $this->db->select('m.*,mk.nama_merek')->from('material m')->join('merek mk', 'm.merek_id=mk.id')->where('jasa_keyword_id', $data_jasa['jasa_keyword_id'])->get()->result_array();
+			if($pesanan['material_id_used'] == 'all') {
+				$this->db
+					 ->select('*')
+					 ->from('material m')
+					 ->join('merek mk', 'm.merek_id=mk.id')
+					 ->where('m.jasa_keyword_id', $data_jasa['jasa_keyword_id']);
+				array_push($data_material_used, $this->db->get()->result_array())[0];
+			}else if(preg_match("/,/", $pesanan['material_id_used'])){
+				$material_id_used = explode(",", $pesanan['material_id_used']);
+				foreach($material_id_used as $material_id) {
+					$this->db
+						 ->select('*')
+						 ->from('material m')
+						 ->join('merek mk', 'm.merek_id=mk.id')
+						 ->where('m.id', $material_id)
+						 ->where('m.jasa_keyword_id', $data_jasa['jasa_keyword_id']);
+					 array_push($data_material_used, $this->db->get()->row_array());
+				}
+			}
+			$data_harga_jasa           = join("", explode(".", explode("Rp. ", $data_jasa['harga'])[1]));
+			$data_harga_material_array = [];
+			foreach($data_material_used as $data) {
+				$data_harga_material_array[] = join("", explode(".", $data['harga']));
+			}
+			$data_harga_material       = array_sum($data_harga_material_array);
+			$data_total                = array_sum([$data_harga_material, $data_harga_jasa]);
 			if(preg_match("/,/",$pesanan['pegawai_id'])) {
 				$pegawai_id = explode(",", $pesanan['pegawai_id']);
 				foreach($pegawai_id as $id) {
@@ -122,6 +152,8 @@ class Pegawai extends CI_Controller {
 			}else{
 				array_push($data_pegawai_to_surveying, $this->db->get_where('pegawai', ['id' => $pesanan['pegawai_id']])->row_array());
 			}
+			// $result = array_diff($data_material, $data_material_used);
+			// echo '<pre>';print_r(array_unique([$data_material, $data_material_used])); die;
 			$data = [
 				'title'                     => 'Detail tugas',
 				'title_main_header'         => 'Detail tugas',
@@ -130,6 +162,9 @@ class Pegawai extends CI_Controller {
 				'data_pegawai2'             => $this->session->userdata(),
 				'data_pesanan'              => $pesanan,
 				'data_jasa'                 => $data_jasa,
+				'data_material_used'        => $pesanan['material_id_used'] == 'all' ? $data_material_used[0]:$data_material_used,
+				'data_material'             => $data_material,
+				'data_total_harga'          => formatRupiah($data_total),
 				'data_pegawai_to_surveying' => $data_pegawai_to_surveying
 			];
 			if($pesanan['status'] == 2) {
@@ -157,6 +192,45 @@ class Pegawai extends CI_Controller {
 					
 				}
 			}
+		}else{
+			show_error("Data tugas tidak valid", 400);
+		}
+	}
+
+	public function tugas_tambah_material($id) {
+		$this->db
+			 ->select('
+				 ps.*,
+				 c.nama,
+				 c.nomor_ponsel,
+				 c.foto_customer,
+				 c.alamat,
+				 c.latlon
+			 ')
+			 ->from('pesanan ps')
+			 ->join('customer c', 'ps.customer_id=c.id')
+			 ->where('ps.id', $id);
+		$pesanan = $this->db->get()->row_array();
+		$this->db
+			 ->select('*')
+			 ->from('jasa_pivot_type jpt')
+			 ->join('jasa j', 'jpt.jasa_id=j.id')
+			 ->join('perusahaan p', 'j.perusahaan_id=p.id')
+			 ->join('jasa_type jt', 'jpt.jasa_type_id=jt.id')
+			 ->join('jasa_keyword jk', 'j.jasa_keyword_id=jk.id')
+			 ->where('jpt.jasa_id', $pesanan['jasa_id']);
+		$data_jasa = $this->db->get()->row_array();
+		if($pesanan && $data_jasa) {
+			$material_id = "";
+			foreach($_POST['id_material'] as $id_material) {
+				$material_id .= "$id_material,";
+			}
+			$material_id  = substr($material_id, 0, -1);
+			$this->db->set('material_id_used', $material_id);
+			$this->db->where('id', $id);
+			$this->db->update('pesanan');
+			$this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Berhasil</strong> menambahkan component ke jasa ini.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+			redirect("pegawai/tugas/$id/detail");
 		}else{
 			show_error("Data tugas tidak valid", 400);
 		}
@@ -241,6 +315,7 @@ class Pegawai extends CI_Controller {
 			$this->db->set('nama', $nama);
 			$this->db->set('nomor_ponsel', $nomor_ponsel);
 			$this->db->set('gender', $gender);
+			$this->db->where('user_id', $data['data_pegawai2']['id']);
 			$this->db->update('pegawai');
 
 			$this->session->set_userdata('email', $email);

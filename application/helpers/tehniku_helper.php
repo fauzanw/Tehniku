@@ -1,5 +1,7 @@
 <?php 
 
+error_reporting(0);
+
 function hitungJarak($latitude1, $longitude1, $latitude2, $longitude2, $unit = 'Mi') 
 { 
 	$theta = $longitude1 - $longitude2; 

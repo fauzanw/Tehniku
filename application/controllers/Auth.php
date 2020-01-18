@@ -119,6 +119,7 @@ class Auth extends CI_Controller {
 			// echo $foto_ktp, $foto_npwp, $logo_perusahaan;
 
 			$edited_perusahaan_logo = $_FILES['logo_perusahaan']['name'];
+			$target_dir_perusahaan = "/assets/argon/img/perusahaan/";
 			if($edited_perusahaan_logo) {
 				$config = array(
 					'allowed_types' => 'jpeg|jpg|png',
@@ -145,6 +146,7 @@ class Auth extends CI_Controller {
 			}
 
 			// jika foto npwp diubah
+			$target_dir_npwp = FCPATH."assets/argon/img/npwp/";
 			$edited_foto_npwp = $_FILES['foto_npwp']['name'];
 			if($edited_foto_npwp) {
 				$config = array(
@@ -157,6 +159,8 @@ class Auth extends CI_Controller {
 
 				if($this->upload->do_upload('foto_npwp')) {
 					$new_logo  = $this->upload->data('file_name');
+					var_dump(copy(FCPATH."assets/argon/img/perusahaan/$new_logo", $target_dir_npwp.$new_logo));
+					unlink(FCPATH."assets/argon/img/perusahaan/$new_logo");
 					$foto_npwp = $new_logo;
 				}else{
 					if($this->upload->display_errors() == "<p>The filetype you are attempting to upload is not allowed.</p>") {
@@ -172,6 +176,7 @@ class Auth extends CI_Controller {
 			}
 
 			// jika foto ktp diubah
+			$target_dir_ktp = FCPATH."assets/argon/img/ktp/";
 			$edited_foto_ktp = $_FILES['foto_ktp']['name'];
 			if($edited_foto_ktp) {
 				$config = array(
@@ -184,6 +189,8 @@ class Auth extends CI_Controller {
 
 				if($this->upload->do_upload('foto_ktp')) {
 					$new_logo = $this->upload->data('file_name');
+					copy(FCPATH."assets/argon/img/perusahaan/$new_logo", $target_dir_ktp.$new_logo);
+					unlink(FCPATH."assets/argon/img/perusahaan/$new_logo");
 					$foto_ktp = $new_logo;
 				}else{
 					if($this->upload->display_errors() == "<p>The filetype you are attempting to upload is not allowed.</p>") {
@@ -197,8 +204,6 @@ class Auth extends CI_Controller {
 					}
 				}
 			}
-
-			die;
 
 			$id_user   = uniqid();
 			$data_user = array(
@@ -384,13 +389,8 @@ class Auth extends CI_Controller {
 		$config = [
 			'protocol'    => 'smtp',
 			'smtp_host'   => 'ssl://smtp.googlemail.com',
-<<<<<<< HEAD
-			'smtp_user'   => 'fgaming386@gmail.com' ,
-			'smtp_pass'   => 'ozan09012005',
-=======
 			'smtp_user'   => '' /* Your Email */,
 			'smtp_pass'   => '' /* Your email password */,
->>>>>>> 8b63e4a5630ed4c85513a53c4217c800225d63c6
 			'smtp_port'   => 465,
 			'mailtype'    => 'html',
 			'charset'     => 'utf-8',

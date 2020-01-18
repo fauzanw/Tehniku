@@ -31,7 +31,7 @@
                             </td>
                             <td>
                                 <div class="form-check">
-                                    <input type="checkbox" name="is_blocked_customer"  class="form-check-input" id="is_blocked_customer" class="custom-control-input"  <?= ($data['is_blocked']) == 1 ? "checked":null; ?> data-id="<?= $data['user_id'] ?>">
+                                    <input type="checkbox" name="is_blocked_customer"  class="form-check-input is_blocked_customer"  <?= ($data['is_blocked']) == 1 ? "checked":null; ?> data-id="<?= $data['user_id'] ?>">
                                 </div>
                             </td>
                             <td class='text-right'> 

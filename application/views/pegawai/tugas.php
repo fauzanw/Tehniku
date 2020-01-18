@@ -33,19 +33,26 @@
                                     <p class="ml-2 mt--1 text-orange" style='font-weight: bold;'><?= $data['harga']; ?></p>
                                 </div>
                             </div>
-                            <div class="row mr-4 ml-4">
+                            <div class="row mr-4 ml-4 mt-2">
+                                <div class="col-md-2">
                                     <i class="fas fa-street-view" style="font-size: 20px;color: #939393;"></i>
-                                    <p class="ml-2 mt--1"><?= $data['alamat']; ?></p>
+                                </div>
+                                <div class="col-md-10 ml--4">
+                                    <p class="ml-2 mt--1 expander"><?= $data['alamat']; ?></p>
+                                </div>
                             </div>
                         </div>
-                        <p class="mt-3 mr-5 ml-5"><i class="fas fa-quote-left"></i> <?= $data['description']; ?> <i class="fas fa-quote-right"></i></p>
+                        <p class="mt-3 mr-5 ml-5 expander"><i class="fas fa-quote-left"></i> <?= $data['description']; ?> <i class="fas fa-quote-right"></i></p>
                     </div>
                 </div>
             </div>
             <?php endforeach; ?>
         </div>
       <?php else: ?>
-
+        <div class="text-center mt-5 pt-5 mb-5">
+            <img src="<?= base_url('assets/argon/img/theme/empty.svg') ?>" width="240" height="240" alt="">
+            <h2>Belum ada pesanan dari customer!</h2>
+        </div>
       <?php endif; ?>
     </div>
   </div>

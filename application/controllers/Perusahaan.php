@@ -38,7 +38,14 @@ class Perusahaan extends CI_Controller {
 	public function manage() {
 		$perusahaan = $this->db->get_where('perusahaan', ["user_id" => $this->session->userdata('id')])->row_array();
 		$this->db
-			 ->select('*')
+			 ->select('
+				 j.*,
+				 jt.type,
+				 p.nama,
+				 p.nomor_ponsel,
+				 p.latlon,
+				 p.logo_perusahaan
+			 ')
 			 ->from('jasa_pivot_type jpt')
 			 ->join('jasa j', 'jpt.jasa_id=j.id')
 			 ->join('jasa_type jt', 'jpt.jasa_type_id=jt.id')
@@ -57,22 +64,36 @@ class Perusahaan extends CI_Controller {
 		];
 		if(isset($_POST['type_jasa'])) {
 			if($_POST['type_jasa'] == 'semua_jasa') {
-				$this->db
-				 ->select('*')
-				 ->from('jasa_pivot_type jpt')
-				 ->join('jasa j', 'jpt.jasa_id=j.id')
-				 ->join('jasa_type jt', 'jpt.jasa_type_id=jt.id')
-				 ->join('perusahaan p', 'j.perusahaan_id=p.id')
-				 ->where('p.user_id', $this->session->userdata('id'));
+					$this->db
+						 ->select('
+						 	j.*,
+						 	jt.type,
+						 	p.nama,
+						 	p.nomor_ponsel,
+						 	p.latlon,
+						 	p.logo_perusahaan
+						 ')
+						->from('jasa_pivot_type jpt')
+						->join('jasa j', 'jpt.jasa_id=j.id')
+						->join('jasa_type jt', 'jpt.jasa_type_id=jt.id')
+						->join('perusahaan p', 'j.perusahaan_id=p.id')
+						->where('p.user_id', $this->session->userdata('id'));
 			}else{
-				$this->db
-				 ->select('*')
-				 ->from('jasa_pivot_type jpt')
-				 ->join('jasa j', 'jpt.jasa_id=j.id')
-				 ->join('jasa_type jt', 'jpt.jasa_type_id=jt.id')
-				 ->join('perusahaan p', 'j.perusahaan_id=p.id')
-				 ->where('p.user_id', $this->session->userdata('id'))
-				 ->where('jt.type', $_POST['type_jasa']);
+					$this->db
+						 ->select('
+						 	j.*,
+						 	jt.type,
+						 	p.nama,
+						 	p.nomor_ponsel,
+						 	p.latlon,
+						 	p.logo_perusahaan
+						 ')
+						->from('jasa_pivot_type jpt')
+						->join('jasa j', 'jpt.jasa_id=j.id')
+						->join('jasa_type jt', 'jpt.jasa_type_id=jt.id')
+						->join('perusahaan p', 'j.perusahaan_id=p.id')
+						->where('p.user_id', $this->session->userdata('id'))
+						->where('jt.type', $_POST['type_jasa']);
 			}
 			$data['data_jasa'] = $this->db->get()->result_array();
 			$this->load->view('perusahaan/header', $data);
@@ -183,6 +204,75 @@ class Perusahaan extends CI_Controller {
 		}
 	}
 
+	public function edit_jasa($id)
+	{
+		$perusahaan = $this->db->get_where('perusahaan', ["user_id" => $this->session->userdata('id')])->row_array();
+		$this->db
+			 ->select('
+				 j.*,
+				 jt.type,
+				 jk.keyword,
+				 p.nama,
+				 p.nomor_ponsel,
+				 p.latlon,
+				 p.logo_perusahaan
+			 ')
+			 ->from('jasa_pivot_type jpt')
+			 ->join('jasa j', 'jpt.jasa_id=j.id')
+			 ->join('jasa_type jt', 'jpt.jasa_type_id=jt.id')
+			 ->join('jasa_keyword jk', 'j.jasa_keyword_id=jk.id')
+			 ->join('perusahaan p', 'j.perusahaan_id=p.id')
+			 ->where('p.user_id', $this->session->userdata('id'))
+			 ->where('j.id', $id);
+		$jasa = $this->db->get()->row_array();
+		if($jasa) {
+			$data = [
+				'title'             => 'Edit Jasa',
+				'data_jasa'         => $jasa,
+				'title_main_header' => 'Edit Jasa',
+				'data_perusahaan'   => $perusahaan,
+				'data_perusahaan2'  => $this->session->userdata(),
+				'count_pesanan'     => $this->db->get_where('pesanan', ['perusahaan_id' => $perusahaan['id']])->result_array(),
+				'data_keyword'      => $this->db->get('jasa_keyword')->result_array(),
+				'data_type_jasa'    => $this->db->get('jasa_type')->result_array(),
+			];
+			if(!isset($_POST['edit_jasa'])) {
+				$this->load->view('perusahaan/header', $data);
+				$this->load->view('perusahaan/navigator', $data);
+				$this->load->view('perusahaan/main_header', $data);
+				$this->load->view('perusahaan/edit_jasa', $data);
+				$this->load->view('perusahaan/footer', $data);
+			}else{
+				$this->db->set('nama_jasa', $_POST['nama_jasa']);
+				$this->db->set('description', $_POST['description']);
+				$this->db->set('harga', $_POST['harga']);
+				$this->db->set('jasa_keyword_id', $_POST['keyword_jasa']);
+				$this->db->where('id', $id);
+				$this->db->update('jasa');
+
+				$this->db->set('jasa_type_id', $_POST['type_jasa']);
+				$this->db->where('jasa_id', $id);
+				$this->db->update('jasa_pivot_type');
+
+				$this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Data Jasa</strong> berhasil di ubah.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+				redirect('perusahaan/manage');
+			}
+		}else{
+			show_error('Data jasa tidak valid', 400);
+		}
+	}
+	
+	public function hapus_jasa($id) {
+		$jasa = $this->db->get_where('jasa', ['id' => $id])->row_array();
+		if($jasa) {
+			$this->db->delete('jasa', ['id' => $id]);
+			$this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Data Jasa</strong> berhasil di hapus.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+			redirect('perusahaan/manage');
+		}else{
+			show_error('Data jasa tidak valid', 400);
+		}
+	}
+
 	public function tambah_jasa() {
 		$perusahaan = $this->db->get_where('perusahaan', ["user_id" => $this->session->userdata('id')])->row_array();
 		if(!isset($_POST['tambah_jasa'])) {
@@ -224,7 +314,7 @@ class Perusahaan extends CI_Controller {
 
 	public function pegawai() {
 		$perusahaan = $this->db->get_where('perusahaan', ["user_id" => $this->session->userdata('id')])->row_array();
-		$pegawai    = $this->db->select('*')->from('pegawai p')->join('users u', 'p.user_id=u.id')->get()->result_array();
+		$pegawai    = $this->db->select('*')->from('pegawai p')->join('users u', 'p.user_id=u.id')->where('perusahaan_id', $perusahaan['id'])->get()->result_array();
 		rsort($pegawai);
 		$data = [
 			'title'             => 'Pegawai',
@@ -343,7 +433,7 @@ class Perusahaan extends CI_Controller {
 		if(!isset($_POST['edit'])) {
 			show_404();
 		}else{
-			$data_pegawai = $this->db->get_where('pegawai', ['id' => $id])->row_array();
+			$data_pegawai = $this->db->get_where('pegawai', ['user_id' => $id])->row_array();
 			if($data_pegawai) {
 
 				$this->db->set('nama', $this->input->post('nama_pegawai'));
@@ -353,7 +443,7 @@ class Perusahaan extends CI_Controller {
 				$this->db->where('id', $id);
 				$this->db->update('pegawai');
 				$this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Berhasil</strong> edit data pegawai.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-			redirect('perusahaan/pegawai');
+				redirect('perusahaan/pegawai');
 			} else{
 				$this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Gagal</strong> edit, pegawai tidak terdaftar.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
 				redirect('perusahaan/pegawai');
@@ -396,12 +486,12 @@ class Perusahaan extends CI_Controller {
 			 ->from('pesanan ps')
 			 ->join('jasa j', 'ps.jasa_id=j.id')
 			 ->join('customer c', 'ps.customer_id=c.id')
-			 ->where('ps.status !=', 4);
+			 ->where('ps.status !=', 4)
+			 ->where('ps.perusahaan_id', $perusahaan['id']);
 		$pesanan = $this->db->get()->result_array();
-		// echo '<pre>';print_r($pesanan); die;
 		rsort($pesanan);
-		// echo '<pre>';print_r($pesanan); die;
 		$data_jasa = [];
+		// echo '<pre>';print_r($pesanan); die;
 		foreach($pesanan as $i => $data) {
 			$this->db
 				 ->select('*')
@@ -417,7 +507,6 @@ class Perusahaan extends CI_Controller {
 			$data_jasa[$i]['jarak'] = hitungJarak($latlon_perusahaan[0], $latlon_perusahaan[1],$latlon_customer[0], $latlon_customer[1]);
 		}
 		rsort($data_jasa);
-		rsort($pesanan);
 		$data = [
 			'title'             => 'Pesanan Customer Perusahaan',
 			'title_main_header' => 'Pesanan Customer Perusahaan',
@@ -511,8 +600,8 @@ class Perusahaan extends CI_Controller {
 							$pegawai_id .= "$id,";
 							$this->db->set('status', 0);
 							$this->db->where('id', $id);
+							$this->db->update('pegawai');
 						}
-						$this->db->update('pegawai');
 						$pegawai_id = substr($pegawai_id, 0, -1);
 
 						$this->db->set('pegawai_id', $pegawai_id);

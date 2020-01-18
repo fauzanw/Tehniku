@@ -55,7 +55,14 @@ class Customer extends CI_Controller {
 				foreach($data_jasa as $i => $_DATA_JASA) {
 					$latlon_perusahaan = explode(", ", $_DATA_JASA['latlon']);
 					$latlon_customer   = explode(", ", $latlon);
-					$data_jasa[$i]['jarak'] = hitungJarak($latlon_perusahaan[0], $latlon_perusahaan[1],$latlon_customer[0], $latlon_customer[1]);
+					if(isset($latlon_perusahaan[0]) && isset($latlon_perusahaan[1]) && isset($latlon_customer[0]) && isset($latlon_customer[1])) {
+						$jarak             = hitungJarak($latlon_perusahaan[0], $latlon_perusahaan[1],$latlon_customer[0], $latlon_customer[1]);
+					}else{
+						$jarak             = "Latitude & Longitude tidak valid";
+					}
+					if($jarak) {
+						$data_jasa[$i]['jarak'] = $jarak;
+					}
 				}
 				sort($data_jasa);
 				// echo "<pre>";print_r($data_jasa); die;
@@ -112,7 +119,14 @@ class Customer extends CI_Controller {
 				foreach($data['data_jasa'] as $i => $_DATA_JASA) {
 					$latlon_perusahaan = explode(", ", $_DATA_JASA['latlon']);
 					$latlon_customer   = explode(", ", $customer['latlon']);
-					$data['data_jasa'][$i]['jarak'] = hitungJarak($latlon_perusahaan[0], $latlon_perusahaan[1],$latlon_customer[0], $latlon_customer[1]);
+					if(isset($latlon_perusahaan[0]) && isset($latlon_perusahaan[1]) && isset($latlon_customer[0]) && isset($latlon_customer[1])) {
+						$jarak             = hitungJarak($latlon_perusahaan[0], $latlon_perusahaan[1],$latlon_customer[0], $latlon_customer[1]);
+					}else{
+						$jarak             = "Latitude & Longitude tidak valid";
+					}
+					if($jarak) {
+						$data['data_jasa'][$i]['jarak'] = $jarak;
+					}
 				}
 			}
 		}else{
@@ -126,10 +140,18 @@ class Customer extends CI_Controller {
 				'data_type_jasa'    => $this->db->get('jasa_type')->result_array(),
 				'data_keyword_jasa' => $this->db->get('jasa_keyword')->result_array()
 			];
+			// echo '<pre>';print_r($data['data_jasa']); die;
 			foreach($data['data_jasa'] as $i => $_DATA_JASA) {
 				$latlon_perusahaan = explode(", ", $_DATA_JASA['latlon']);
 				$latlon_customer   = explode(", ", $customer['latlon']);
-				$data['data_jasa'][$i]['jarak'] = hitungJarak($latlon_perusahaan[0], $latlon_perusahaan[1],$latlon_customer[0], $latlon_customer[1]);
+				if(isset($latlon_perusahaan[0]) && isset($latlon_perusahaan[1]) && isset($latlon_customer[0]) && isset($latlon_customer[1])) {
+					$jarak             = hitungJarak($latlon_perusahaan[0], $latlon_perusahaan[1],$latlon_customer[0], $latlon_customer[1]);
+				}else{
+					$jarak             = "Latitude & Longitude tidak valid";
+				}
+				if($jarak) {
+					$data['data_jasa'][$i]['jarak'] = $jarak;
+				}
 			}
 		}
 		$this->load->view('customer/header', $data);
@@ -161,6 +183,7 @@ class Customer extends CI_Controller {
 			'data_customer'     => $customer,
 			'data_customer2'    => $this->session->userdata(),
 			'data_jasa'         => $cekjasa,
+			'data_pesanan'      => $this->db->get_where('pesanan', ['jasa_id' => $jasa_id])->row_array(),
 			'jarak'             => base64_decode($_GET['coor'])
 		];
 		if(isset($_POST['set_jadwal'])) {
@@ -169,13 +192,14 @@ class Customer extends CI_Controller {
 				$pisah        = explode("/", $split_jadwal[1]);
 				$jadwal       = formatHariTanggal("$pisah[2]-$pisah[0]-$pisah[1]") . " Jam $split_jadwal[0]";
 				$data_pesanan = [
-					'id'            => uniqid(),
-					'jasa_id'       => $jasa_id,
-					'perusahaan_id' => $cekjasa['id'],
-					'customer_id'   => $data['data_customer']['id'],
-					'waktu'         => $jadwal,
-					'description'   => htmlspecialchars($_POST['description']),
-					'pegawai_id'    => '',	
+					'id'               => uniqid(),
+					'jasa_id'          => $jasa_id,
+					'perusahaan_id'    => $cekjasa['id'],
+					'customer_id'      => $data['data_customer']['id'],
+					'waktu'            => $jadwal,
+					'description'      => htmlspecialchars($_POST['description']),
+					'pegawai_id'       => '',	
+					'material_id_used' => $data['data_pesanan']['type'] == 'instalasi' ? 'all':'',
 					'status'        => 1
 				];
 				$this->db->insert('pesanan', $data_pesanan);
@@ -217,7 +241,14 @@ class Customer extends CI_Controller {
 		foreach($data_jasa as $i => $data) {
 			$latlon_customer   = explode(", ", $customer['latlon']);
 			$latlon_perusahaan = explode(", ", $data['latlon']);
-			$data_jasa[$i]['jarak'] = hitungJarak($latlon_perusahaan[0], $latlon_perusahaan[1],$latlon_customer[0], $latlon_customer[1]);
+			if(isset($latlon_perusahaan[0]) && isset($latlon_perusahaan[1]) && isset($latlon_customer[0]) && isset($latlon_customer[1])) {
+				$jarak             = hitungJarak($latlon_perusahaan[0], $latlon_perusahaan[1],$latlon_customer[0], $latlon_customer[1]);
+			}else{
+				$jarak             = "Latitude & Longitude tidak valid";
+			}
+			if($jarak) {
+				$data_jasa[$i]['jarak'] = $jarak;
+			}
 		}
 		// echo "<pre>";print_r([$data_jasa, $pesanan]); die;
 		$data = [
@@ -266,7 +297,14 @@ class Customer extends CI_Controller {
 		if($pesanan && $data_jasa) {
 			$latlon_customer   = explode(", ", $customer['latlon']);
 			$latlon_perusahaan = explode(", ", $pesanan['latlon']);
-			$data_jasa['jarak'] = hitungJarak($latlon_perusahaan[0], $latlon_perusahaan[1],$latlon_customer[0], $latlon_customer[1]);
+			if(isset($latlon_perusahaan[0]) && isset($latlon_perusahaan[1]) && isset($latlon_customer[0]) && isset($latlon_customer[1])) {
+				$jarak             = hitungJarak($latlon_perusahaan[0], $latlon_perusahaan[1],$latlon_customer[0], $latlon_customer[1]);
+			}else{
+				$jarak             = "Latitude & Longitude tidak valid";
+			}
+			if($jarak) {
+				$data_jasa['jarak'] = $jarak;
+			}
 			$data = [
 				'title'                  => 'Detail Pesanan Pakejasa',
 				'title_main_header'      => 'Detail Pesanan Pakejasa',
@@ -277,11 +315,29 @@ class Customer extends CI_Controller {
 				'data_pegawai_to_survey' => $data_pegawai_to_surveying
 			];
 			if($pesanan['status'] == 1) {
-				$this->load->view('customer/header', $data);
-				$this->load->view('customer/navigator', $data);
-				$this->load->view('customer/main_header', $data);
-				$this->load->view('customer/wait_verified_pesanan', $data);
-				$this->load->view('customer/footer', $data);
+				if(!isset($_POST['ubah_data'])) {
+					$this->load->view('customer/header', $data);
+					$this->load->view('customer/navigator', $data);
+					$this->load->view('customer/main_header', $data);
+					$this->load->view('customer/wait_verified_pesanan', $data);
+					$this->load->view('customer/footer', $data);
+				}else{
+					if($_POST['description']) {
+						$this->db->set('description', $_POST['description']);
+					}
+
+					if($_POST['jadwal']) {
+						$split_jadwal = explode(" ", $_POST['jadwal']);
+						$pisah        = explode("/", $split_jadwal[1]);
+						$jadwal       = formatHariTanggal("$pisah[2]-$pisah[0]-$pisah[1]") . " Jam $split_jadwal[0]";
+						$this->db->set('waktu', $jadwal);
+					}
+
+					$this->db->where('id', $id_pesanan);
+					$this->db->update('pesanan');
+					$this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Berhasil</strong> ubah data pesanan.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+					redirect("customer/pakejasa/pesanan/$id_pesanan/detail");
+				}
 			}else if($pesanan['status'] == 2) {
 				$this->load->view('customer/header', $data);
 				$this->load->view('customer/navigator', $data);
@@ -289,7 +345,11 @@ class Customer extends CI_Controller {
 				$this->load->view('customer/verified_pesanan', $data);
 				$this->load->view('customer/footer', $data);
 			}else{
-				echo 'Y';
+				$this->load->view('customer/header', $data);
+				$this->load->view('customer/navigator', $data);
+				$this->load->view('customer/main_header', $data);
+				$this->load->view('customer/surveying_pesanan', $data);
+				$this->load->view('customer/footer', $data);
 			}
 		}else{
 			show_error("Data pesanan tidak valid", 400);
@@ -373,6 +433,7 @@ class Customer extends CI_Controller {
 			$this->db->set('nama', $nama);
 			$this->db->set('nomor_ponsel', $nomor_ponsel);
 			$this->db->set('alamat', $alamat);
+			$this->db->where('user_id', $data['data_customer2']['id']);
 			$this->db->update('customer');
 
 			$this->session->set_userdata('email', $email);

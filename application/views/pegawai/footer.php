@@ -10,7 +10,13 @@
   <script type="text/javascript" src="<?= base_url('assets/argon/') ?>DataTables/datatables.min.js"></script>
   <script src="<?= base_url('assets/argon/') ?>DataTables/DataTables-1.10.20/css/dataTables.bootstrap.js"></script>
   <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/3/jquery.inputmask.bundle.js"></script>
+  <script src="<?= base_url('assets/argon/js/plugins/jquery.expander.min.js') ?>"></script>
   <script>
+    $('.expander').expander({
+      slicePoint: 50,
+      expandText:'Lihat selengkapnya',
+      userCollapseText:'Lihat lebih singkat'
+    })
     $(":input").inputmask();
     $('#nomor_ponsel').inputmask({
       "mask": "999-999-999-999"

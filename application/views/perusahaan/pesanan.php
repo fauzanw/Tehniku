@@ -12,9 +12,18 @@
 
                         <div class="card-body">
                             <h5 class="card-title"><?= $data_jasa[$i]['nama_jasa']; ?></h5>
-                                <p><i class="fas fa-phone-volume"></i> &nbsp;<?= $data['nomor_ponsel']; ?></p>
-                                <p><i class="fas fa-briefcase"></i> &nbsp;<?= $data_jasa[$i]['type']; ?></p>
-                                <p><i class="fas fa-map-marker-alt"></i> &nbsp;Jarak customer : <?= $data_jasa[$i]['jarak']; ?> Km</p>
+                            <?php if($data['status'] == 1) : ?>
+                                <p><span class="badge badge-dot mr-4"><i class="bg-warning"></i> Menunggu diverifikasi</span></p>
+                            <?php elseif($data['status'] == 2) : ?>
+                                <p><span class="badge badge-dot mr-4"><i class="bg-success"></i> Diverifikasi</span></p>
+                            <?php elseif($data['status'] == 3) : ?>
+                                <p><span class="badge badge-dot mr-4"><i class="bg-warning"></i> Sedang survey</span></p>
+                            <?php elseif($data['status'] == 4) : ?>
+                                <p><span class="badge badge-dot mr-4"><i class="bg-success"></i> Selesai</span></p>
+                            <?php endif; ?>
+                            <p><i class="fas fa-phone-volume"></i> &nbsp;<?= $data['nomor_ponsel']; ?></p>
+                            <p><i class="fas fa-briefcase"></i> &nbsp;<?= $data_jasa[$i]['type']; ?></p>
+                            <p><i class="fas fa-map-marker-alt"></i> &nbsp;Jarak customer : <?= $data_jasa[$i]['jarak']; ?> Km</p>
                             <a href="<?= base_url('perusahaan/pesanan/') . $data['id'] . '/detail' ?>" class="btn btn-orange btn-block"><i class="fas fa-info-circle"></i> Detail Pesanan</a>
                         </div>
                     </div>

@@ -182,7 +182,6 @@ class Admin extends CI_Controller {
 				"merek_id"        => $this->input->post('merek'),
 				"harga"           => $this->input->post('harga'),
 				"jasa_keyword_id" => $this->input->post('jasa_keyword'),
-				'data_verifikasi'  => $this->db->get_where('users', ['is_verified' => 0])->result_array()
 			];
 			$this->db->insert("material", $data_material);
 			$this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Berhasil</strong> tambah material.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
@@ -275,20 +274,28 @@ class Admin extends CI_Controller {
 			}else{
 				$file = $_FILES['cover']['tmp_name'];
 				if($xls = SimpleXLS::parse($file)) {
-					for($i = 3;$i < sizeof($xls->rows()) - 3;$i++) {
-						$data_material = [
-							'id'               => uniqid(),
-							'nama_material'    => htmlspecialchars($xls->rows()[$i][1]),
-							'description'      => htmlspecialchars($xls->rows()[$i][2]),
-							'merek_id'         => $xls->rows()[$i][3],
-							'harga'            => formatRupiah($xls->rows()[$i][4]),
-							'jasa_keyword_id'  => $xls->rows()[$i][5]
-						];
-
-						$this->db->insert('material', $data_material);
+					for($i = 3;$i < sizeof($xls->rows());$i++) {
+						$nama       = $xls->rows()[$i][1];
+						$desc       = $xls->rows()[$i][2];
+						$merek_id   = $xls->rows()[$i][3];
+						$harga      = formatRupiah($xls->rows()[$i][4]);
+						$jaskey_id  = $xls->rows()[$i][4];
+						$cek_merek  = $this->db->get_where('merek', ['id' => $merek_id])->row_array();
+						$cek_jaskey = $this->db->get_where('jasa_keyword', ['id' => $jaskey_id])->row_array();
+						if($cek_merek && $cek_jaskey) {
+							$data_material = [
+								'id'               => uniqid(),
+								'nama_material'    => htmlspecialchars($xls->rows()[$i][1]),
+								'description'      => htmlspecialchars($xls->rows()[$i][2]),
+								'merek_id'         => $xls->rows()[$i][3],
+								'harga'            => $harga == NULL ? '':$harga,
+								'jasa_keyword_id'  => $xls->rows()[$i][5]
+							];
+							$insert = $this->db->insert('material', $data_material);
+						}
+						$this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Berhasil</strong> impor material.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+						redirect('admin/material');
 					}
-					$this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Berhasil</strong> impor material.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-					redirect('admin/material');
 				}else{
 					echo SimpleXLS::parseError();
 				}

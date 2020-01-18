@@ -25,7 +25,7 @@
                             <td><?= $data['nomor_ktp']; ?></td>
                             <td>
                                 <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" name="is_verified" id="is_verified_user" class="custom-control-input"  <?= ($data_verifikasi[$index]['is_verified']) == 1 ? "checked":null; ?> data-id="<?= $data_verifikasi[$index]['id'] ?>">
+                                    <input type="checkbox" class="form-check-input is_verified_user" name="is_verified" class="custom-control-input"  <?= ($data_verifikasi[$index]['is_verified']) == 1 ? "checked":null; ?> data-id="<?= $data_verifikasi[$index]['id'] ?>">
                                 </div>
                             </td>
                             <!-- <td>

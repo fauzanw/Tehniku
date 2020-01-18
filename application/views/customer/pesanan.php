@@ -23,7 +23,7 @@
                             <?php endif; ?>
                             <p><i class="fas fa-briefcase" style="font-size: 20px;color: #939393;"></i> &nbsp;<?= $data_jasa[$i]['type']; ?></p>
                             <p><i class="fas fa-money-bill-wave" style="font-size: 16px;color: #939393;"></i> &nbsp;<?= $data_jasa[$i]['harga']; ?></p>
-                            <p><i class="fas fa-search-location" style="font-size: 20px;color: #939393;"></i> &nbsp;<?= $data_jasa[$i]['jarak']; ?> Km</p>
+                            <p class="<?= ($data_jasa[$i]['jarak'] == 'Latitude & Longitude tidak valid' ? 'text-danger text-bold':null); ?>"><i class="fas fa-search-location" style="font-size: 20px;color: #939393;"></i> &nbsp;<?= ($data_jasa[$i]['jarak'] == 'Latitude & Longitude tidak valid' ? 'invalid':$data_jasa[$i]['jarak']." Km"); ?></p>
                             <a href="<?= base_url('customer/pakejasa/pesanan/') . $data['id'] . '/detail' ?>" class="btn btn-orange btn-block"><i class="fas fa-info-circle"></i> Detail Pesanan</a>
                         </div>
                     </div>
@@ -31,7 +31,10 @@
             <?php endforeach; ?>
         </div>
       <?php else: ?>
-
+        <div class="text-center mt-5 pt-5 mb-5">
+            <img src="<?= base_url('assets/argon/img/theme/empty.svg') ?>" width="240" height="240" alt="">
+            <h1>Belum ada pesanan !</h1>
+        </div>
       <?php endif; ?>
     </div>
   </div>

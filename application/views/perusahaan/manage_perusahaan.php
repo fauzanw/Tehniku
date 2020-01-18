@@ -154,8 +154,8 @@
                           <i class="fas fa-ellipsis-v"></i>
                       </a>
                       <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                          <a class="dropdown-item" href="<?= base_url('admin/perusahaan/') . $data['id'] . '/detail' ?>">Detail Perusahaan</a>
-                          <a class="dropdown-item" href="<?= base_url('perusahaan/pegawai/').$data['id']."/hapus" ?>">Hapus</a>
+                          <a class="dropdown-item" href="<?= base_url('perusahaan/jasa/') . $data['id'] . '/edit' ?>">Edit</a>
+                          <a class="dropdown-item" href="<?= base_url('perusahaan/jasa/').$data['id']."/hapus" ?>">Hapus</a>
                       </div>
                   </div>
                 </td>

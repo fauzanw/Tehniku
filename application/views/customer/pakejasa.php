@@ -93,7 +93,7 @@
                                 </div>
                                 <div class="row mr-3">
                                     <img src="<?= base_url('assets/argon/img/theme/iconLocation.png') ?>" style="width: 20px;height:18px;" alt="">
-                                    <p class="ml-2 mt--1"><?= $data['jarak']; ?> Km</p>
+                                    <p class="ml-2 mt--1 <?= ($data['jarak'] == 'Latitude & Longitude tidak valid' ? 'text-danger text-bold':null); ?>"><?= ($data['jarak'] == 'Latitude & Longitude tidak valid' ? 'invalid':$data['jarak']." Km"); ?></p>
                                 </div>
                             </div>
                         </div>

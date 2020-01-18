@@ -30,7 +30,7 @@
       
       $(document).ready(function() {
         $('#dataTable').DataTable();
-        $('#is_blocked_customer').on('click', function() {
+        $('.is_blocked_customer').on('click', function() {
           const id = $(this).data('id')
           $.ajax({
             url: "<?= base_url('admin/customer/blocked/edit') ?>",
@@ -43,7 +43,7 @@
             }
           })
         });
-        $('#is_verified_user').on('click', function() {
+        $('.is_verified_user').on('click', function() {
           const id = $(this).data('id')
           $.ajax({
             url: "<?= base_url('admin/user/verifikasi/edit') ?>",
@@ -56,7 +56,7 @@
             }
           })
         })
-        $('#is_blocked').on('click', function() {
+        $('.is_blocked').on('click', function() {
           const id = $(this).data('id')
           $.ajax({
             url: "<?= base_url('admin/perusahaan/blocked/edit') ?>",

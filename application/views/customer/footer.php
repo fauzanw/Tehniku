@@ -118,6 +118,7 @@
           switch(error.code) {
             case error.PERMISSION_DENIED:
               $('#cari-perusahaan-terdekat').removeAttr('checked', 'checked')
+              $('#cari_jasa').attr('disabled', false)
               Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
@@ -126,6 +127,7 @@
               break;
             case error.POSITION_UNAVAILABLE:
               $('#cari-perusahaan-terdekat').removeAttr('checked', 'checked')
+              $('#cari_jasa').attr('disabled', false)
               Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
@@ -134,6 +136,7 @@
               break;
             case error.TIMEOUT:
               $('#cari-perusahaan-terdekat').removeAttr('checked', 'checked')
+              $('#cari_jasa').attr('disabled', false)
               Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
@@ -142,6 +145,7 @@
               break;
             case error.UNKNOWN_ERROR:
               $('#cari-perusahaan-terdekat').removeAttr('checked', 'checked')
+              $('#cari_jasa').attr('disabled', false)
               Swal.fire({
                 icon: 'error',
                 title: 'Oops...',

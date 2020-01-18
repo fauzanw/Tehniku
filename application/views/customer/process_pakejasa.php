@@ -38,7 +38,7 @@
                                 </div>
                                 <div class="row mr-3">
                                     <img src="<?= base_url('assets/argon/img/theme/iconLocation.png') ?>" style="width: 20px;height:18px;" alt="">
-                                    <p class="ml-2 mt--1"><?= $jarak; ?> Km</p>
+                                    <p class="ml-2 mt--1 <?= ($jarak == 'Latitude & Longitude tidak valid' ? 'text-danger text-bold':null); ?>"><?= ($jarak == 'Latitude & Longitude tidak valid' ? 'invalid':$jarak." Km"); ?></p>
                                 </div>
                             </div>
                         </div>

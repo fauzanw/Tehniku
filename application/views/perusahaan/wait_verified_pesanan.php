@@ -14,7 +14,7 @@
                         <div class="col-md-8">
                             <h1><?= $data_pesanan['nama']; ?></h1>
                             <p><i class="fas fa-phone-volume"></i> &nbsp;<?= $data_pesanan['nomor_ponsel']; ?></p>
-                            <p><i class="fas fa-street-view"></i> &nbsp;<?= $data_pesanan['alamat']; ?></p>
+                            <p class="expander"><i class="fas fa-street-view"></i> &nbsp;<?= $data_pesanan['alamat']; ?></p>
                             <p><i class="fas fa-map-marker-alt"></i> &nbsp;Jarak customer : <?= $data_jasa['jarak']; ?> Km</p>
                         </div>
                     </div>
