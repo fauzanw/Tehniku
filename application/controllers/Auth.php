@@ -181,7 +181,12 @@ class Auth extends CI_Controller {
 			if($edited_foto_ktp) {
 				$config = array(
 					'allowed_types' => 'jpeg|jpg|png',
-					'max_size'      => '2048',
+;
+                $this->session->unset_userdata("email");
+                $this->session->unset_userdata("password");
+                $this->session->unset_userdata("role_id");
+                $this->session->unset_userdata("is_verified");
+                $this->session->unset_userdata("date					'max_size'      => '2048',
 					'upload_path'   => './assets/argon/img/ktp/',
 					'encrypt_name'  => TRUE
 				);
