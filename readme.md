@@ -1,49 +1,56 @@
+
 # Tehniku
 
+  
+
 ### Authentication Route:
+
 #### Admin :
-- admin/login
+
+- /admin/login
+
+  
 
 #### User :
+
 - /auth/login
+
 - /auth/customer/register
+
 - /auth/perusahaan/register
 
+  
+
 ### Demo Account
+
 #### Admin :
-```json
-{
-  "email":"fgaming386@gmail.com",
-  "password":"pojan"
-}
-```
+| email                | password |
+|----------------------|----------|
+| fgaming386@gmail.com | pojan    |
+
 ### Perusahaan
-```json
-{
-  "email":"lg_tech@gmail.com",
-  "password":"lg_tech"
-}
-```
+
+| email               | password  |
+|---------------------|-----------|
+| lg_tech@gmail.com   | lg_tech   |
+| samsung@gmail.com   | samsung   |
+| panasonic@gmail.com | panasonic |
+
+  
 
 ### Pegawai
-```json
-[
-  {
-    "email": "brilly4n@gmail.com",
-    "password": "brillyan"
-  },
+| email              | password |
+|--------------------|----------|
+| brilly4n@gmail.com | brillyan |
+| rizsyad@gmail.com  | rizsyad  |
+| zakir@gmail.com    | zakir    |
 
-  {
-    "email": "rizsyad@gmail.com",
-    "password": "rizsyad"
-   }
-]
-```
+  
 
 ### Customer
-```json
-{
-  "email":"pojan@gmail.com",
-  "password":"pojan"
-}
-```
+
+| email            | password |
+|------------------|----------|
+| pojan@gmail.com  | pojan    |
+| prabu@revan.tech | revan    |
+| f@gmail.com      | f        |
