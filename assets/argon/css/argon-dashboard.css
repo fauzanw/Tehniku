@@ -1091,6 +1091,9 @@ pre code {
 }
 
 @media (min-width: 768px) {
+  .justify-content-center-md {
+    justify-content: center !important;
+  }
   .col-md {
     flex-basis: 0;
     flex-grow: 1;
@@ -21233,6 +21236,10 @@ table.dataTable tbody tr {
 
 h6, .h6 {
   font-size: 1rem;
+}
+
+.h7 {
+  font-size: 0.75rem;
 }
 
 .embed-responsive {

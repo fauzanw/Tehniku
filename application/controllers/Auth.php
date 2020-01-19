@@ -159,7 +159,7 @@ class Auth extends CI_Controller {
 
 				if($this->upload->do_upload('foto_npwp')) {
 					$new_logo  = $this->upload->data('file_name');
-					var_dump(copy(FCPATH."assets/argon/img/perusahaan/$new_logo", $target_dir_npwp.$new_logo));
+					copy(FCPATH."assets/argon/img/perusahaan/$new_logo", $target_dir_npwp.$new_logo);
 					unlink(FCPATH."assets/argon/img/perusahaan/$new_logo");
 					$foto_npwp = $new_logo;
 				}else{
@@ -181,12 +181,7 @@ class Auth extends CI_Controller {
 			if($edited_foto_ktp) {
 				$config = array(
 					'allowed_types' => 'jpeg|jpg|png',
-;
-                $this->session->unset_userdata("email");
-                $this->session->unset_userdata("password");
-                $this->session->unset_userdata("role_id");
-                $this->session->unset_userdata("is_verified");
-                $this->session->unset_userdata("date					'max_size'      => '2048',
+					'max_size'      => '2048',
 					'upload_path'   => './assets/argon/img/ktp/',
 					'encrypt_name'  => TRUE
 				);

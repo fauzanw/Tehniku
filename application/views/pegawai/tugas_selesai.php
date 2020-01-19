@@ -5,9 +5,18 @@
             <div class="card shadow-lg">
                 <div class="card-header">
                     <a href="<?= base_url('pegawai/tugas') ?>" class='badge badge-orange'><i class="fas fa-arrow-left"></i> &nbsp;Kembali ke pesanan</a>
+                    <?php if($data_pesanan['status'] == 1) : ?>
+                        <p><b>Status: </b> <span class="badge badge-dot mr-4"><i class="bg-warning"></i> Menunggu diverifikasi</span></p>
+                    <?php elseif($data_pesanan['status'] == 2) : ?>
+                        <p><b>Status: </b> <span class="badge badge-dot mr-4"><i class="bg-success"></i> Diverifikasi</span></p>
+                    <?php elseif($data_pesanan['status'] == 3) : ?>
+                        <p><b>Status: </b> <span class="badge badge-dot mr-4"><i class="bg-warning"></i> Sedang survey</span></p>
+                    <?php elseif($data_pesanan['status'] == 4) : ?>
+                        <p><b>Status: </b> <span class="badge badge-dot mr-4"><i class="bg-success"></i> Selesai</span></p>
+                    <?php endif; ?>
                 </div>
                 <div class="card-body">
-                    <h5>Data pegawai yang akan ikut survey kerumah customer:</h5>
+                    <h5>Data pegawai yang akan ikut survey kerumah customer : </h5>
                     <table class="table table-orange table-responsive-md dataTable">
                         <thead>
                             <tr>
@@ -30,47 +39,68 @@
                     </table>
                 </div>
             </div>
-            <form method="post" class="mt-2">
-                <button onclick="return confirm('Apakah kamu yakin?')" name="survey" type="submit" class="btn btn-orange btn-block">Berangkat Survey</button>
-            </form>
         </div>
       </div>
+      <center class="wow bounce pb-4 mt-5" data-wow-duration="2s">
+        <img src="<?= base_url('assets/argon/img/theme/completed.svg') ?>" class="img-fluid" width="250" height="250" alt="">
+        <h2 class="mt-2">Tugas ini sudah selesai!</h2>
+      </center>
       <div class="row mt-3">
         <div class="col-md-4 mb-sm-3">
             <div class="card card-pakejasa shadow-lg">
-                <img src="<?= base_url('assets/argon/img/theme/wave.png') ?>" style="height: 180px;" alt="">
+                <img src="<?= base_url('assets/argon/img/theme/wave.png') ?>" class="wave-pakejasa" alt="">
                 <center class="mt--15">
                     <h2 class="text-white" style="font-weight: bold;"><?= $data_jasa['nama']; ?></h2>
-                    <img src="<?= base_url('assets/argon/img/perusahaan/') . $data_jasa['logo_perusahaan'] ?>" class="card-img-top mt-3" style="width: 70px;height:70px;" alt="">
+                    <img src="<?= base_url('assets/argon/img/perusahaan/') . $data_jasa['logo_perusahaan'] ?>" class="mt--1 card-img-top mt-3" style="width: 80px;height:80px;" alt="">
                 </center>
                 <div class="card-body">
-                    <div class="mt-6 mr-3 ml-3 row justify-content-between">
-                        <h6 class="mb-0 float-left"><?= $data_jasa['nama_jasa']; ?></h6>
-                        <span class="badge badge-danger float-right">Rp. <?= $data_total_harga; ?></span>
+                    <div class="mt-5 mr-3 ml-3 text-center">
+                        <h1 class="mt-5"><?= $data_jasa['nama_jasa']; ?></h1>
+                        <div class="mt--4">
+                            <hr>
+                            <div class="mt--3 mr-3 ml-3">
+                                <div class="row">
+                                    <i class="fas fa-briefcase" style="font-size: 22px;color: #939393;"></i>
+                                    <p class="ml-2 mt--1"><?= $data_jasa['type']; ?></p>
+                                </div>
+                                <i class="fas fa-clock"></i>
+                                <p class="ml-2 mt--1"><?= $data_pesanan['waktu']; ?></p>
+                            </div>
+                        </div>
+                        <!-- <a href="<?= base_url('customer/pakejasa/process/'.$data['id'].'?type='.$data['jasa_type_id'].'&coor='.base64_encode($data['jarak'])) ?>" class="btn btn-orange btn-block mt-4">Pilih jasa ini</a> -->
                     </div>
-                    <hr>
-                    <div class="mt--3">
-                        <div class="row no-gutters justify-content-between">
-
-                            <div class="col-auto d-flex align-items-center">
-                                <div class="mr-2 embed-responsive embed-responsive-1by1" style="width:32px;">
-                                    <div class="embed-responsive-item">
-                                        <i class="fas fa-briefcase p-1 img__contain"></i>
-                                    </div>
-                                </div>
-                                <p class="h7 mb-0 font-weight-light">
-                                    <span class="font-weight-medium"><?= $data_jasa['type']; ?></span>
-                                </p>
+                    <div class="mt-4">
+                        <div class="row justify-content-between mt--2">
+                            <div class="col-lg-6 col-sm-6 col-md-12 mr-0 ml-0">
+                                <div style="width: 90%;" class="h7">Harga Jasa</div>
                             </div>
-
-                            <div class="col-auto d-flex align-items-center">
-                                <div class="mr-2 embed-responsive embed-responsive-1by1" style="width:32px;">
-                                    <div class="embed-responsive-item">
-                                        <i class="fas fa-money-bill-wave p-1 img__contain"></i>
-                                    </div>
+                            <div class="col-lg-6 col-sm-6 col-md-12">
+                                <div><?= $data_jasa['harga']; ?></div>
+                            </div>
+                        </div>
+                        <?php if($data_jasa['type'] != 'instalasi') : ?>
+                        <?php foreach($data_material_used as $data) : ?>
+                            <div class="row justify-content-between mt--1">
+                                <div class="col-lg-6 col-sm-6 col-md-12 mr-0 ml-0">
+                                    <div style="width: 90%;" class="h7"><?= $data['nama_material']; ?></div>
+                                </div>
+                                <div class="col-lg-6 col-sm-6 col-md-12">
+                                    <div>Rp. <?= $data['harga']; ?></div>
                                 </div>
                             </div>
-                            <p class="h7 mb-0 font-weight-light"><span class="text-bold text-orange"><?= $data_jasa['harga']; ?></span></p>
+                        <?php endforeach; ?>
+                        <?php endif; ?>
+                        <div class="row justify-content-between mt--4">
+                            <hr style="width: 90%;">
+                            <b class="mt-3 mr-2">+</b>
+                        </div>
+                        <div class="row justify-content-between mt--4">
+                        <div class="col-lg-6 col-sm-6 col-md-12 mr-0 ml-0">
+                                <div style="width: 90%;" class="h7">Total Harga</div>
+                            </div>
+                            <div class="col-lg-6 col-sm-6 col-md-12">
+                            <div><b>Rp. <?= $data_total_harga; ?></b></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -137,7 +167,7 @@
                                             <td><?= $data['nama_merek'] ?></td>
                                             <td>Rp. <?= $data['harga']; ?></td>
                                             <td>
-                                                <input type="checkbox" name="id_material[]" id="id" value="<?= $data['id'] ?>">
+                                                <input type="checkbox" name="id_material[]" disabled id="id" value="<?= $data['id'] ?>">
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>

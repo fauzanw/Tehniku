@@ -1,7 +1,7 @@
     <div class="container-fluid mt--7">
         <?= $this->session->flashdata('message'); ?>
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-6 pb-3">
                 <div class="card shadow-lg">
                     <div class="card-body">
                         <form method="post">

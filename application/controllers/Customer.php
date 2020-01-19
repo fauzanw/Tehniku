@@ -287,12 +287,42 @@ class Customer extends CI_Controller {
 		$data_pegawai_to_surveying = [];
 		if(preg_match("/,/",$pesanan['pegawai_id'])) {
 			$pegawai_id = explode(",", $pesanan['pegawai_id']);
-			foreach($pegawai_id as $id) {
-				array_push($data_pegawai_to_surveying, $this->db->get_where('pegawai', ['id' => $id])->row_array());
+			foreach($pegawai_id as $id_pegawai) {
+				array_push($data_pegawai_to_surveying, $this->db->get_where('pegawai', ['id' => $id_pegawai])->row_array());
 			}
 		}else{
 			array_push($data_pegawai_to_surveying, $this->db->get_where('pegawai', ['id' => $pesanan['pegawai_id']])->row_array());
 		}
+
+		$data_material_used = [];
+		$data_material = $this->db->select('m.*,mk.nama_merek')->from('material m')->join('merek mk', 'm.merek_id=mk.id')->where('jasa_keyword_id', $data_jasa['jasa_keyword_id'])->get()->result_array();
+		if($pesanan['material_id_used'] == 'all') {
+			$this->db
+				 ->select('*')
+				 ->from('material m')
+				 ->join('merek mk', 'm.merek_id=mk.id')
+				 ->where('m.jasa_keyword_id', $data_jasa['jasa_keyword_id']);
+			array_push($data_material_used, $this->db->get()->result_array())[0];
+		}else if(preg_match("/,/", $pesanan['material_id_used'])){
+			$material_id_used = explode(",", $pesanan['material_id_used']);
+			foreach($material_id_used as $material_id) {
+				$this->db
+					 ->select('*')
+					 ->from('material m')
+					 ->join('merek mk', 'm.merek_id=mk.id')
+					 ->where('m.id', $material_id)
+					 ->where('m.jasa_keyword_id', $data_jasa['jasa_keyword_id']);
+				 array_push($data_material_used, $this->db->get()->row_array());
+			}
+		}
+
+		$data_harga_material_array = [];
+		$data_harga_jasa           = join("", explode(".", explode("Rp. ", $data_jasa['harga'])[1]));
+		foreach($data_material_used as $data) {
+			$data_harga_material_array[] = join("", explode(".", $data['harga']));
+		}
+		$data_harga_material       = array_sum($data_harga_material_array);
+		$data_total                = array_sum([$data_harga_material, $data_harga_jasa]);
 
 		if($pesanan && $data_jasa) {
 			$latlon_customer   = explode(", ", $customer['latlon']);
@@ -312,7 +342,9 @@ class Customer extends CI_Controller {
 				'data_customer2'         => $this->session->userdata(),
 				'data_pesanan'           => $pesanan,
 				'data_jasa'              => $data_jasa,
-				'data_pegawai_to_survey' => $data_pegawai_to_surveying
+				'data_pegawai_to_survey' => $data_pegawai_to_surveying,
+				'data_material_used'     => $data_material_used,
+				'data_harga_total'       => formatRupiah($data_total)
 			];
 			if($pesanan['status'] == 1) {
 				if(!isset($_POST['ubah_data'])) {
@@ -344,11 +376,17 @@ class Customer extends CI_Controller {
 				$this->load->view('customer/main_header', $data);
 				$this->load->view('customer/verified_pesanan', $data);
 				$this->load->view('customer/footer', $data);
-			}else{
+			}else if($pesanan['status'] == 3){
 				$this->load->view('customer/header', $data);
 				$this->load->view('customer/navigator', $data);
 				$this->load->view('customer/main_header', $data);
 				$this->load->view('customer/surveying_pesanan', $data);
+				$this->load->view('customer/footer', $data);
+			}else if($pesanan['status'] == 4) {
+				$this->load->view('customer/header', $data);
+				$this->load->view('customer/navigator', $data);
+				$this->load->view('customer/main_header', $data);
+				$this->load->view('customer/selesai_pesanan', $data);
 				$this->load->view('customer/footer', $data);
 			}
 		}else{

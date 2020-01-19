@@ -96,8 +96,8 @@
           </div>
       </div>
       <center class="wow bounce pb-4 mt--2" data-wow-duration="2s">
-        <img src="<?= base_url('assets/argon/img/theme/survey.svg') ?>" class="img-fluid" width="500" height="500" alt="">
-        <h3 class="mt-2">Pegawai <?= $data_pesanan['nama']; ?> sedang survey kerumah kamu</h3>
+        <img src="<?= base_url('assets/argon/img/theme/completed.svg') ?>" class="img-fluid" width="300" height="300" alt="">
+        <h2 class="mt-2">Pesanan anda telah selesai</h2>
       </center>
       <?php if($data_jasa['type'] != 'instalasi') : ?>
         <div class="card shadow-lg mb-5 wow fadeIn">

@@ -42,20 +42,20 @@ class Pegawai extends CI_Controller {
 		$perusahaan   = $this->db->get_where('perusahaan', ["id" => $pegawai['perusahaan_id']])->row_array();
 		$this->db
 			 ->select('
-			 ps.*,
-			 jpt.jasa_id,
-			 jpt.jasa_type_id,
-			 j.nama_jasa,
-			 j.harga,
-			 j.perusahaan_id,
-			 j.jasa_keyword_id,
-			 jt.type,
-			 p.nama,
-			 p.nomor_ponsel,
-			 p.logo_perusahaan,
-			 c.nomor_ponsel,
-			 c.alamat,
-			 jk.keyword
+				ps.*,
+				jpt.jasa_id,
+				jpt.jasa_type_id,
+				j.nama_jasa,
+				j.harga,
+				j.perusahaan_id,
+				j.jasa_keyword_id,
+				jt.type,
+				p.nama,
+				p.nomor_ponsel,
+				p.logo_perusahaan,
+				c.nomor_ponsel,
+				c.alamat,
+				jk.keyword
 			 ')
 			 ->from('pesanan ps')
 			 ->join('customer c', 'ps.customer_id=c.id')
@@ -63,7 +63,9 @@ class Pegawai extends CI_Controller {
 			 ->join('jasa j', 'jpt.jasa_id=j.id')
 			 ->join('jasa_type jt', 'jpt.jasa_type_id=jt.id')
 			 ->join('perusahaan p', 'j.perusahaan_id=p.id')
-			 ->join('jasa_keyword jk', 'j.jasa_keyword_id=jk.id');
+			 ->join('jasa_keyword jk', 'j.jasa_keyword_id=jk.id')
+			 ->where('p.id', $perusahaan['id'])
+			 ->where('ps.status !=', 1);
 		$pesanan      = $this->db->get()->result_array();
 		$real_pesanan = [];
 		foreach($pesanan as $i => $data) {
@@ -146,8 +148,8 @@ class Pegawai extends CI_Controller {
 			$data_total                = array_sum([$data_harga_material, $data_harga_jasa]);
 			if(preg_match("/,/",$pesanan['pegawai_id'])) {
 				$pegawai_id = explode(",", $pesanan['pegawai_id']);
-				foreach($pegawai_id as $id) {
-					array_push($data_pegawai_to_surveying, $this->db->get_where('pegawai', ['id' => $id])->row_array());
+				foreach($pegawai_id as $id_pegawai) {
+					array_push($data_pegawai_to_surveying, $this->db->get_where('pegawai', ['id' => $id_pegawai])->row_array());
 				}
 			}else{
 				array_push($data_pegawai_to_surveying, $this->db->get_where('pegawai', ['id' => $pesanan['pegawai_id']])->row_array());
@@ -189,8 +191,18 @@ class Pegawai extends CI_Controller {
 					$this->load->view('pegawai/tugas_survey', $data);
 					$this->load->view('pegawai/footer', $data);
 				}else{
-					
+					$this->db->set('status', 4);
+					$this->db->where('id', $id);
+					$this->db->update('pesanan');
+					$this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Tugas</strong> telah selesai.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+					redirect("pegawai/tugas/$id/detail");
 				}
+			}else if($pesanan['status'] == 4) {
+				$this->load->view('pegawai/header', $data);
+				$this->load->view('pegawai/navigator', $data);
+				$this->load->view('pegawai/main_header', $data);
+				$this->load->view('pegawai/tugas_selesai', $data);
+				$this->load->view('pegawai/footer', $data);
 			}
 		}else{
 			show_error("Data tugas tidak valid", 400);

@@ -44,8 +44,8 @@
                     <h2 class="text-white" style="font-weight: bold;"><?= $data_jasa['nama']; ?></h2>
                     <img src="<?= base_url('assets/argon/img/perusahaan/') . $data_jasa['logo_perusahaan'] ?>" class="mt--1 card-img-top mt-3" style="width: 80px;height:80px;" alt="">
                 </center>
-                <div class="card-body mr-3 ml-3">
-                    <div class="mt-5 text-center">
+                <div class="card-body">
+                    <div class="mt-5 mr-3 ml-3 text-center">
                         <h1 class="mt-5"><?= $data_jasa['nama_jasa']; ?></h1>
                         <div class="mt--4">
                             <hr>
@@ -54,16 +54,45 @@
                                     <i class="fas fa-briefcase" style="font-size: 22px;color: #939393;"></i>
                                     <p class="ml-2 mt--1"><?= $data_jasa['type']; ?></p>
                                 </div>
-                                <div class="row">
-                                    <i class="fas fa-money-bill-wave" style="font-size: 20px;color: #939393;"></i>
-                                    <p class="ml-2 mt--1 text-orange" style="font-weight: bold;"><?= $data_jasa['harga']; ?></p>
-                                </div>
-                                <div class="row mt-3">
-                                    <p class="ml-2 mt--1"><?= $data_pesanan['waktu']; ?></p>
-                                </div>
+                                <i class="fas fa-clock"></i>
+                                <p class="ml-2 mt--1"><?= $data_pesanan['waktu']; ?></p>
                             </div>
                         </div>
                         <!-- <a href="<?= base_url('customer/pakejasa/process/'.$data['id'].'?type='.$data['jasa_type_id'].'&coor='.base64_encode($data['jarak'])) ?>" class="btn btn-orange btn-block mt-4">Pilih jasa ini</a> -->
+                    </div>
+                    <div class="mt-4">
+                        <div class="row justify-content-between mt--2">
+                            <div class="col-lg-6 col-sm-6 col-md-12 mr-0 ml-0">
+                                <div style="width: 90%;" class="h7">Harga Jasa</div>
+                            </div>
+                            <div class="col-lg-6 col-sm-6 col-md-12">
+                                <div><?= $data_jasa['harga']; ?></div>
+                            </div>
+                        </div>
+                        <?php if($data_jasa['type'] != 'instalasi') : ?>
+                        <?php foreach($data_material_used as $data) : ?>
+                            <div class="row justify-content-between mt--1">
+                                <div class="col-lg-6 col-sm-6 col-md-12 mr-0 ml-0">
+                                    <div style="width: 90%;" class="h7"><?= $data['nama_material']; ?></div>
+                                </div>
+                                <div class="col-lg-6 col-sm-6 col-md-12">
+                                    <div>Rp. <?= $data['harga']; ?></div>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                        <?php endif; ?>
+                        <div class="row justify-content-between mt--4">
+                            <hr style="width: 90%;">
+                            <b class="mt-3 mr-2">+</b>
+                        </div>
+                        <div class="row justify-content-between mt--4">
+                        <div class="col-lg-6 col-sm-6 col-md-12 mr-0 ml-0">
+                                <div style="width: 90%;" class="h7">Total Harga</div>
+                            </div>
+                            <div class="col-lg-6 col-sm-6 col-md-12">
+                            <div><b>Rp. <?= $data_total_harga; ?></b></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -187,7 +216,7 @@
                             <td><?= $data['nama_merek'] ?></td>
                             <td>Rp. <?= $data['harga']; ?></td>
                             <td>
-                                <input type="checkbox" checked name="id_material[]" id="id_material">
+                                <input type="checkbox" checked disabled name="id_material[]" id="id_material">
                             </td>
                         </tr>
                     <?php endforeach; ?>

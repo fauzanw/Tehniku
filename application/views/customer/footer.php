@@ -14,7 +14,13 @@
   <script src="<?= base_url('assets/argon/js/wow.min.js') ?>"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
   <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
+  <script src="<?= base_url('assets/argon/js/plugins/jquery.expander.min.js') ?>"></script>
   <script>
+    $('.expanderpm').expander({
+      slicePoint: 5,
+      expandText:'(+)',
+      userCollapseText:'(-)'
+    })
     new WOW().init();
     $(":input").inputmask();
     $('#nomor_ponsel').inputmask({

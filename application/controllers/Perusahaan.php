@@ -486,7 +486,7 @@ class Perusahaan extends CI_Controller {
 			 ->from('pesanan ps')
 			 ->join('jasa j', 'ps.jasa_id=j.id')
 			 ->join('customer c', 'ps.customer_id=c.id')
-			 ->where('ps.status !=', 4)
+			//  ->where('ps.status !=', 4)
 			 ->where('ps.perusahaan_id', $perusahaan['id']);
 		$pesanan = $this->db->get()->result_array();
 		rsort($pesanan);
@@ -613,6 +613,18 @@ class Perusahaan extends CI_Controller {
 						redirect("perusahaan/pesanan/$jasa_id/detail");
 					}
 				}
+			}else if($pesanan['status'] == 3) {
+				$this->load->view('perusahaan/header', $data);
+				$this->load->view('perusahaan/navigator', $data);
+				$this->load->view('perusahaan/main_header', $data);
+				$this->load->view('perusahaan/surveying_pesanan', $data);
+				$this->load->view('perusahaan/footer', $data);
+			}else if($pesanan['status'] == 4) {
+				$this->load->view('perusahaan/header', $data);
+				$this->load->view('perusahaan/navigator', $data);
+				$this->load->view('perusahaan/main_header', $data);
+				$this->load->view('perusahaan/selesai_pesanan', $data);
+				$this->load->view('perusahaan/footer', $data);
 			}
 		}else{
 			show_error('Data pesanan tidak valid', 400);
