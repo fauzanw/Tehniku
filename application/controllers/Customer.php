@@ -14,12 +14,14 @@ class Customer extends CI_Controller {
 
 	public function index()
 	{
-		$perusahaan = $this->db->get_where('customer', ["user_id" => $this->session->userdata('id')])->row_array();
+		$customer = $this->db->get_where('customer', ["user_id" => $this->session->userdata('id')])->row_array();
 		$data = [
-			'title'             => 'Dashboard',
-			'title_main_header' => 'Dashboard',
-			'data_customer'   => $perusahaan,
-			'data_customer2'  => $this->session->userdata()
+			'title'                   => 'Dashboard',
+			'title_main_header'       => 'Dashboard',
+			'data_customer'           => $customer,
+			'data_customer2'          => $this->session->userdata(),
+			'jumlah_pesanan_saat_ini' => sizeof($this->db->get_where('pesanan', ['customer_id' => $customer['id'], 'status !=' => 4])->result_array()),
+			'jumlah_semua_pesanan'    => sizeof($this->db->get_where('pesanan', ['customer_id' => $customer['id']])->result_array())
 		];
 		$this->load->view('customer/header', $data);
 		$this->load->view('customer/navigator', $data);
@@ -68,13 +70,15 @@ class Customer extends CI_Controller {
 				// echo "<pre>";print_r($data_jasa); die;
 				$customer = $this->db->get_where('customer', ["user_id" => $this->session->userdata('id')])->row_array();
 				$data = [
-					'title'             => 'Pake Jasa',
-					'title_main_header' => 'Pake Jasa',
-					'data_customer'     => $customer,
-					'data_customer2'    => $this->session->userdata(),
-					'data_jasa'         => $data_jasa,
-					'data_type_jasa'    => $this->db->get('jasa_type')->result_array(),
-					'data_keyword_jasa' => $this->db->get('jasa_keyword')->result_array()
+					'title'                   => 'Pake Jasa',
+					'title_main_header'       => 'Pake Jasa',
+					'data_customer'           => $customer,
+					'data_customer2'          => $this->session->userdata(),
+					'data_jasa'               => $data_jasa,
+					'data_type_jasa'          => $this->db->get('jasa_type')->result_array(),
+					'data_keyword_jasa'       => $this->db->get('jasa_keyword')->result_array(),
+					'jumlah_pesanan_saat_ini' => sizeof($this->db->get_where('pesanan', ['customer_id' => $customer['id'], 'status !=' => 4])->result_array()),
+					'jumlah_semua_pesanan'    => sizeof($this->db->get_where('pesanan', ['customer_id' => $customer['id']])->result_array())
 				];
 			}else{
 				$this->db
@@ -108,13 +112,15 @@ class Customer extends CI_Controller {
 				// echo "<pre>";print_r($data_jasa); die;
 				$customer = $this->db->get_where('customer', ["user_id" => $this->session->userdata('id')])->row_array();
 				$data = [
-					'title'             => 'Pake Jasa',
-					'title_main_header' => 'Pake Jasa',
-					'data_customer'     => $customer,
-					'data_customer2'    => $this->session->userdata(),
-					'data_jasa'         => $data_jasa,
-					'data_type_jasa'    => $this->db->get('jasa_type')->result_array(),
-					'data_keyword_jasa' => $this->db->get('jasa_keyword')->result_array()
+					'title'                   => 'Pake Jasa',
+					'title_main_header'       => 'Pake Jasa',
+					'data_customer'           => $customer,
+					'data_customer2'          => $this->session->userdata(),
+					'data_jasa'               => $data_jasa,
+					'data_type_jasa'          => $this->db->get('jasa_type')->result_array(),
+					'data_keyword_jasa'       => $this->db->get('jasa_keyword')->result_array(),
+					'jumlah_pesanan_saat_ini' => sizeof($this->db->get_where('pesanan', ['customer_id' => $customer['id'], 'status !=' => 4])->result_array()),
+					'jumlah_semua_pesanan'    => sizeof($this->db->get_where('pesanan', ['customer_id' => $customer['id']])->result_array())
 				];
 				foreach($data['data_jasa'] as $i => $_DATA_JASA) {
 					$latlon_perusahaan = explode(", ", $_DATA_JASA['latlon']);
@@ -132,13 +138,15 @@ class Customer extends CI_Controller {
 		}else{
 			$customer = $this->db->get_where('customer', ["user_id" => $this->session->userdata('id')])->row_array();
 			$data = [
-				'title'             => 'Pake Jasa',
-				'title_main_header' => 'Pake Jasa',
-				'data_customer'     => $customer,
-				'data_customer2'    => $this->session->userdata(),
-				'data_jasa'         => $this->db->select('j.*, jpt.jasa_id, jpt.jasa_type_id, jt.type, p.nama,p.nomor_ponsel,p.nomor_npwp,p.user_id,p.logo_perusahaan,p.latlon,jk.keyword')->from('jasa_pivot_type jpt')->join('jasa j', 'jpt.jasa_id=j.id')->join('jasa_type jt', 'jpt.jasa_type_id=jt.id')->join('perusahaan p', 'j.perusahaan_id=p.id')->join('jasa_keyword jk', 'j.jasa_keyword_id=jk.id')->get()->result_array(),
-				'data_type_jasa'    => $this->db->get('jasa_type')->result_array(),
-				'data_keyword_jasa' => $this->db->get('jasa_keyword')->result_array()
+				'title'                   => 'Pake Jasa',
+				'title_main_header'       => 'Pake Jasa',
+				'data_customer'           => $customer,
+				'data_customer2'          => $this->session->userdata(),
+				'data_jasa'               => $this->db->select('j.*, jpt.jasa_id, jpt.jasa_type_id, jt.type, p.nama,p.nomor_ponsel,p.nomor_npwp,p.user_id,p.logo_perusahaan,p.latlon,jk.keyword')->from('jasa_pivot_type jpt')->join('jasa j', 'jpt.jasa_id=j.id')->join('jasa_type jt', 'jpt.jasa_type_id=jt.id')->join('perusahaan p', 'j.perusahaan_id=p.id')->join('jasa_keyword jk', 'j.jasa_keyword_id=jk.id')->get()->result_array(),
+				'data_type_jasa'          => $this->db->get('jasa_type')->result_array(),
+				'data_keyword_jasa'       => $this->db->get('jasa_keyword')->result_array(),
+				'jumlah_pesanan_saat_ini' => sizeof($this->db->get_where('pesanan', ['customer_id' => $customer['id'], 'status !=' => 4])->result_array()),
+				'jumlah_semua_pesanan'    => sizeof($this->db->get_where('pesanan', ['customer_id' => $customer['id']])->result_array())
 			];
 			// echo '<pre>';print_r($data['data_jasa']); die;
 			foreach($data['data_jasa'] as $i => $_DATA_JASA) {
@@ -178,13 +186,15 @@ class Customer extends CI_Controller {
 		// var_dump(base64_decode($_GET['coor'])); die;
 		// $jarak = hitungJarak($latlon_perusahaan[0], $latlon_perusahaan[1],$latlon_customer[0], $latlon_customer[1]);
 		$data = [
-			'title'             => 'Proses Pakejasa',
-			'title_main_header' => 'Proses Pakejasa',
-			'data_customer'     => $customer,
-			'data_customer2'    => $this->session->userdata(),
-			'data_jasa'         => $cekjasa,
-			'data_pesanan'      => $this->db->get_where('pesanan', ['jasa_id' => $jasa_id])->row_array(),
-			'jarak'             => base64_decode($_GET['coor'])
+			'title'                   => 'Proses Pakejasa',
+			'title_main_header'       => 'Proses Pakejasa',
+			'data_customer'           => $customer,
+			'data_customer2'          => $this->session->userdata(),
+			'data_jasa'               => $cekjasa,
+			'data_pesanan'            => $this->db->get_where('pesanan', ['jasa_id' => $jasa_id])->row_array(),
+			'jarak'                   => base64_decode($_GET['coor']),
+			'jumlah_pesanan_saat_ini' => sizeof($this->db->get_where('pesanan', ['customer_id' => $customer['id'], 'status !=' => 4])->result_array()),
+			'jumlah_semua_pesanan'    => sizeof($this->db->get_where('pesanan', ['customer_id' => $customer['id']])->result_array())
 		];
 		if(isset($_POST['set_jadwal'])) {
 			if(isset($_POST['jadwal']) && isset($_POST['description'])) {
@@ -252,12 +262,14 @@ class Customer extends CI_Controller {
 		}
 		// echo "<pre>";print_r([$data_jasa, $pesanan]); die;
 		$data = [
-			'title'             => 'Pesanan',
-			'title_main_header' => 'Pesanan',
-			'data_customer'     => $customer,
-			'data_customer2'    => $this->session->userdata(),
-			'data_pesanan'      => $pesanan,
-			'data_jasa'         => $data_jasa
+			'title'                   => 'Pesanan',
+			'title_main_header'       => 'Pesanan',
+			'data_customer'           => $customer,
+			'data_customer2'          => $this->session->userdata(),
+			'data_pesanan'            => $pesanan,
+			'data_jasa'               => $data_jasa,
+			'jumlah_pesanan_saat_ini' => sizeof($this->db->get_where('pesanan', ['customer_id' => $customer['id'], 'status !=' => 4])->result_array()),
+			'jumlah_semua_pesanan'    => sizeof($this->db->get_where('pesanan', ['customer_id' => $customer['id']])->result_array())
 		];
 		$this->load->view('customer/header', $data);
 		$this->load->view('customer/navigator', $data);
@@ -336,15 +348,17 @@ class Customer extends CI_Controller {
 				$data_jasa['jarak'] = $jarak;
 			}
 			$data = [
-				'title'                  => 'Detail Pesanan Pakejasa',
-				'title_main_header'      => 'Detail Pesanan Pakejasa',
-				'data_customer'          => $customer,
-				'data_customer2'         => $this->session->userdata(),
-				'data_pesanan'           => $pesanan,
-				'data_jasa'              => $data_jasa,
-				'data_pegawai_to_survey' => $data_pegawai_to_surveying,
-				'data_material_used'     => $data_material_used,
-				'data_harga_total'       => formatRupiah($data_total)
+				'title'                   => 'Detail Pesanan Pakejasa',
+				'title_main_header'       => 'Detail Pesanan Pakejasa',
+				'data_customer'           => $customer,
+				'data_customer2'          => $this->session->userdata(),
+				'data_pesanan'            => $pesanan,
+				'data_jasa'               => $data_jasa,
+				'data_pegawai_to_survey'  => $data_pegawai_to_surveying,
+				'data_material_used'      => $data_material_used,
+				'data_harga_total'        => formatRupiah($data_total),
+				'jumlah_pesanan_saat_ini' => sizeof($this->db->get_where('pesanan', ['customer_id' => $customer['id'], 'status !=' => 4])->result_array()),
+				'jumlah_semua_pesanan'     => sizeof($this->db->get_where('pesanan', ['customer_id' => $customer['id']])->result_array())
 			];
 			if($pesanan['status'] == 1) {
 				if(!isset($_POST['ubah_data'])) {
@@ -398,10 +412,12 @@ class Customer extends CI_Controller {
 	{
 		$customer = $this->db->get_where('customer', ["user_id" => $this->session->userdata('id')])->row_array();
 		$data = [
-			'title'             => 'Setting',
-			'title_main_header' => 'Setting',
-			'data_customer'     => $customer,
-			'data_customer2'    => $this->session->userdata(),
+			'title'                   => 'Setting',
+			'title_main_header'       => 'Setting',
+			'data_customer'           => $customer,
+			'data_customer2'          => $this->session->userdata(),
+			'jumlah_pesanan_saat_ini' => sizeof($this->db->get_where('pesanan', ['customer_id' => $customer['id'], 'status !=' => 4])->result_array()),
+			'jumlah_semua_pesanan'    => sizeof($this->db->get_where('pesanan', ['customer_id' => $customer['id']])->result_array())
 		];
 		if(!isset($_POST['edit_data'])) {
 			$this->load->view('customer/header', $data);

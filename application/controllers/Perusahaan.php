@@ -26,7 +26,10 @@ class Perusahaan extends CI_Controller {
 			'title_main_header' => 'Dashboard',
 			'data_perusahaan'   => $perusahaan,
 			'data_perusahaan2'  => $this->session->userdata(),
-			'count_pesanan'     => $this->db->get_where('pesanan', ['perusahaan_id' => $perusahaan['id']])->result_array()
+			'count_pesanan'     => $this->db->get_where('pesanan',        ['perusahaan_id' => $perusahaan['id'], 'status' => 1])->result_array(),
+			'jumlah_jasa'       => sizeof($this->db->get_where('jasa',    ['perusahaan_id' => $perusahaan['id']])->result_array()),
+			'jumlah_pesanan'    => sizeof($this->db->get_where('pesanan', ['perusahaan_id' => $perusahaan['id']])->result_array()),
+			'jumlah_pegawai'    => sizeof($this->db->get_where('pegawai', ['perusahaan_id' => $perusahaan['id']])->result_array())
 		];
 		$this->load->view('perusahaan/header', $data);
 		$this->load->view('perusahaan/navigator', $data);
@@ -60,7 +63,10 @@ class Perusahaan extends CI_Controller {
 			'title_main_header' => 'Manage Perusahaan',
 			'data_perusahaan'   => $perusahaan,
 			'data_perusahaan2'  => $this->session->userdata(),
-			'count_pesanan'     => $this->db->get_where('pesanan', ['perusahaan_id' => $perusahaan['id']])->result_array()
+			'count_pesanan'     => $this->db->get_where('pesanan', ['perusahaan_id' => $perusahaan['id'], 'status' => 1])->result_array(),
+			'jumlah_jasa'       => sizeof($this->db->get_where('jasa',    ['perusahaan_id' => $perusahaan['id']])->result_array()),
+			'jumlah_pesanan'    => sizeof($this->db->get_where('pesanan', ['perusahaan_id' => $perusahaan['id']])->result_array()),
+			'jumlah_pegawai'    => sizeof($this->db->get_where('pegawai', ['perusahaan_id' => $perusahaan['id']])->result_array())
 		];
 		if(isset($_POST['type_jasa'])) {
 			if($_POST['type_jasa'] == 'semua_jasa') {
@@ -232,9 +238,12 @@ class Perusahaan extends CI_Controller {
 				'title_main_header' => 'Edit Jasa',
 				'data_perusahaan'   => $perusahaan,
 				'data_perusahaan2'  => $this->session->userdata(),
-				'count_pesanan'     => $this->db->get_where('pesanan', ['perusahaan_id' => $perusahaan['id']])->result_array(),
+				'count_pesanan'     => $this->db->get_where('pesanan', ['perusahaan_id' => $perusahaan['id'], 'status' => 1])->result_array(),
 				'data_keyword'      => $this->db->get('jasa_keyword')->result_array(),
 				'data_type_jasa'    => $this->db->get('jasa_type')->result_array(),
+				'jumlah_jasa'       => sizeof($this->db->get_where('jasa',    ['perusahaan_id' => $perusahaan['id']])->result_array()),
+				'jumlah_pesanan'    => sizeof($this->db->get_where('pesanan', ['perusahaan_id' => $perusahaan['id']])->result_array()),
+				'jumlah_pegawai'    => sizeof($this->db->get_where('pegawai', ['perusahaan_id' => $perusahaan['id']])->result_array())
 			];
 			if(!isset($_POST['edit_jasa'])) {
 				$this->load->view('perusahaan/header', $data);
@@ -283,7 +292,10 @@ class Perusahaan extends CI_Controller {
 				'data_perusahaan2'  => $this->session->userdata(),
 				'data_keyword'      => $this->db->get('jasa_keyword')->result_array(),
 				'data_type_jasa'    => $this->db->get('jasa_type')->result_array(),
-				'count_pesanan'     => $this->db->get_where('pesanan', ['perusahaan_id' => $perusahaan['id']])->result_array()
+				'count_pesanan'     => $this->db->get_where('pesanan', ['perusahaan_id' => $perusahaan['id'], 'status' => 1])->result_array(),
+				'jumlah_jasa'       => sizeof($this->db->get_where('jasa',    ['perusahaan_id' => $perusahaan['id']])->result_array()),
+				'jumlah_pesanan'    => sizeof($this->db->get_where('pesanan', ['perusahaan_id' => $perusahaan['id']])->result_array()),
+				'jumlah_pegawai'    => sizeof($this->db->get_where('pegawai', ['perusahaan_id' => $perusahaan['id']])->result_array())
 			];
 			$this->load->view('perusahaan/header', $data);
 			$this->load->view('perusahaan/navigator', $data);
@@ -322,7 +334,10 @@ class Perusahaan extends CI_Controller {
 			'data_perusahaan'   => $perusahaan,
 			'data_perusahaan2'  => $this->session->userdata(),
 			"data_pegawai"      => $pegawai,
-			'count_pesanan'     => $this->db->get_where('pesanan', ['perusahaan_id' => $perusahaan['id']])->result_array()
+			'count_pesanan'     => $this->db->get_where('pesanan', ['perusahaan_id' => $perusahaan['id'], 'status' => 1])->result_array(),
+			'jumlah_jasa'       => sizeof($this->db->get_where('jasa',    ['perusahaan_id' => $perusahaan['id']])->result_array()),
+			'jumlah_pesanan'    => sizeof($this->db->get_where('pesanan', ['perusahaan_id' => $perusahaan['id']])->result_array()),
+			'jumlah_pegawai'    => sizeof($this->db->get_where('pegawai', ['perusahaan_id' => $perusahaan['id']])->result_array())
 		];
 		$this->load->view('perusahaan/header', $data);
 		$this->load->view('perusahaan/navigator', $data);
@@ -341,7 +356,10 @@ class Perusahaan extends CI_Controller {
 				'data_perusahaan'   => $perusahaan,
 				'data_perusahaan2'  => $this->session->userdata(),
 				"data_pegawai"      => $pegawai,
-				'count_pesanan'     => $this->db->get_where('pesanan', ['perusahaan_id' => $perusahaan['id']])->result_array()
+				'count_pesanan'     => $this->db->get_where('pesanan', ['perusahaan_id' => $perusahaan['id'], 'status' => 1])->result_array(),
+				'jumlah_jasa'       => sizeof($this->db->get_where('jasa',    ['perusahaan_id' => $perusahaan['id']])->result_array()),
+				'jumlah_pesanan'    => sizeof($this->db->get_where('pesanan', ['perusahaan_id' => $perusahaan['id']])->result_array()),
+				'jumlah_pegawai'    => sizeof($this->db->get_where('pegawai', ['perusahaan_id' => $perusahaan['id']])->result_array())
 			];
 			$this->load->view('perusahaan/header', $data);
 			$this->load->view('perusahaan/navigator', $data);
@@ -514,7 +532,10 @@ class Perusahaan extends CI_Controller {
 			'data_perusahaan2'  => $this->session->userdata(),
 			'data_pesanan'      => $pesanan,
 			'data_jasa'         => $data_jasa,
-			'count_pesanan'     => $this->db->get_where('pesanan', ['perusahaan_id' => $perusahaan['id']])->result_array()
+			'count_pesanan'     => $this->db->get_where('pesanan', ['perusahaan_id' => $perusahaan['id'], 'status' => 1])->result_array(),
+			'jumlah_jasa'       => sizeof($this->db->get_where('jasa',    ['perusahaan_id' => $perusahaan['id']])->result_array()),
+			'jumlah_pesanan'    => sizeof($this->db->get_where('pesanan', ['perusahaan_id' => $perusahaan['id']])->result_array()),
+			'jumlah_pegawai'    => sizeof($this->db->get_where('pegawai', ['perusahaan_id' => $perusahaan['id']])->result_array())
 		];
 		$this->load->view('perusahaan/header', $data);
 		$this->load->view('perusahaan/navigator', $data);
@@ -569,7 +590,10 @@ class Perusahaan extends CI_Controller {
 				'data_pegawai'        => $data_pegawai,
 				'data_tambah_pegawai' => $this->db->get_where('pegawai', ['perusahaan_id' => $perusahaan['id'], 'status !=' => 0])->result_array(), // status pegawai 1 = ready dan 0 = sedang bekerja
 				'data_material'       => $data_material,
-				'count_pesanan'       => $this->db->get_where('pesanan', ['perusahaan_id' => $perusahaan['id']])->result_array()
+				'count_pesanan'       => $this->db->get_where('pesanan', ['perusahaan_id' => $perusahaan['id'], 'status' => 1])->result_array(),
+				'jumlah_jasa'         => sizeof($this->db->get_where('jasa',    ['perusahaan_id' => $perusahaan['id']])->result_array()),
+				'jumlah_pesanan'      => sizeof($this->db->get_where('pesanan', ['perusahaan_id' => $perusahaan['id']])->result_array()),
+				'jumlah_pegawai'      => sizeof($this->db->get_where('pegawai', ['perusahaan_id' => $perusahaan['id']])->result_array())
 			];
 			if($pesanan['status'] == 1) {
 				if(!isset($_POST['verif'])) {
@@ -632,6 +656,67 @@ class Perusahaan extends CI_Controller {
 		
 	}
 
+	public function laporan()
+	{
+		$perusahaan = $this->db->get_where('perusahaan', ["user_id" => $this->session->userdata('id')])->row_array();
+		$data = [
+			'title'             => 'Laporan Perusahaan',
+			'title_main_header' => 'Laporan Perusahaan',
+			'data_perusahaan'   => $perusahaan,
+			'data_perusahaan2'  => $this->session->userdata(),
+			'jumlah_jasa'       => sizeof($this->db->get_where('jasa',    ['perusahaan_id' => $perusahaan['id']])->result_array()),
+			'jumlah_pesanan'    => sizeof($this->db->get_where('pesanan', ['perusahaan_id' => $perusahaan['id']])->result_array()),
+			'jumlah_pegawai'    => sizeof($this->db->get_where('pegawai', ['perusahaan_id' => $perusahaan['id']])->result_array())
+		];
+		$this->load->view('perusahaan/header', $data);
+		$this->load->view('perusahaan/navigator', $data);
+		$this->load->view('perusahaan/main_header', $data);
+		if(!isset($_POST['get_laporan'])) {
+			$this->load->view('perusahaan/laporan', $data);
+		}else{
+			$this->db
+				 ->select('
+					 l.*,
+					 pg.id as pegawai_id,
+					 pg.nama as nama_pegawai,
+					 pg.*,
+					 p.id as perusahaan_id,
+					 p.nama as nama_perusahaan,
+					 p.*,
+					 c.id as customer_id,
+					 c.nama as nama_customer,
+					 c.*,
+					 ps.id as pesanan_id,
+					 ps.*,
+					 j.id as jasa_id,
+					 j.*,
+					 jpt.id as jasa_pivot_type_id,
+					 jpt.*,
+					 jt.id as jasa_type_id,
+					 jt.*
+				 ')
+				 ->from('laporan l')
+				 ->join('pegawai pg', 'l.pegawai_id=pg.id')
+				 ->join('customer c', 'l.customer_id=c.id')
+				 ->join('perusahaan p', 'l.perusahaan_id=p.id')
+				 ->join('pesanan ps', 'l.pesanan_id=ps.id')
+				 ->join('jasa j', 'ps.jasa_id=j.id')
+				 ->join('jasa_pivot_type jpt', 'j.id=jpt.jasa_id')
+				 ->join('jasa_type jt', 'jpt.jasa_type_id=jt.id')
+				 ->where('DATE(l.date_created) >=', $_POST['dari_tanggal']);
+			$data_laporan = $this->db->get()->result_array();
+			rsort($data_laporan);
+			foreach($data_laporan as $i => $data) {
+				$date = explode("-", $data['date_created']);
+				$data_laporan[$i]['date_created'] = "$date[2]-$date[1]-$date[0]";
+			}
+			// echo '<pre>';print_r($data_laporan); die;
+			$data['data_laporan'] = $data_laporan;
+			$this->load->view('perusahaan/laporan_detail', $data);
+		}
+		$this->load->view('perusahaan/footer', $data);
+	}
+
 
 	public function setting() {
 		$perusahaan = $this->db->get_where('perusahaan', ["user_id" => $this->session->userdata('id')])->row_array();
@@ -640,7 +725,10 @@ class Perusahaan extends CI_Controller {
 			'title_main_header' => 'Setting Akun Perusahaan',
 			'data_perusahaan'   => $perusahaan,
 			'data_perusahaan2'  => $this->session->userdata(),
-			'count_pesanan'     => $this->db->get_where('pesanan', ['perusahaan_id' => $perusahaan['id']])->result_array()
+			'count_pesanan'     => $this->db->get_where('pesanan', ['perusahaan_id' => $perusahaan['id'], 'status' => 1])->result_array(),
+			'jumlah_jasa'       => sizeof($this->db->get_where('jasa',    ['perusahaan_id' => $perusahaan['id']])->result_array()),
+			'jumlah_pesanan'    => sizeof($this->db->get_where('pesanan', ['perusahaan_id' => $perusahaan['id']])->result_array()),
+			'jumlah_pegawai'    => sizeof($this->db->get_where('pegawai', ['perusahaan_id' => $perusahaan['id']])->result_array())
 		];
 		if(!isset($_POST['edit_data'])) {
 			$this->load->view('perusahaan/header', $data);

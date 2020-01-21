@@ -87,6 +87,11 @@
               <i class="ni ni-bullet-list-67 text-orange"></i> Pesanan Customer &nbsp;<?= (sizeof($count_pesanan) > 0) ? '<p class="badge badge-danger">'.sizeof($count_pesanan).'</p>':null; ?>
             </a>
           </li>
+          <li class="nav-item <?= ($this->uri->segment(1)) == "perusahaan" && $this->uri->segment(2) == "laporan" && $this->uri->segment(3) == "" ? "active":"" ?>">
+            <a class="nav-link <?= ($this->uri->segment(1)) == "perusahaan" && $this->uri->segment(2) == "laporan" && $this->uri->segment(3) == "" ? "active":"" ?>" href="<?= base_url('perusahaan/laporan') ?>">
+              <i class="fas fa-clipboard-list text-orange"></i> Laporan
+            </a>
+          </li>
           <li class="nav-item <?= ($this->uri->segment(1)) == "perusahaan" && $this->uri->segment(2) == "setting" && $this->uri->segment(3) == "" ? "active":"" ?>">
             <a class="nav-link <?= ($this->uri->segment(1)) == "perusahaan" && $this->uri->segment(2) == "setting" && $this->uri->segment(3) == "" ? "active":"" ?>" href="<?= base_url('perusahaan/setting') ?>">
               <i class="ni ni-settings-gear-65 text-orange"></i> Setting

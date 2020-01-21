@@ -97,6 +97,7 @@ class Pegawai extends CI_Controller {
 		$this->db
 			 ->select('
 				 ps.*,
+				 c.id as customer_id,
 				 c.nama,
 				 c.nomor_ponsel,
 				 c.foto_customer,
@@ -167,7 +168,8 @@ class Pegawai extends CI_Controller {
 				'data_material_used'        => $pesanan['material_id_used'] == 'all' ? $data_material_used[0]:$data_material_used,
 				'data_material'             => $data_material,
 				'data_total_harga'          => formatRupiah($data_total),
-				'data_pegawai_to_surveying' => $data_pegawai_to_surveying
+				'data_pegawai_to_surveying' => $data_pegawai_to_surveying,
+				'data_laporan_tugas_ini'    => $this->db->get_where('laporan', ['pesanan_id' => $id])->row_array()
 			];
 			if($pesanan['status'] == 2) {
 				if(!isset($_POST['survey'])) {
@@ -184,18 +186,30 @@ class Pegawai extends CI_Controller {
 					redirect("pegawai/tugas/$id/detail");
 				}
 			}else if($pesanan['status'] == 3) {
-				if(!isset($_POST['selesai'])) {
-					$this->load->view('pegawai/header', $data);
-					$this->load->view('pegawai/navigator', $data);
-					$this->load->view('pegawai/main_header', $data);
-					$this->load->view('pegawai/tugas_survey', $data);
-					$this->load->view('pegawai/footer', $data);
-				}else{
+				if(isset($_POST['selesai'])) {
 					$this->db->set('status', 4);
 					$this->db->where('id', $id);
 					$this->db->update('pesanan');
 					$this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Tugas</strong> telah selesai.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
 					redirect("pegawai/tugas/$id/detail");
+				}else if(isset($_POST['lapor'])) {
+					$this->db->insert('laporan', [
+						'id'            => uniqid(),
+						'uang_masuk'    => $_POST['uang_customer'],
+						'pegawai_id'    => $pegawai['id'],
+						'perusahaan_id' => $perusahaan['id'],
+						'customer_id'   => $pesanan['customer_id'],
+						'pesanan_id'    => $id,
+						'date_created'  => date('Y-m-d')
+					]);
+					$this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Berhasil</strong> melaporkan tugas.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+					redirect("pegawai/tugas/$id/detail");
+				}else{
+					$this->load->view('pegawai/header', $data);
+					$this->load->view('pegawai/navigator', $data);
+					$this->load->view('pegawai/main_header', $data);
+					$this->load->view('pegawai/tugas_survey', $data);
+					$this->load->view('pegawai/footer', $data);
 				}
 			}else if($pesanan['status'] == 4) {
 				$this->load->view('pegawai/header', $data);
@@ -247,7 +261,6 @@ class Pegawai extends CI_Controller {
 			show_error("Data tugas tidak valid", 400);
 		}
 	}
-
 	public function setting()
 	{
 		$pegawai = $this->db->get_where('pegawai', ["user_id" => $this->session->userdata('id')])->row_array();

@@ -33,6 +33,7 @@
   <link href="<?= base_url('assets/argon') ?>/css/argon-dashboard.css?v=1.1.0" rel="stylesheet" />
   <link rel="stylesheet" type="text/css" href="<?= base_url('assets/argon/') ?>DataTables/datatables.min.css"/>
   <!-- <link rel="stylesheet" href="<?= base_url('assets/argon/') ?>DataTables/DataTables-1.10.20/css/dataTables.bootstrap.min.css"> -->
+  <link rel="stylesheet" href="<?= base_url('assets/argon/css/print.min.css') ?>">
 </head>
 
 <body class="">

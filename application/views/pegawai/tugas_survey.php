@@ -1,14 +1,14 @@
     <div class="container-fluid mt--7">
       <?= $this->session->flashdata('message'); ?>
       <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-<?= (sizeof($data_laporan_tugas_ini) > 0 ? '12':'7') ?>">
             <div class="card shadow-lg">
                 <div class="card-header">
                     <a href="<?= base_url('pegawai/tugas') ?>" class='badge badge-orange'><i class="fas fa-arrow-left"></i> &nbsp;Kembali ke pesanan</a>
                 </div>
                 <div class="card-body">
                     <h5>Data pegawai yang akan ikut survey kerumah customer : </h5>
-                    <table class="table table-orange table-responsive-md dataTable">
+                    <table class="table table-orange table-responsive<?= (sizeof($data_laporan_tugas_ini) > 0 ? '-md':null) ?> dataTable">
                         <thead>
                             <tr>
                                 <th>No</th>
@@ -31,9 +31,30 @@
                 </div>
             </div>
             <form method="post" class="mt-2">
-                <button onclick="return confirm('Apakah kamu yakin?')" name="selesai" type="submit" class="btn btn-orange btn-block">Selesaikan tugas</button>
+                <button onclick="return confirm('Apakah kamu yakin?')" <?= (sizeof($data_laporan_tugas_ini) > 0 ? null:'disabled') ?> name="selesai" type="submit" class="btn btn-orange btn-block">Selesaikan tugas</button>
             </form>
         </div>
+        <?php if(sizeof($data_laporan_tugas_ini) == 0) : ?>
+        <div class="col-md-5">
+            <div class="card shadow-lg">
+                <div class="card-body">
+                    <div class="card-title">
+                        <h5>Laporkan ke perusahaan jika customer sudah membayar</h5>
+                        <hr>
+                    </div>
+                    <form method="post" class="needs-validation" novalidate>
+                        <div class="form-group">
+                            <label for="uang_customer">Uang Customer : </label>
+                            <input type="text" name="uang_customer" id="uang_customer" required class="form-control rupiah">
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" name="lapor" class="btn btn-orange btn-block">Lapor</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <?php endif; ?>
       </div>
 
       <div class="row mt-3">
