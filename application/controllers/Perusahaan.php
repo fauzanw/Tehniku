@@ -551,7 +551,8 @@ class Perusahaan extends CI_Controller {
 			 ->select('*')
 			 ->from('pesanan ps')
 			 ->join('customer c', 'ps.customer_id=c.id')
-			 ->where('ps.id', $jasa_id);
+			 ->where('ps.id', $jasa_id)
+			 ->where('ps.perusahaan_id', $perusahaan['id']);
 		$pesanan = $this->db->get()->row_array();
 		$this->db
 		->select('*')
@@ -664,6 +665,7 @@ class Perusahaan extends CI_Controller {
 			'title_main_header' => 'Laporan Perusahaan',
 			'data_perusahaan'   => $perusahaan,
 			'data_perusahaan2'  => $this->session->userdata(),
+			'data_jasa'         => $this->db->get_where('jasa', ['perusahaan_id' => $perusahaan['id']])->result_array(),
 			'jumlah_jasa'       => sizeof($this->db->get_where('jasa',    ['perusahaan_id' => $perusahaan['id']])->result_array()),
 			'jumlah_pesanan'    => sizeof($this->db->get_where('pesanan', ['perusahaan_id' => $perusahaan['id']])->result_array()),
 			'jumlah_pegawai'    => sizeof($this->db->get_where('pegawai', ['perusahaan_id' => $perusahaan['id']])->result_array())
@@ -703,12 +705,16 @@ class Perusahaan extends CI_Controller {
 				 ->join('jasa j', 'ps.jasa_id=j.id')
 				 ->join('jasa_pivot_type jpt', 'j.id=jpt.jasa_id')
 				 ->join('jasa_type jt', 'jpt.jasa_type_id=jt.id')
-				 ->where('DATE(l.date_created) >=', $_POST['dari_tanggal']);
+				 ->where('DATE(l.date_created) >=', $_POST['dari_tanggal'])
+				 ->where('ps.perusahaan_id', $perusahaan['id']);
+			if($_POST['type_jasa'] != 'semua_jasa') {
+				$this->db->where('j.id', $_POST['type_jasa']);
+			}
 			$data_laporan = $this->db->get()->result_array();
 			rsort($data_laporan);
 			foreach($data_laporan as $i => $data) {
-				$date = explode("-", $data['date_created']);
-				$data_laporan[$i]['date_created'] = "$date[2]-$date[1]-$date[0]";
+				// $date = explode("-", $data['date_created']);
+				$data_laporan[$i]['date_created'] = formatHariTanggal($data['date_created']);
 			}
 			// echo '<pre>';print_r($data_laporan); die;
 			$data['data_laporan'] = $data_laporan;

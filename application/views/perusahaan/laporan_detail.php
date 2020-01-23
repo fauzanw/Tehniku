@@ -11,7 +11,7 @@
                 <a href="javascript:window.location.href = '<?= base_url('perusahaan/laporan') ?>'" class="badge badge-orange mb-xl-5"><i class="fas fa-arrow-left"></i> Kembali cari laporan</a>
                 <?php if(sizeof($data_laporan) > 0) : ?>
                     <button class="badge badge-orange mb-5 printjs">Print ke PDF</button>
-                    <table class="table table-responsive-md table-hover dataTable" id="printJSTable">
+                    <table class="table table-responsive table-hover dataTable" id="printJSTable">
                         <thead>
                             <tr>
                                 <th>No</th>

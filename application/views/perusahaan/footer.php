@@ -12,6 +12,7 @@
   <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/3/jquery.inputmask.bundle.js"></script>
   <script src="<?= base_url('assets/argon/js/plugins/jquery.expander.min.js') ?>"></script>
   <script src="<?= base_url('assets/argon/js/print.min.js') ?>"></script>
+  <script src="<?= base_url('assets/argon/select2-4.0.3/dist/js/select2.full.js') ?>"></script>
   <script>
     $('.expander').expander({
       slicePoint: 50,
@@ -74,6 +75,7 @@
 
 
       $(document).ready( function () {
+        $(".select2" ).select2()
         $('#type_jasa').on('change', function() {
           $('#form_type_jasa').submit();
         })
