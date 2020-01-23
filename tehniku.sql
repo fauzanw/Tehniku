@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: 21 Jan 2020 pada 09.54
+-- Generation Time: 23 Jan 2020 pada 19.52
 -- Versi Server: 5.7.28-0ubuntu0.18.04.4
 -- PHP Version: 7.2.24-0ubuntu0.18.04.2
 
@@ -307,7 +307,7 @@ CREATE TABLE `pesanan` (
 --
 
 INSERT INTO `pesanan` (`id`, `jasa_id`, `perusahaan_id`, `customer_id`, `waktu`, `description`, `pegawai_id`, `material_id_used`, `status`) VALUES
-('5e1a9f197eb1a', '5e134ab006a1d', '8a345e15-9690-4a89-9b63-da230e170490', '5e024299723af', 'Kamis, 30 Januari 2020 Jam 11:59', 'instalasi ke rumah jl raya bekasi rt 05/09 1350', '5e1a9e677c8cc', 'all', '3'),
+('5e1a9f197eb1a', '5e134ab006a1d', '8a345e15-9690-4a89-9b63-da230e170490', '5e024299723af', 'Kamis, 30 Januari 2020 Jam 11:59', 'instalasi ke rumah jl raya bekasi rt 05/09 1350', '5e1a9e677c8cc', 'all', '4'),
 ('5e21be3b3e144', '5e21b55308f2c', '5e21ae9c32b98', '5e024299723af', 'Sabtu, 18 Januari 2020 Jam 05:01', 'bngsd\r\n', '', 'all', '1'),
 ('5e22cab67f9f5', '5e22c692def58', '8a345e15-9690-4a89-9b63-da230e170490', '5e1b1dce52a83', 'Minggu, 19 Januari 2020 Jam 16:06', 'Oke', '5e017625df559,5e1b4d1eeae2e', '5e22d4d8798cd,5e22d515355cc', '3');
 
